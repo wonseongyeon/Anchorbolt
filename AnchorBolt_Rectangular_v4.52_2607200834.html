@@ -1,0 +1,2619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACI 318-19 | 앵커 볼트 구조 계산서 v4.52 (긴급보강·개선제안·계산서자동추출 이식)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+:root{
+  --bg:#0c1118;--s1:#141c26;--s2:#1a2535;--s3:#1f2f42;
+  --bd:#26374a;--bd2:#304558;
+  --ac:#1a72d4;--ac2:#2588f0;--ac3:#4da6ff;
+  --gr:#3ab85a;--rd:#e84040;--yw:#d4a520;--or:#d46820;
+  --t1:#dce9f6;--t2:#8aaec8;--t3:#4e6a82;
+  --pdf-blue:#1F3864;--pdf-hdr:#2E5496;--pdf-light:#D6E4F7;--pdf-hl:#BDD7EE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-family:'Noto Sans KR',sans-serif;font-size:13px}
+#wrapper{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#top{height:48px;flex-shrink:0;display:flex;align-items:center;gap:12px;padding:0 16px;background:var(--s1);border-bottom:2px solid var(--ac);z-index:10}
+.logo{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;line-height:1.3}
+.logo small{display:block;font-size:10px;color:var(--t2);font-weight:400}
+.sep{width:1px;height:28px;background:var(--bd2);flex-shrink:0}
+.tabs{display:flex;gap:2px;background:var(--bg);border:1px solid var(--bd2);border-radius:6px;padding:3px}
+.tab{padding:4px 13px;border:none;border-radius:4px;background:transparent;color:var(--t2);cursor:pointer;font-size:12px;font-family:inherit;font-weight:500;transition:all .12s;white-space:nowrap}
+.tab.on{background:var(--ac);color:#fff;font-weight:700}
+.tab:hover:not(.on){background:var(--s2);color:var(--t1)}
+.acts{margin-left:auto;display:flex;gap:6px;flex-wrap:nowrap}
+.abtn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:5px;border:1px solid var(--bd2);background:var(--s2);color:var(--t1);cursor:pointer;font-size:11px;font-family:inherit;transition:all .12s;white-space:nowrap}
+.abtn:hover{border-color:var(--ac2);color:var(--ac3)}
+#meta{height:32px;flex-shrink:0;display:flex;align-items:center;padding:0 14px;background:var(--s2);border-bottom:1px solid var(--bd);z-index:9}
+.mf{display:flex;align-items:center;gap:5px;padding:0 10px;border-right:1px solid var(--bd);height:100%}
+.mf:first-child{padding-left:0}
+.ml{font-size:10px;color:var(--t3);white-space:nowrap}
+.mi{background:transparent;border:none;color:var(--t2);font-size:11px;font-family:inherit;outline:none}
+.mi:focus{color:var(--t1)}
+#app{flex:1;display:flex;overflow:hidden;min-height:0}
+#lp{width:390px;min-width:280px;max-width:520px;background:var(--s1);border-right:1px solid var(--bd);overflow-y:auto;overflow-x:hidden;flex-shrink:0}
+#lp::-webkit-scrollbar{width:4px}
+#lp::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.sec{border-bottom:1px solid var(--bd);padding:10px 13px}
+.st{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--ac3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.st::after{content:'';flex:1;height:1px;background:var(--bd)}
+.ir{display:grid;grid-template-columns:1fr 46px 88px 32px 18px;align-items:center;gap:4px;margin-bottom:5px}
+.ir label{font-size:11px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sym{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--yw);text-align:right}
+.ir input,.ir select{width:100%;padding:3px 6px;background:var(--bg);border:1px solid var(--bd2);border-radius:4px;color:var(--t1);font-size:11px;font-family:'IBM Plex Mono',monospace;text-align:right;transition:border-color .12s}
+.ir input:focus,.ir select:focus{outline:none;border-color:var(--ac)}
+.ir input[readonly]{background:var(--s3);color:var(--t3);cursor:default;border-style:dashed}
+.unt{font-size:10px;color:var(--t3)}
+.hb{width:16px;height:16px;border-radius:50%;border:1px solid var(--bd2);background:transparent;color:var(--t3);font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;transition:all .12s;flex-shrink:0}
+.hb:hover{border-color:var(--ac3);color:var(--ac3)}
+.cr{display:flex;justify-content:space-between;padding:1px 0;font-size:11px;margin-bottom:2px}
+.ck{color:var(--t2);font-family:'IBM Plex Mono',monospace;font-size:10.5px}
+.cv{color:var(--yw);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px}
+.asel select{width:100%;padding:5px 7px;background:var(--bg);border:1px solid var(--bd2);border-radius:4px;color:var(--t1);font-size:12px;font-family:inherit;margin-bottom:7px}
+.ainfo{background:var(--s2);border:1px solid var(--bd2);border-radius:4px;padding:7px 9px;font-size:11px;color:var(--t2);line-height:1.7}
+.ai-t{color:var(--ac3);font-weight:600;font-size:11.5px;margin-bottom:3px}
+.ai-r{display:flex;justify-content:space-between;gap:6px}
+.ai-k{color:var(--t3);font-size:10.5px}
+.ai-v{color:var(--t1);font-family:'IBM Plex Mono',monospace;font-size:10px}
+.phi-row{display:grid;grid-template-columns:1fr 46px 88px 32px;align-items:center;gap:4px;margin-bottom:5px}
+.phi-val{width:100%;padding:3px 6px;background:var(--s3);border:1px solid var(--bd);border-radius:4px;color:var(--t3);font-size:11px;font-family:'IBM Plex Mono',monospace;text-align:right;cursor:default}
+.eh-catalog{background:var(--s3);border:1px solid var(--bd2);border-radius:4px;padding:5px 8px;font-size:10.5px;color:var(--t2);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center}
+.eh-manual-toggle{font-size:10px;color:var(--ac3);cursor:pointer;text-decoration:underline;margin-left:6px}
+.rebar-info{background:var(--s3);border:1px solid var(--bd);border-radius:4px;padding:5px 9px;font-size:10.5px;margin-top:4px}
+.rebar-info-row{display:flex;justify-content:space-between;margin-bottom:1px}
+.rebar-info-k{color:var(--t3)}
+.rebar-info-v{color:var(--ac3);font-family:'IBM Plex Mono',monospace;font-weight:600}
+.hefp-box{background:var(--s3);border:1px solid var(--yw);border-radius:4px;padding:6px 9px;margin-top:4px;font-size:10.5px}
+.warnbox{background:rgba(212,104,32,.12);border:1px solid var(--or);border-radius:4px;padding:6px 9px;margin-top:5px;font-size:10.5px;color:#ffcf9e;line-height:1.6}
+.newbadge{display:inline-block;background:var(--gr);color:#06210f;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:6px;vertical-align:middle}
+#cv{flex:1;min-width:0;display:flex;flex-direction:column;background:#07111c;overflow:hidden}
+#vh{height:30px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 12px;background:var(--s1);border-bottom:1px solid var(--bd);font-size:11px;color:var(--t2)}
+.vbg{background:var(--s3);border:1px solid var(--bd2);border-radius:3px;padding:2px 7px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--ac3);font-weight:600}
+#viewSplit{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+#cw3d{position:relative;overflow:hidden;min-height:80px}
+#iso3d{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%}
+#vDivider{height:6px;background:var(--bd2);cursor:ns-resize;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .12s;z-index:5}
+#vDivider:hover,#vDivider.dragging{background:var(--ac)}
+#vDivider::after{content:'⋯';color:var(--t3);font-size:14px;line-height:1;letter-spacing:2px}
+#cw2d{position:relative;overflow:hidden;min-height:60px;background:#07111c}
+#plan2d{position:absolute;top:0;left:0;width:100%;height:100%}
+#plan2d-label{position:absolute;top:5px;left:8px;font-size:10px;font-weight:700;color:var(--ac3);background:rgba(7,17,28,.85);padding:2px 7px;border-radius:3px;border:1px solid var(--bd2);pointer-events:none;z-index:3}
+#plan2d-hint{position:absolute;bottom:5px;right:8px;font-size:10px;color:var(--t3);background:rgba(7,17,28,.8);padding:2px 6px;border-radius:3px;pointer-events:none;z-index:3;white-space:nowrap}
+#axbox{position:absolute;top:8px;left:8px;background:rgba(7,17,28,.88);border:1px solid var(--bd2);border-radius:5px;padding:8px 11px;font-size:11px;line-height:1.9;pointer-events:none;z-index:2}
+.axr{display:flex;align-items:center;gap:7px}
+#legbox{position:absolute;bottom:8px;left:8px;background:rgba(7,17,28,.88);border:1px solid var(--bd2);border-radius:5px;padding:8px 11px;font-size:11px;line-height:1.9;pointer-events:none;z-index:2}
+.lr{display:flex;align-items:center;gap:7px}
+.ld{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ll{width:18px;height:3px;border-radius:2px;flex-shrink:0}
+#chint{position:absolute;top:8px;right:8px;background:rgba(7,17,28,.8);border:1px solid var(--bd);border-radius:4px;padding:4px 8px;font-size:10px;color:var(--t3);pointer-events:none;line-height:1.6;z-index:2}
+#rebar3dToggle{position:absolute;top:42px;right:8px;background:rgba(7,17,28,.88);border:1px solid var(--bd);border-radius:4px;padding:4px 8px;font-size:10px;color:var(--t2);z-index:3;display:flex;align-items:center;gap:5px;user-select:none}
+#rebar3dToggle input{width:13px;height:13px;accent-color:var(--ac)}
+#rebar3dToggle.disabled{opacity:.45;color:var(--t3)}
+#vctrls{position:absolute;bottom:8px;right:8px;display:flex;flex-direction:column;gap:4px;z-index:2}
+.vc{width:28px;height:28px;background:var(--s1);border:1px solid var(--bd2);border-radius:4px;color:var(--t2);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.vc:hover{border-color:var(--ac);color:var(--ac3)}
+#rp{width:460px;min-width:360px;background:var(--s1);border-left:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+#sbar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 10px;background:var(--s2);border-bottom:1px solid var(--bd);flex-shrink:0}
+.sc{background:var(--s1);border:1px solid var(--bd2);border-radius:5px;padding:5px 7px;text-align:center}
+.sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px}
+.sv{font-size:13px;font-weight:700;font-family:'IBM Plex Mono',monospace}
+.sc.sok .sv{color:var(--gr)}
+.sc.sng .sv{color:var(--rd)}
+.sc.sna .sv{color:var(--t3)}
+#rc{flex:1;overflow-y:auto;padding:12px}
+#rc::-webkit-scrollbar{width:4px}
+#rc::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.rb{margin-bottom:13px}
+.rbt{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;padding-bottom:5px;border-bottom:2px solid var(--bd2)}
+.rbn{width:18px;height:18px;border-radius:50%;background:var(--ac);color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:6px}
+.rbtx{font-size:12px;font-weight:700;display:flex;align-items:center}
+.rbrf{font-size:10px;color:var(--t3)}
+.badge{padding:2px 7px;border-radius:9px;font-size:10px;font-weight:700}
+.badge.ok{background:rgba(58,184,90,.13);color:var(--gr);border:1px solid rgba(58,184,90,.4)}
+.badge.ng{background:rgba(232,64,64,.13);color:var(--rd);border:1px solid rgba(232,64,64,.4)}
+.badge.na{background:rgba(78,106,130,.12);color:var(--t3);border:1px solid var(--bd)}
+.ct{width:100%;border-collapse:collapse;margin-bottom:6px}
+.ct th{background:var(--s3);padding:4px 6px;font-size:9.5px;font-weight:600;color:var(--t2);text-align:left;border-bottom:1px solid var(--bd2)}
+.ct td{padding:4px 6px;border-bottom:1px solid rgba(38,55,74,.6);font-size:11px;vertical-align:top}
+.ct tr:hover td{background:rgba(26,114,212,.04)}
+.ct td.s{font-family:'IBM Plex Mono',monospace;color:var(--yw);font-size:10px;white-space:nowrap;width:70px}
+.ct td.e{font-family:'IBM Plex Mono',monospace;color:var(--t2);font-size:10px;word-break:break-all;line-height:1.5}
+.ct td.v{font-family:'IBM Plex Mono',monospace;color:var(--ac3);font-weight:600;text-align:right;white-space:nowrap;width:78px}
+.ct th:last-child{white-space:nowrap;width:82px;min-width:82px}
+.ct td.rf{color:var(--t3);text-align:right;white-space:nowrap;font-size:9px;width:82px;min-width:82px}
+.ct tr.hl td{background:rgba(26,114,212,.09)}
+.ct tr.hl td.s{color:var(--ac2)}
+.ct tr.hl td.v{color:#fff;font-size:11.5px}
+.ct td.grp{background:var(--s2);color:var(--t3);font-size:10px;font-style:italic;padding:3px 6px;border-bottom:1px solid var(--bd2)}
+.chk{display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:5px;margin-top:5px;font-size:11.5px;font-weight:600}
+.chk.ok{background:rgba(58,184,90,.09);border:1px solid rgba(58,184,90,.3)}
+.chk.ng{background:rgba(232,64,64,.09);border:1px solid rgba(232,64,64,.3)}
+.chkr{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px}
+.nabox{padding:7px 9px;border-radius:4px;background:var(--s2);border:1px solid var(--bd);color:var(--t3);font-size:11px}
+#tip{position:fixed;background:var(--s2);border:1px solid var(--ac);border-radius:7px;padding:11px 13px;max-width:320px;font-size:11.5px;line-height:1.7;color:var(--t1);z-index:9999;display:none;box-shadow:0 8px 30px rgba(0,0,0,.7);pointer-events:none}
+#tip .tt{font-weight:700;color:var(--ac3);margin-bottom:5px;font-size:12px;padding-bottom:4px;border-bottom:1px solid var(--bd2)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:8888;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--s1);border:1px solid var(--bd2);border-radius:10px;width:700px;max-width:95vw;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+.modal-head{padding:14px 18px;background:var(--s2);border-bottom:1px solid var(--bd2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-head h3{font-size:13px;font-weight:700;color:var(--ac3)}
+.modal-close{background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;padding:0 4px}
+.modal-close:hover{color:var(--t1)}
+.modal-body{overflow-y:auto;padding:16px 18px;flex:1}
+.modal-body::-webkit-scrollbar{width:4px}
+.modal-body::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.dev-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:11px}
+.dev-table th{background:var(--s3);padding:5px 8px;text-align:center;font-size:10px;color:var(--t2);border:1px solid var(--bd2)}
+.dev-table td{padding:4px 8px;text-align:center;border:1px solid var(--bd2);font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--t1)}
+.dev-table tr:hover td{background:rgba(26,114,212,.07)}
+.dev-table td.hi{color:var(--gr);font-weight:700;background:rgba(58,184,90,.07)}
+.dev-table td.hdia{color:var(--yw);font-weight:700}
+.save-slot{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--bd2);border-radius:6px;background:var(--s2);margin-bottom:6px;cursor:pointer;transition:border-color .12s}
+.save-slot:hover{border-color:var(--ac)}
+.save-slot-name{flex:1;font-size:12px;font-weight:600}
+.save-slot-date{font-size:10px;color:var(--t3);font-family:'IBM Plex Mono',monospace}
+select option{background:var(--bg)}
+.rf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:820px){.rf-grid{grid-template-columns:1fr}}
+.rf-card{background:var(--s2);border:1px solid var(--bd2);border-radius:9px;padding:14px 16px;margin-bottom:14px}
+.rf-card-t{font-size:11px;font-weight:700;color:var(--ac3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.rf-opt{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px}
+.rf-o{border:1.5px solid var(--bd2);background:var(--bg);border-radius:8px;padding:10px 11px;cursor:pointer;font-size:11.5px}
+.rf-o:hover{border-color:var(--ac3)}
+.rf-o.sel{border-color:var(--or);background:rgba(212,104,32,.14)}
+.rf-o b{display:block;color:var(--t1);margin-bottom:2px;font-size:12px}
+.rf-o span{color:var(--t3);font-size:10px;line-height:1.35}
+.rf-demand{display:flex;gap:14px;flex-wrap:wrap}
+.rf-demand .d{background:var(--bg);border-radius:8px;padding:8px 12px;min-width:110px}
+.rf-demand .d .dl{font-size:9.5px;color:var(--t3)}
+.rf-demand .d .dv{font-size:15px;font-weight:700;color:var(--ac3);font-family:'IBM Plex Mono',monospace}
+.rf-result{background:var(--bg);border-radius:9px;padding:14px 16px;margin-top:6px}
+.rf-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--bd);font-size:11.5px}
+.rf-row .k{color:var(--t2)}
+.rf-row .v{font-weight:700;font-family:'IBM Plex Mono',monospace}
+.rf-verdict{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin-top:10px;font-weight:700;font-size:12.5px}
+.rf-verdict.ok{background:rgba(58,184,90,.13);color:var(--gr);border:1px solid rgba(58,184,90,.4)}
+.rf-verdict.ng{background:rgba(232,64,64,.13);color:var(--rd);border:1px solid rgba(232,64,64,.4)}
+.rf-step{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:11.5px}
+.rf-step .sn{width:20px;height:20px;border-radius:50%;background:var(--or);color:#1a0d00;font-weight:800;font-size:10.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.drop-zone{border:2px dashed var(--bd2);border-radius:10px;padding:22px;text-align:center;background:var(--s2);cursor:pointer;transition:all .15s}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--ac3);background:var(--s3)}
+.drop-zone .dz-ico{font-size:28px;margin-bottom:6px}
+.drop-zone .dz-t{font-size:12.5px;font-weight:700;color:var(--t1)}
+.drop-zone .dz-s{font-size:10.5px;color:var(--t3);margin-top:3px}
+.drop-zone.loaded{border-style:solid;border-color:var(--gr);background:rgba(58,184,90,.08)}
+.extract-row{display:grid;grid-template-columns:26px 1fr 1fr 90px 2fr;gap:8px;align-items:center;padding:7px 4px;border-bottom:1px solid var(--bd)}
+.extract-row.hdr{font-size:9.5px;font-weight:700;color:var(--t3);text-transform:uppercase;border-bottom:2px solid var(--bd2)}
+.extract-row input[type=checkbox]{width:15px;height:15px;accent-color:var(--gr)}
+.extract-row input[type=text]{width:100%;padding:5px 7px;background:var(--bg);border:1px solid var(--bd2);border-radius:5px;color:var(--t1);font-size:11.5px;font-family:'IBM Plex Mono',monospace}
+.conf-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;text-align:center}
+.conf-badge.high{background:rgba(58,184,90,.15);color:var(--gr)}
+.conf-badge.low{background:rgba(212,165,32,.15);color:var(--yw)}
+</style>
+</head>
+<body>
+<div id="wrapper">
+<div id="top">
+  <div class="logo">앵커 볼트 구조 계산서<small>Anchor Bolt Structural Design — ACI 318-19 Ch.17 (Rectangular v4.52, 긴급보강·개선제안·자동추출 이식)</small></div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <button class="tab on" onclick="setMode('all')">All</button>
+    <button class="tab" onclick="setMode('tension')">Tension</button>
+    <button class="tab" onclick="setMode('shear')">Shear</button>
+    <button class="tab" onclick="setMode('combined')">Combined</button>
+  </div>
+  <div class="acts">
+    <button class="abtn" onclick="openModal('modalSave')">💾 저장</button>
+    <button class="abtn" onclick="openModal('modalCatalog')">📋 카탈로그</button>
+    <button class="abtn" onclick="openModal('modalDevLen')">📐 Ld 표</button>
+    <button class="abtn" id="pdfBtn" onclick="expPDF()">📄 PDF</button>
+    <button class="abtn" onclick="expXLS()">📊 Excel</button>
+    <button class="abtn" id="retrofitBtn" onclick="openRetrofit()" style="border-color:var(--or);color:#ffcf9e">🔧 긴급 보강</button>
+    <button class="abtn" id="suggestBtn" onclick="openSuggest()">💡 개선 제안</button>
+    <button class="abtn" onclick="openModal('modalExtract')" style="border-color:#4da6ff;color:#a8d4ff">📄 계산서 자동추출(베타)</button>
+  </div>
+</div>
+<div id="meta">
+  <div class="mf"><span class="ml">Job No.</span><input class="mi" id="mJob" placeholder="Job No." style="width:85px"></div>
+  <div class="mf"><span class="ml">Project</span><input class="mi" id="mP" placeholder="Project" style="width:125px"></div>
+  <div class="mf"><span class="ml">Doc. No.</span><input class="mi" id="mDoc" placeholder="Doc. No." style="width:110px"></div>
+  <div class="mf"><span class="ml">Item</span><input class="mi" id="mItem" placeholder="Item" style="width:85px"></div>
+  <div class="mf"><span class="ml">작성자</span><input class="mi" id="mA" placeholder="작성자" style="width:60px"></div>
+  <div class="mf"><span class="ml">날짜</span><input class="mi" id="mD" type="date" style="width:108px"></div>
+  <div class="mf"><span class="ml">Rev.</span><input class="mi" id="mR" placeholder="A" style="width:30px"></div>
+  <div class="mf" style="border:none"><span class="ml">기준</span><span style="font-size:11px;color:var(--ac3);margin-left:4px">ACI 318-19 Chapter 17</span></div>
+</div>
+<div id="app">
+<div id="lp">
+  <div class="sec"><div class="st">앵커 타입</div>
+    <div class="asel"><select id="iAT" onchange="onAT()">
+      <optgroup label="── Cast-in Place ──">
+        <option value="cast_headed" selected>Cast-in Headed Bolt</option>
+        <option value="cast_hooked">Cast-in Hooked Bolt</option>
+      </optgroup>
+      <optgroup label="── Post-installed ──">
+        <option value="post_exp">Post-installed Expansion</option>
+        <option value="post_uc">Post-installed Undercut</option>
+        <option value="post_adh">Post-installed Adhesive</option>
+      </optgroup>
+    </select></div>
+    <div class="ainfo" id="ainfo"></div>
+  </div>
+  <div class="sec"><div class="st">앵커 배치</div>
+    <div class="ir"><label>X방향 앵커 수 (nx)</label><span class="sym">nx</span><input type="number" id="iNx" value="3" min="1" max="8" oninput="onNxNy()"><span class="unt">ea</span><button class="hb" onclick="tip(event,'nx','nx×ny = 총 앵커 수')">?</button></div>
+    <div class="ir"><label>Y방향 앵커 수 (ny)</label><span class="sym">ny</span><input type="number" id="iNy" value="3" min="1" max="8" oninput="onNxNy()"><span class="unt">ea</span><button class="hb" onclick="tip(event,'ny','Y방향 앵커 수')">?</button></div>
+    <div id="sxWrap"></div><div id="syWrap"></div>
+    <div style="font-size:10px;color:var(--t3);padding:1px 0 2px 2px">※ ANc 계산엔 smax 사용</div>
+    <div style="margin-top:7px;padding-top:7px;border-top:1px solid var(--bd)">
+      <div style="font-size:10px;color:var(--ac3);font-weight:700;margin-bottom:5px">앵커 삭제 옵션</div>
+      <div style="font-size:10px;color:var(--t3);line-height:1.5;margin-bottom:5px">체크된 앵커만 계산에 포함됩니다. 예: 3×3 배치에서 중앙 앵커를 해제하면 8개 앵커로 계산됩니다.</div>
+      <div id="anchorActiveGrid"></div>
+      <div class="cr" style="margin-top:5px"><span class="ck">활성 앵커 수</span><span class="cv" id="dActiveAnchors">—</span></div>
+    </div>
+  </div>
+  <div class="sec"><div class="st">앵커 볼트 제원</div>
+    <div class="ir"><label>볼트 공칭지름 (da)</label><span class="sym">da</span><input type="number" id="iDa" value="20" oninput="onDaChange()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'da','Ase,N=π/4×(0.9da)²')">?</button></div>
+    <div class="ir"><label>유효 매입 깊이 (hef)</label><span class="sym">hef</span><input type="number" id="iHef" value="300" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'hef','그룹: hef′ 수정 §17.6.2.1.2')">?</button></div>
+    <div class="ir"><label>앵커 용접 여부</label><span class="sym">weld</span>
+      <select id="iAnchorWeld" onchange="schedCalc()"><option value="no" selected>No</option><option value="yes">Yes</option></select>
+      <span class="unt"></span><button class="hb" onclick="tip(event,'앵커 용접 여부','전단 Concrete Breakout의 Vb 계수 산정에 사용합니다. 기본값은 No입니다.')">?</button></div>
+    <div class="ir" id="rowBondPreset" style="display:none"><label>Bond 기본값</label><span class="sym">env</span><select id="iBondPreset" onchange="onBondPresetChange();schedCalc()"><option value="indoor" selected>Indoor / Dry</option><option value="outdoor">Outdoor / Dry to fully saturated</option></select><span class="unt"></span><button class="hb" onclick="tip(event,'Bond 기본값','Table 17.6.5.2.5의 최소 characteristic bond stress 기본값을 불러옵니다. 선택 후에도 아래 τcr, τuncr는 직접 수정 가능합니다.')">?</button></div>
+    <div class="ir" id="rowTauCr" style="display:none"><label>Characteristic bond stress (cracked)</label><span class="sym">τcr</span><input type="number" id="iTauCr" value="2.1" step="0.1" oninput="schedCalc()"><span class="unt">MPa</span><button class="hb" onclick="tip(event,'τcr','§17.6.5.2.2 및 Table 17.6.5.2.5 기본값. 사용자가 직접 수정 가능')">?</button></div>
+    <div class="ir" id="rowTauUncr" style="display:none"><label>Characteristic bond stress (uncracked)</label><span class="sym">τuncr</span><input type="number" id="iTauUncr" value="7.0" step="0.1" oninput="schedCalc()"><span class="unt">MPa</span><button class="hb" onclick="tip(event,'τuncr','§17.6.5.2.4 및 Table 17.6.5.2.5 기본값. 사용자가 직접 수정 가능')">?</button></div>
+    <div class="ir" id="rowCacBond" style="display:none"><label>Bond splitting critical edge distance</label><span class="sym">cac</span><input type="number" id="iCacBond" value="460" readonly style="background:var(--s3);color:var(--t3);cursor:default;border-style:dashed"><span class="unt">mm</span><button class="hb" onclick="tip(event,'cac','Table 17.9.5: Adhesive anchor의 c_ac = 2hef. 자동산정값입니다.')">?</button></div>
+
+    <div class="ir" id="rowEh"><label>헤드 지압 폭 (eh)</label><span class="sym">eh</span><input type="number" id="iEh" value="63.5" oninput="onEhManual()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'eh','Abrg=eh²-π/4×da²')">?</button></div>
+    <div id="ehCatalogInfo" class="eh-catalog">
+      <span id="ehCatalogText">ASTM F1554 카탈로그</span>
+      <span id="ehCatalogVal" style="color:var(--yw);font-family:IBM Plex Mono"></span>
+      <span class="eh-manual-toggle" onclick="toggleEhManual()">수동입력</span>
+    </div>
+    <div class="ir" id="rowAbrg"><label>헤드 지압면적 (Abrg)</label><span class="sym">Abrg</span><input type="number" id="iAbrg" readonly oninput="schedCalc()" style="background:var(--s3);color:var(--t3);cursor:default;border-style:dashed"><span class="unt">mm²</span><button class="hb" onclick="tip(event,'Abrg','기본은 eh 기준 자동산정 및 입력불가. eh 수동입력 모드에서는 직접 입력 가능')">?</button></div>
+    <div class="ir" id="rowLh" style="display:none"><label>훅 길이 (lhook)</label><span class="sym">lhk</span><input type="number" id="iLh" value="80" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'lhook','Np=0.9×f′c×lhook×da')">?</button></div>
+    <div class="ir"><label>앵커 극한강도 (futa)</label><span class="sym">futa</span><input type="number" id="iFuta" value="400" oninput="schedCalc()"><span class="unt">MPa</span><button class="hb" onclick="tip(event,'futa','≤min(1.9fya,860)')">?</button></div>
+    <div class="ir"><label>앵커 항복강도 (fya)</label><span class="sym">fya</span><input type="number" id="iFya" value="240" oninput="schedCalc()"><span class="unt">MPa</span><button class="hb" onclick="tip(event,'fya','A325:635, A490:895 MPa')">?</button></div>
+    <div class="ir"><label>강재요소 거동</label><span class="sym">steel</span>
+      <select id="iSteelDuct" onchange="schedCalc()">
+        <option value="ductile" selected>연성강재요소 지배</option>
+        <option value="brittle">취성강재요소 지배</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'강재요소 거동','Table 17.5.3(a): 연성강재요소 지배 시 φs,t=0.75, φs,v=0.65 / 취성강재요소 지배 시 φs,t=0.65, φs,v=0.60')">?</button></div>
+  </div>
+  <div class="sec"><div class="st">콘크리트 페데스탈</div>
+    <div class="ir"><label>X길이 (Lpx)</label><span class="sym">Lpx</span><input type="number" id="iLpx" value="800" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'Lpx','Ca1,x=(Lpx-totalSx)/2')">?</button></div>
+    <div class="ir"><label>Y길이 (Lpy)</label><span class="sym">Lpy</span><input type="number" id="iLpy" value="800" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'Lpy','Ca1,y=(Lpy-totalSy)/2')">?</button></div>
+    <div class="ir"><label>높이 (Hp)</label><span class="sym">Hp</span><input type="number" id="iHp" value="450" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'Hp','Hp≥hef 권장')">?</button></div>
+    <div class="ir"><label>콘크리트 강도 (f′c)</label><span class="sym">f′c</span><input type="number" id="iFc" value="30" oninput="schedCalc()"><span class="unt">MPa</span><button class="hb" onclick="tip(event,'f\u2032c','Nb=kc×λ×√f′c×hef^1.5')">?</button></div>
+    <div class="ir"><label>경량계수 (λ)</label><span class="sym">λ</span>
+      <select id="iLam" onchange="schedCalc()"><option value="1.0">1.0 일반</option><option value="0.85">0.85 모래경량</option><option value="0.75">0.75 전경량</option></select>
+      <span class="unt"></span><button class="hb" onclick="tip(event,'λ','§19.2.4')">?</button></div>
+    <div class="ir"><label>균열 조건</label><span class="sym">ψc</span>
+      <select id="iCr" onchange="schedCalc()"><option value="cracked">균열</option><option value="uncracked">무균열</option></select>
+      <span class="unt"></span><button class="hb" onclick="tip(event,'균열','ψc,N: 균열=1.0, 무균열=1.25')">?</button></div>
+  </div>
+  <div class="sec"><div class="st">연단거리 (자동)</div>
+    <div class="cr"><span class="ck">Ca1,x</span><span class="cv" id="dCa1x">—</span></div>
+    <div class="cr"><span class="ck">Ca1,y</span><span class="cv" id="dCa1y">—</span></div>
+    <div class="cr"><span class="ck">Ca1 (지배)</span><span class="cv" id="dCa1">—</span></div>
+    <div class="hefp-box" id="hefpBox" style="display:none">
+      <div style="color:var(--ac3);font-weight:700;font-size:10px;margin-bottom:4px">hef′ 수정 (§17.6.2.1.2)</div>
+      <div id="hefpFormula" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);white-space:pre-line;line-height:1.7"></div>
+    </div>
+    <div class="cr"><span class="ck">hef′</span><span class="cv" id="dHefp">—</span></div>
+    <div class="hefp-box" id="ca1vpBox" style="display:none">
+      <div style="color:var(--ac3);font-weight:700;font-size:10px;margin-bottom:4px">전단 ca1′ 수정 (§17.7.2.1.2)</div>
+      <div id="ca1vpFormula" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);white-space:pre-line;line-height:1.7"></div>
+    </div>
+    <div class="cr"><span class="ck">전단 ca1′</span><span class="cv" id="dCa1vp">—</span></div>
+    <div class="ir" style="margin-top:5px"><label>Ca1 Override</label><span class="sym">Ca1*</span><input type="number" id="iCa1Ov" placeholder="auto" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'Ca1 Override','비워두면 자동산정')">?</button></div>
+  </div>
+  <div class="sec"><div class="st">하중 입력 및 설계 Case</div>
+    <div class="ir"><label>축하중 P, -Z 방향 +</label><span class="sym">P</span><input type="number" id="iP" value="50" oninput="schedCalc()"><span class="unt">kN</span><button class="hb" onclick="tip(event,'P','축하중 부호: 아래방향(-Z, 압축)을 +로 입력하고, 위방향(+Z, 인장/인발)은 -로 입력')">?</button></div>
+    <div class="ir"><label>X방향 횡하중</label><span class="sym">Hx</span><input type="number" id="iHx" value="50" oninput="schedCalc()"><span class="unt">kN</span><button class="hb" onclick="tip(event,'Hx','Y축 기준 Case에서 Vua 산정에 사용')">?</button></div>
+    <div class="ir"><label>Y방향 횡하중</label><span class="sym">Hy</span><input type="number" id="iHy" value="50" oninput="schedCalc()"><span class="unt">kN</span><button class="hb" onclick="tip(event,'Hy','X축 기준 Case에서 Vua 산정에 사용')">?</button></div>
+    <div class="ir"><label>X축 모멘트</label><span class="sym">Mx</span><input type="number" id="iMx" value="50" oninput="schedCalc()"><span class="unt">kN·m</span><button class="hb" onclick="tip(event,'Mx','X축 기준 Case에서 Nua 산정에 사용')">?</button></div>
+    <div class="ir"><label>Y축 모멘트</label><span class="sym">My</span><input type="number" id="iMy" value="50" oninput="schedCalc()"><span class="unt">kN·m</span><button class="hb" onclick="tip(event,'My','Y축 기준 Case에서 Nua 산정에 사용')">?</button></div>
+    <div class="ir"><label>설계 Case</label><span class="sym">Case</span>
+      <select id="iDesignCase" onchange="schedCalc()">
+        <option value="Y" selected>Case 2 — Y축 기준 (P, Hx, My)</option>
+        <option value="X">Case 1 — X축 기준 (P, Hy, Mx)</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'설계 Case','Y축 기준은 P,Hx,My / X축 기준은 P,Hy,Mx를 사용')">?</button></div>
+    <div class="ir"><label>중립축 산정 방식</label><span class="sym">N.A.</span>
+      <select id="iNAMode" onchange="onNAModeChange()">
+        <option value="linear" selected>Linear Stress Method</option>
+        <option value="manual">수동입력</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'중립축 산정 방식','Auto: 탄성해석 이분법으로 중립축 산정 / 수동입력: 사용자가 입력한 중립축 좌표 c 사용')">?</button></div>
+    <div class="ir" id="rowNAcManual" style="display:none"><label>중립축 좌표 직접입력</label><span class="sym">c</span><input type="number" id="iNAc" value="0" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'중립축 좌표 c','부재 중심을 원점으로 한 중립축 좌표. Y축 기준은 x=c, X축 기준은 y=c')">?</button></div>
+    <div class="ir" id="rowManualAnchorLoadMode" style="display:none"><label>앵커별 Nua/Vua 직접입력</label><span class="sym">N,V</span>
+      <select id="iManualAnchorLoadMode" onchange="onManualAnchorLoadModeChange()">
+        <option value="no" selected>미사용</option>
+        <option value="yes">사용</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'앵커별 Nua/Vua 직접입력','중립축 산정 방식이 수동입력일 때, 각 활성 앵커에 작용하는 Nua 및 Vua를 직접 입력합니다. 입력값은 강도검토 수요값에 직접 반영됩니다.')">?</button></div>
+    <div id="manualAnchorLoadBox" style="display:none;border:1px solid var(--bd);border-radius:6px;padding:8px;margin:6px 0;background:rgba(255,255,255,.02)">
+      <div style="font-size:10px;color:var(--ac3);font-weight:700;margin-bottom:5px">앵커별 계수하중 직접입력</div>
+      <div style="font-size:10px;color:var(--t3);line-height:1.45;margin-bottom:6px">Nua는 인장력을 +로 입력합니다. Vua는 해당 앵커의 전단 수요값으로 입력합니다.</div>
+      <div id="manualAnchorLoadGrid"></div>
+    </div>
+    <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--bd)">
+      <div style="font-size:10px;color:var(--ac3);font-weight:700;margin-bottom:5px">전단 편심 e′V 산정용</div>
+      <div class="ir"><label>전단력 작용점 X좌표</label><span class="sym">xV</span><input type="number" id="iVx" value="0" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'xV','전단력 작용 위치의 X좌표. 앵커군 도심 원점 기준')">?</button></div>
+      <div class="ir"><label>전단력 작용점 Y좌표</label><span class="sym">yV</span><input type="number" id="iVy" value="0" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'yV','전단력 작용 위치의 Y좌표. 앵커군 도심 원점 기준')">?</button></div>
+    </div>
+    <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--bd)">
+      <div style="font-size:10px;color:var(--ac3);font-weight:700;margin-bottom:5px">마찰 저항에 의한 전단 감소</div>
+      <div class="ir"><label>마찰 고려</label><span class="sym">Vf</span>
+        <select id="iUseFriction" onchange="onFrictionChange()"><option value="no" selected>미고려</option><option value="yes">고려</option></select>
+        <span class="unt"></span><button class="hb" onclick="tip(event,'마찰 고려','Vf = μ·max(P,0), Vua = max(|H| - Vf, 0). P>0인 하향 압축력만 마찰저항에 사용')">?</button></div>
+      <div id="frictionFields" style="display:none">
+        <div class="ir"><label>마찰계수 μ</label><span class="sym">μ</span>
+          <select id="iMuF" onchange="onFrictionChange()"><option value="0.70" selected>0.70 grout/contact coincident</option><option value="0.90">0.90 full plate below concrete surface</option><option value="custom">직접입력</option></select>
+          <span class="unt"></span><button class="hb" onclick="tip(event,'μ','마찰계수. Vf = μ·max(P,0)')">?</button></div>
+        <div class="ir" id="rowMuCustom" style="display:none"><label>마찰계수 직접입력</label><span class="sym">μ*</span><input type="number" id="iMuCustom" value="0.70" step="0.01" oninput="schedCalc()"><span class="unt">—</span><button class="hb" onclick="tip(event,'μ*','직접 입력 마찰계수')">?</button></div>
+        <div class="rebar-info" style="margin-top:6px">
+          <div class="rebar-info-row"><span class="rebar-info-k">선택 Case Vua,g</span><span class="rebar-info-v" id="dVuaRaw">—</span></div>
+          <div class="rebar-info-row"><span class="rebar-info-k">Vf = μP</span><span class="rebar-info-v" id="dVf">—</span></div>
+          <div class="rebar-info-row"><span class="rebar-info-k">Vua,i</span><span class="rebar-info-v" id="dVuaI">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sec"><div class="st">전단키 (Shear Lug / Plate·Rib)<span class="newbadge">NEW</span></div>
+    <div class="ir"><label>전단키 사용 여부</label><span class="sym">SL</span>
+      <select id="iUseShearLug" onchange="onShearLugToggle()">
+        <option value="no" selected>미사용</option><option value="yes">사용</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'전단키(Shear Lug)','ACI 318-19 §17.11 — 베이스플레이트 하부에 용접된 강판/리브가 콘크리트에 직접 지압되어 전단력을 저항하는 방식. 사용 시 전단은 원칙적으로 전단키가 전량 부담합니다(§17.11.1.1.2). Octagonal v2.1 로직을 사각 페데스탈 기준(Ca1V/Ca2V)으로 이식.')">?</button></div>
+    <div id="shearLugFields" style="display:none">
+      <div class="ainfo" style="margin-bottom:7px">
+        <div class="ai-t">📐 ACI 318-19 §17.11 적용</div>
+        <div class="ai-r"><span class="ai-k">최소 앵커수</span><span class="ai-v">4EA (§17.11.1.1.2)</span></div>
+        <div class="ai-r"><span class="ai-k">φ (지압/파괴)</span><span class="ai-v">0.65 / 0.65</span></div>
+        <div class="ai-r"><span class="ai-k">전단 분담</span><span class="ai-v">전단키가 전량 부담</span></div>
+      </div>
+      <div class="ir"><label>전단키 폭 (bsl)</label><span class="sym">bsl</span><input type="number" id="iBsl" value="300" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'bsl','전단하중 방향과 직각인 전단키의 폭')">?</button></div>
+      <div class="ir"><label>전단키 두께 (tsl)</label><span class="sym">tsl</span><input type="number" id="iTsl" value="25" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'tsl','하중 방향으로의 강판 두께. 유효지압면적 산정 시 2×tsl 깊이가 기준(§17.11.2.1.1)')">?</button></div>
+      <div class="ir"><label>전단키 매입높이 (hsl)</label><span class="sym">hsl</span><input type="number" id="iHsl" value="150" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'hsl','베이스플레이트 하부에서 전단키 하단까지의 매입 높이')">?</button></div>
+      <div class="ir"><label>유효매입깊이 hef,sl (자동)</label><span class="sym">hef,sl</span><input type="number" id="iHefslOv" placeholder="auto=hsl" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'hef,sl','비워두면 hsl과 동일 적용(§17.11.3.1.1)')">?</button></div>
+      <div class="ir"><label>연단거리 Ca1,sl (자동)</label><span class="sym">Ca1,sl</span><input type="number" id="iCa1slOv" placeholder="auto" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'Ca1,sl','비워두면 앵커 전단검토와 동일한 ca1′(사각 페데스탈 자동산정, Ca1V)을 재사용합니다.')">?</button></div>
+      <div class="rebar-info">
+        <div class="rebar-info-row"><span class="rebar-info-k">Aef,sl (유효지압면적)</span><span class="rebar-info-v" id="riAefSl">—</span></div>
+        <div class="rebar-info-row"><span class="rebar-info-k">ψbrg,sl (축하중 보정)</span><span class="rebar-info-v" id="riPsiBrgSl">—</span></div>
+      </div>
+      <div class="warnbox">⚠ v4.52 범위: 단일 전단키·모서리 아닌 변 방향 지압/파괴 검토만 자동화되어 있습니다(Octagonal v2.1과 동일 범위). 다중 전단키 합산(§17.11.2.4), 모서리 검토(§17.11.3.3), 인장앵커 모멘트 반영(§17.11.1.1.9)은 별도 수동 검토가 필요합니다.</div>
+    </div>
+  </div>
+  <div class="sec"><div class="st">강도감소계수 φ</div>
+    <div class="phi-row"><label style="font-size:11px;color:var(--t2)">φ 강재 인장</label><span class="sym">φs,t</span><div class="phi-val" id="dPhiST">0.75</div><span class="unt">—</span></div>
+    <div class="phi-row"><label style="font-size:11px;color:var(--t2)">φ 강재 전단</label><span class="sym">φs,v</span><div class="phi-val" id="dPhiSV">0.65</div><span class="unt">—</span></div>
+    <div class="phi-row"><label style="font-size:11px;color:var(--t2)">φ 콘크리트 인장</label><span class="sym">φc,t</span><div class="phi-val" id="dPhiCT">0.70</div><span class="unt">—</span></div>
+    <div class="phi-row"><label style="font-size:11px;color:var(--t2)">φ 콘크리트 전단</label><span class="sym">φc,v</span><div class="phi-val" id="dPhiCV">0.70</div><span class="unt">—</span></div>
+    <div style="font-size:10px;color:var(--t3);margin-top:4px">※ φs: 강재요소 연성/취성 선택값에 따라 Table 17.5.3(a) 적용. φc: Supplementary Reinforcement 유무에 따라 Table 17.5.3(b) 적용.</div>
+  </div>
+  <div class="sec"><div class="st">보강 철근</div>
+    <div class="ir"><label>Supplementary Reinforcement</label><span class="sym">SR</span>
+      <select id="iHasRebar" onchange="onRebarToggle()">
+        <option value="no" selected>없음</option><option value="yes">있음</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'Supplementary Reinforcement','보강철근 있음 선택 시 φc,t 및 φc,v = 0.75, 없음 선택 시 0.70 (Table 17.5.3(b))')">?</button></div>
+
+    <div class="ir" id="rowRebarDetailMode" style="display:none"><label>인장 보강철근 제원 입력 Nnr</label><span class="sym">Nnr</span>
+      <select id="iRebarDetailMode" onchange="onRebarToggle()">
+        <option value="no" selected>입력안함</option>
+        <option value="yes">입력함</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'인장 보강철근 제원 입력 Nnr','인장 Concrete Breakout 보강철근 저항 φNnr 산정용 입력입니다. Vnr 입력과 별도로 작동합니다.')">?</button></div>
+
+    <div class="ir" id="rowVnrMode" style="display:none"><label>전단 보강철근 제원 입력 Vnr</label><span class="sym">Vnr</span>
+      <select id="iVnrMode" onchange="onRebarToggle()">
+        <option value="no" selected>입력안함</option>
+        <option value="yes">입력함</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'전단 보강철근 제원 입력 Vnr','전단 Concrete Breakout 보강철근 저항 φVnr 산정용 입력입니다. Nnr 입력과 별도로 작동합니다.')">?</button></div>
+
+    <div class="ir" id="rowTieMode" style="display:none"><label>띠철근 제원 입력</label><span class="sym">Tie</span>
+      <select id="iTieMode" onchange="onRebarToggle()">
+        <option value="no" selected>입력안함</option><option value="yes">입력함</option>
+      </select><span class="unt"></span><button class="hb" onclick="tip(event,'띠철근 제원 입력','전단 ψc,V 보정용 입력입니다. 3D View에는 표시하지 않습니다.')">?</button></div>
+
+    <div class="rebar-info" id="rebarDetailStatus" style="display:none;margin-bottom:5px">
+      <div class="rebar-info-row"><span class="rebar-info-k">제원 입력 상태</span><span class="rebar-info-v" id="riRebarDetailStatus">—</span></div>
+    </div>
+
+    <div id="rebarFields">
+      <div style="font-size:10px;color:var(--ac3);font-weight:700;margin-bottom:6px">Nnr용 수직철근</div>
+      <div class="ir"><label>수직 철근 지름</label><span class="sym">dv</span>
+        <select id="iRb" onchange="onRebarChange()">
+          <option value="10">D10</option><option value="13">D13</option>
+          <option value="16">D16</option><option value="19">D19</option><option value="22">D22</option>
+          <option value="25">D25</option><option value="29">D29</option><option value="32" selected>D32</option><option value="35">D35</option>
+        </select><span class="unt"></span><button class="hb" onclick="tip(event,'dv','Nnr 산정용 0.5hef 이내 수직철근')">?</button></div>
+      <div class="ir"><label>페데스탈 배치 철근 총수</label><span class="sym">Ntot</span><input type="number" id="iNtot" value="16" min="0" max="80" oninput="onRebarChange()"><span class="unt">ea</span><button class="hb" onclick="tip(event,'Ntot','0.5hef 내 N1 자동계산')">?</button></div>
+      <div class="rebar-info">
+        <div class="rebar-info-row"><span class="rebar-info-k">0.5hef 범위</span><span class="rebar-info-v" id="riHefHalf">—</span></div>
+        <div class="rebar-info-row"><span class="rebar-info-k">N1 (0.5hef 내 철근)</span><span class="rebar-info-v" id="riN1">—</span></div>
+      </div>
+      <div class="ir"><label>철근 항복강도 (fy)</label><span class="sym">fy</span><input type="number" id="iFy" value="400" oninput="schedCalc()"><span class="unt">MPa</span><button class="hb" onclick="tip(event,'fy','SD400=400, SD500=500. Nnr 및 Vnr 공통 적용')">?</button></div>
+      <div class="ir"><label>상단~철근 거리 (C1)</label><span class="sym">C1</span><input type="number" id="iC1" value="50" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'C1','Nnr의 Ld1r 계산 및 Vnr 배치 기준 피복으로 사용')">?</button></div>
+      <div class="ir"><label>피복두께 (C2)</label><span class="sym">C2</span><input type="number" id="iC2" value="75" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'C2','Nnr 수직철근 배치 피복두께')">?</button></div>
+      <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--bd)">
+        <div style="font-size:10px;color:var(--ac3);font-weight:700;margin-bottom:5px">정착길이 (ACI §25.5.1 인장 직선, other than top)</div>
+        <div class="ir"><label>Ld (자동계산)</label><span class="sym">Ld</span><input type="number" id="iLdAuto" readonly style="background:var(--s3);color:var(--t3);cursor:default;border-style:dashed"><span class="unt">mm</span><button class="hb" onclick="tip(event,'Ld 자동','fy×ψt×ψe/(1.1×λ×√f′c)×db')">?</button></div>
+        <div class="ir"><label>Ld Override (수동)</label><span class="sym">Ld*</span><input type="number" id="iLdOv" placeholder="auto" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'Ld Override','비워두면 자동계산')">?</button></div>
+      </div>
+    </div>
+
+    <div id="vnrFields" style="display:none;border:1px solid var(--bd);border-radius:6px;padding:8px;margin:6px 0;background:rgba(255,255,255,.02)">
+      <div style="font-size:10px;color:var(--ac3);font-weight:700;margin-bottom:6px">Vnr용 횡철근 — X방향 / Y방향 별도 입력</div>
+      <div class="ir"><label>X방향 횡철근 지름</label><span class="sym">dh,x</span>
+        <select id="iDhx" onchange="schedCalc()">
+          <option value="10">D10</option><option value="13">D13</option><option value="16" selected>D16</option><option value="19">D19</option><option value="22">D22</option><option value="25">D25</option><option value="29">D29</option><option value="32">D32</option><option value="35">D35</option>
+        </select><span class="unt"></span><button class="hb" onclick="tip(event,'dh,x','Y축 기준 계산 시 X축과 평행한 횡철근의 지름')">?</button></div>
+      <div class="ir"><label>X방향 횡철근 배치 수</label><span class="sym">Vxtot</span><input type="number" id="iVxtot" value="4" min="0" max="50" oninput="schedCalc()"><span class="unt">ea</span><button class="hb" onclick="tip(event,'Vxtot','상단에서 C3,x만큼 떨어진 높이에 X축과 평행하게 균등 배치되는 횡철근 수')">?</button></div>
+      <div class="ir"><label>X방향 상단~철근거리</label><span class="sym">C3,x</span><input type="number" id="iC3x" value="50" min="0" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'C3,x','상단에서 X방향 횡철근까지의 수직 거리')">?</button></div>
+      <div class="ir"><label>X방향 피복두께</label><span class="sym">C4,x</span><input type="number" id="iC4x" value="50" min="0" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'C4,x','Vnr_x의 Ld,calc 및 X방향 횡철근 단부 피복')">?</button></div>
+      <div style="height:5px;border-top:1px dashed var(--bd);margin:7px 0"></div>
+      <div class="ir"><label>Y방향 횡철근 지름</label><span class="sym">dh,y</span>
+        <select id="iDhy" onchange="schedCalc()">
+          <option value="10">D10</option><option value="13">D13</option><option value="16" selected>D16</option><option value="19">D19</option><option value="22">D22</option><option value="25">D25</option><option value="29">D29</option><option value="32">D32</option><option value="35">D35</option>
+        </select><span class="unt"></span><button class="hb" onclick="tip(event,'dh,y','X축 기준 계산 시 Y축과 평행한 횡철근의 지름')">?</button></div>
+      <div class="ir"><label>Y방향 횡철근 배치 수</label><span class="sym">Vytot</span><input type="number" id="iVytot" value="4" min="0" max="50" oninput="schedCalc()"><span class="unt">ea</span><button class="hb" onclick="tip(event,'Vytot','상단에서 C3,y만큼 떨어진 높이에 Y축과 평행하게 균등 배치되는 횡철근 수')">?</button></div>
+      <div class="ir"><label>Y방향 상단~철근거리</label><span class="sym">C3,y</span><input type="number" id="iC3y" value="50" min="0" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'C3,y','상단에서 Y방향 횡철근까지의 수직 거리')">?</button></div>
+      <div class="ir"><label>Y방향 피복두께</label><span class="sym">C4,y</span><input type="number" id="iC4y" value="50" min="0" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'C4,y','Vnr_y의 Ld,calc 및 Y방향 횡철근 단부 피복')">?</button></div>
+    </div>
+
+    <div id="tieFields" style="display:none;border:1px solid var(--bd);border-radius:6px;padding:8px;margin:6px 0;background:rgba(255,255,255,.02)">
+      <div style="font-size:10px;color:var(--ac3);font-weight:700;margin-bottom:5px">띠철근 — ψc,V 보정용</div>
+      <div class="ir"><label>띠철근 지름</label><span class="sym">dtie</span>
+        <select id="iDtie" onchange="schedCalc()">
+          <option value="10">D10</option><option value="13">D13</option><option value="16" selected>D16</option><option value="19">D19</option>
+        </select><span class="unt"></span><button class="hb" onclick="tip(event,'dtie','전단 ψc,V 보정에 사용합니다. 3D View에는 표시하지 않습니다.')">?</button></div>
+      <div class="ir"><label>띠철근 간격</label><span class="sym">s_tie</span><input type="number" id="iStie" value="150" min="0" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'s_tie','전단 ψc,V 보정에 사용합니다. 3D View에는 표시하지 않습니다.')">?</button></div>
+    </div>
+  </div>
+  <div style="height:16px"></div>
+</div>
+<div id="cv">
+  <div id="vh"><span id="vbg" class="vbg">—</span><span id="vd" style="color:var(--t2)">—</span></div>
+  <div id="viewSplit">
+    <div id="cw3d" style="flex:1;min-height:80px">
+      <div id="iso3d"></div>
+      <div id="axbox">
+        <div class="axr"><span style="color:#ff6060;font-weight:700;font-size:14px">→</span><span> X (Lpx)</span></div>
+        <div class="axr"><span style="color:#55ccff;font-weight:700;font-size:14px">→</span><span> Y (Lpy)</span></div>
+        <div class="axr"><span style="color:#55dd77;font-weight:700;font-size:14px">↑</span><span> Z (수직)</span></div>
+      </div>
+      <div id="legbox">
+        <div style="font-size:10px;font-weight:700;color:var(--ac3);margin-bottom:3px">범례</div>
+        <div class="lr"><span class="ld" style="background:#1a4a90"></span><span>페데스탈</span></div>
+        <div class="lr"><span class="ld" style="background:#c45c0a"></span><span>앵커 볼트</span></div>
+        <div class="lr"><span class="ld" style="background:#2ea84d"></span><span>보강 철근</span></div>
+        <div class="lr"><span class="ll" style="background:#19d2ff"></span><span>Vnr-X bar</span></div>
+        <div class="lr"><span class="ll" style="background:#ff8c3a"></span><span>Vnr-Y bar</span></div>
+        <div class="lr"><span class="ll" style="background:#4da6ff"></span><span>↑ Nua</span></div>
+        <div class="lr"><span class="ll" style="background:#ff6060"></span><span>Vuax →</span></div>
+        <div class="lr"><span class="ll" style="background:#55ccff"></span><span>Vuay →</span></div>
+      </div>
+      <div id="chint">드래그:회전 │ 휠버튼+드래그:이동 │ 스크롤:줌</div>
+      <label id="rebar3dToggle" class="disabled"><input type="checkbox" id="iAuxRebar3D" disabled onchange="this.dataset.userSet='1';schedCalc()">보조철근 모델</label>
+      <div id="vctrls">
+        <button class="vc" onclick="resetView()">⌂</button>
+        <button class="vc" onclick="setViewTop()">T</button>
+        <button class="vc" onclick="setViewFront()">F</button>
+        <button class="vc" onclick="setViewSide()">S</button>
+      </div>
+    </div>
+    <div id="vDivider"></div>
+    <div id="cw2d" style="height:220px;min-height:60px">
+      <canvas id="plan2d"></canvas>
+      <div id="plan2d-label">2D 평면도 — 철근·앵커 배치 (X-Y Top View)</div>
+      <div id="plan2d-hint">스크롤:줌 │ 휠버튼+드래그:이동 │ 더블클릭:리셋</div>
+    </div>
+  </div>
+</div>
+<div id="rp">
+  <div id="sbar">
+    <div class="sc sna" id="sct"><div class="sl">인장</div><div class="sv" id="svt">—</div></div>
+    <div class="sc sna" id="scv"><div class="sl">전단</div><div class="sv" id="svv">—</div></div>
+    <div class="sc sna" id="scc"><div class="sl">복합</div><div class="sv" id="svc">—</div></div>
+  </div>
+  <div id="rc"><div style="text-align:center;padding:50px 0;color:var(--t3)"><div style="font-size:32px;margin-bottom:10px">📐</div><div>입력값 변경 시 자동 계산됩니다</div></div></div>
+</div>
+</div></div>
+<div id="tip"></div>
+<div class="modal-overlay" id="modalCatalog"><div class="modal" style="width:780px">
+  <div class="modal-head"><h3>📋 Headed Bolt 카탈로그 (ASTM F1554)</h3><button class="modal-close" onclick="closeModal('modalCatalog')">✕</button></div>
+  <div class="modal-body">
+    <div style="font-size:11px;color:var(--t2);margin-bottom:10px">eh = Across Corner 값 사용</div>
+    <table class="dev-table">
+      <tr><th>da (mm)</th><th>Across Flat</th><th>eh (AC, mm)</th><th>Min H (mm)</th><th>Ase,N (mm²)</th><th>Abrg (mm²)</th></tr>
+      <tr id="cat_row_16"><td class="hdia">M16</td><td>24</td><td>27.7</td><td>10</td><td id="ca16_an">—</td><td id="ca16_ab">—</td></tr>
+      <tr id="cat_row_20"><td class="hdia">M20</td><td>30</td><td>34.6</td><td>13</td><td id="ca20_an">—</td><td id="ca20_ab">—</td></tr>
+      <tr id="cat_row_24"><td class="hdia">M24</td><td>36</td><td>41.6</td><td>15</td><td id="ca24_an">—</td><td id="ca24_ab">—</td></tr>
+      <tr id="cat_row_27"><td class="hdia">M27</td><td>41</td><td>47.3</td><td>17</td><td id="ca27_an">—</td><td id="ca27_ab">—</td></tr>
+      <tr id="cat_row_30"><td class="hdia">M30</td><td>46</td><td>53.1</td><td>19</td><td id="ca30_an">—</td><td id="ca30_ab">—</td></tr>
+      <tr id="cat_row_36"><td class="hdia">M36</td><td>55</td><td>63.5</td><td>23</td><td id="ca36_an">—</td><td id="ca36_ab">—</td></tr>
+      <tr id="cat_row_42"><td class="hdia">M42</td><td>65</td><td>75.1</td><td>26</td><td id="ca42_an">—</td><td id="ca42_ab">—</td></tr>
+      <tr id="cat_row_48"><td class="hdia">M48</td><td>75</td><td>86.6</td><td>30</td><td id="ca48_an">—</td><td id="ca48_ab">—</td></tr>
+      <tr id="cat_row_56"><td class="hdia">M56</td><td>85</td><td>98.1</td><td>35</td><td id="ca56_an">—</td><td id="ca56_ab">—</td></tr>
+      <tr id="cat_row_64"><td class="hdia">M64</td><td>95</td><td>109.7</td><td>40</td><td id="ca64_an">—</td><td id="ca64_ab">—</td></tr>
+    </table>
+    <div style="margin-top:10px;font-size:10.5px;color:var(--t3)">Abrg = eh² - π/4×da² | Ase,N = π/4×(0.9×da)²</div>
+  </div>
+</div></div>
+<div class="modal-overlay" id="modalDevLen"><div class="modal" style="width:860px">
+  <div class="modal-head"><h3>📐 정착길이 Ld — ACI 318-19 §25.5.1</h3><button class="modal-close" onclick="closeModal('modalDevLen')">✕</button></div>
+  <div class="modal-body">
+    <div style="font-size:11px;color:var(--t2);margin-bottom:8px">Ld = fy×ψt×ψe/(1.1×λ×√f'c)×db | ψt=ψe=1.0, λ=1.0<br>현재 조건 D<span id="devDa2">—</span>, f'c=<span id="devFc2">—</span>MPa: <span style="color:var(--gr);font-weight:700">초록</span></div>
+    <div style="overflow-x:auto"><table class="dev-table" id="devLenTable2"><tr><th>Dia.</th><th>f'c=21</th><th>f'c=24</th><th>f'c=27</th><th>f'c=30</th><th>f'c=35</th><th>f'c=40</th><th>f'c=45</th><th>f'c=50</th><th>공식</th></tr></table></div>
+  </div>
+</div></div>
+<div class="modal-overlay" id="modalSave"><div class="modal" style="width:520px">
+  <div class="modal-head"><h3>💾 저장 / 불러오기</h3><button class="modal-close" onclick="closeModal('modalSave')">✕</button></div>
+  <div class="modal-body">
+    <div style="margin-bottom:12px"><div style="font-size:11px;color:var(--t2);margin-bottom:8px">저장 이름</div>
+      <div style="display:flex;gap:8px">
+        <input id="saveSlotName" placeholder="예: C1기둥 앵커" style="flex:1;padding:6px 10px;background:var(--bg);border:1px solid var(--bd2);border-radius:5px;color:var(--t1);font-size:12px;outline:none">
+        <button class="abtn" onclick="saveInputs()" style="background:var(--ac);color:#fff">저장</button>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:8px">저장된 케이스</div>
+    <div id="saveSlotList"></div>
+    <div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px;display:flex;gap:8px">
+      <button class="abtn" onclick="exportJSON()" style="flex:1">📤 JSON 내보내기</button>
+      <label class="abtn" style="flex:1;cursor:pointer">📥 JSON 불러오기<input type="file" accept=".json" style="display:none" onchange="importJSON(event)"></label>
+    </div>
+  </div>
+</div></div>
+<div class="modal-overlay" id="modalRetrofit"><div class="modal" style="width:920px;max-width:96vw">
+  <div class="modal-head"><h3>🔧 긴급 보강 설계 — 앵커 파손/오시공 시 Hilti 화학앵커 대체</h3><button class="modal-close" onclick="closeModal('modalRetrofit')">✕</button></div>
+  <div class="modal-body" id="retrofitBody"></div>
+</div></div>
+<div class="modal-overlay" id="modalSuggest"><div class="modal" style="width:820px;max-width:96vw">
+  <div class="modal-head"><h3>💡 N.G 개선 제안 — 실제 계산 엔진 재탐색 결과</h3><button class="modal-close" onclick="closeModal('modalSuggest')">✕</button></div>
+  <div class="modal-body" id="suggestBody"></div>
+</div></div>
+<div class="modal-overlay" id="modalExtract"><div class="modal" style="width:1080px;max-width:97vw">
+  <div class="modal-head"><h3>📄 계산서 자동 추출 (베타) — PDF / Excel 지원</h3><button class="modal-close" onclick="closeModal('modalExtract')">✕</button></div>
+  <div class="modal-body" id="extractBody">
+    <div class="warnbox" style="margin-bottom:14px">⚠ 베타 기능입니다. PDF는 텍스트 레이어에서, Excel은 셀 라벨 옆 값에서 후보를 찾습니다(엑셀이 더 안정적입니다). 스캔 이미지 PDF는 인식되지 않으며, 모든 항목은 <b>사람이 직접 확인 후에만</b> 좌측 입력값에 반영됩니다. Rectangular 배치의 nx/ny/앵커 간격은 자동 추출 대상이 아니므로 도면을 보고 직접 입력하세요.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px">
+      <div>
+        <div class="drop-zone" id="dzCalc" onclick="g('fileCalc').click()">
+          <div class="dz-ico">📊</div>
+          <div class="dz-t">PEDAS 계산서 PDF</div>
+          <div class="dz-s" id="dzCalcStatus">클릭 또는 드래그 (여러 개 가능)</div>
+        </div>
+        <input type="file" id="fileCalc" accept="application/pdf" multiple style="display:none" onchange="handlePdfFiles(this.files,'calc')">
+      </div>
+      <div>
+        <div class="drop-zone" id="dzExcel" onclick="g('fileExcel').click()">
+          <div class="dz-ico">📗</div>
+          <div class="dz-t">PEDAS 계산서 Excel</div>
+          <div class="dz-s" id="dzExcelStatus">클릭 또는 드래그 (.xlsx/.xls, 여러 개 가능) — 권장</div>
+        </div>
+        <input type="file" id="fileExcel" accept=".xlsx,.xls" multiple style="display:none" onchange="handleExcelFiles(this.files,'excel')">
+      </div>
+      <div>
+        <div class="drop-zone" id="dzVendor" onclick="g('fileVendor').click()">
+          <div class="dz-ico">📐</div>
+          <div class="dz-t">Vendor Print PDF</div>
+          <div class="dz-s" id="dzVendorStatus">클릭 또는 드래그 (여러 개 가능)</div>
+        </div>
+        <input type="file" id="fileVendor" accept="application/pdf" multiple style="display:none" onchange="handlePdfFiles(this.files,'vendor')">
+      </div>
+    </div>
+    <div id="extractResults"></div>
+  </div>
+</div></div>
+<script>
+
+// ═══════════════════ CATALOG ═══════════════════
+const EH_CAT={16:27.7,20:34.6,24:41.6,27:47.3,30:53.1,36:63.5,42:75.1,48:86.6,56:98.1,64:109.7};
+const CAT_KEYS=[16,20,24,27,30,36,42,48,56,64];
+let ehManualMode=false;
+function getCatEh(da){return EH_CAT[da]||(da*1.76).toFixed(1)*1;}
+
+// ═══════════════════ ANCHOR CONFIG ═══════════════════
+const ACFG={
+  cast_headed:{label:'Cast-in Headed Bolt',cast:true,kc:17,pst:.75,psv:.65,pct:.70,pcv:.70,head:true,hook:false,
+    info:[['설치','콘크리트 타설 전'],['kc','10 §17.6.2.2.2'],['φs','강재요소 거동 선택값 적용'],['φc','SR 유무 선택값 적용'],['Pullout','Np=8×Abrg×f′c']]},
+  cast_hooked:{label:'Cast-in Hooked Bolt',cast:true,kc:17,pst:.75,psv:.65,pct:.70,pcv:.70,head:false,hook:true,
+    info:[['설치','타설 전'],['kc','10 §17.6.2.2.2'],['φs','강재요소 거동 선택값 적용'],['Pullout','Np=0.9×fc×lh×da']]},
+  post_exp:{label:'Post-installed Expansion',cast:false,kc:10,pst:.65,psv:.60,pct:.65,pcv:.65,head:true,hook:false,
+    info:[['설치','경화 후 팽창'],['kc','7 §17.6.2.2.2'],['φs','강재요소 거동 선택값 적용'],['φc','SR 유무 선택값 적용']]},
+  post_uc:{label:'Post-installed Undercut',cast:false,kc:10,pst:.65,psv:.60,pct:.65,pcv:.65,head:true,hook:false,
+    info:[['설치','언더컷'],['kc','7 §17.6.2.2.2'],['φs','강재요소 거동 선택값 적용']]},
+  post_adh:{label:'Post-installed Adhesive',cast:false,kc:10,pst:.65,psv:.60,pct:.65,pcv:.65,head:false,hook:false,
+    info:[['설치','화학 앵커'],['kc','7 §17.6.2.2.2'],['추가','§17.6.5 Bond']]},
+};
+
+const g=id=>document.getElementById(id);
+const nv=id=>{const v=parseFloat(g(id)?g(id).value:'0');return isNaN(v)?0:v;};
+const nvi=id=>{const v=parseInt(g(id)?g(id).value:'0');return isNaN(v)?0:v;};
+
+// ═══════════════════ ANCHOR TYPE ═══════════════════
+function onAT(){
+  const k=g('iAT').value, c=ACFG[k]||ACFG.cast_headed;
+  let h=`<div class="ai-t">📌 ${c.label}</div>`;
+  c.info.forEach(([a,b])=>h+=`<div class="ai-r"><span class="ai-k">${a}</span><span class="ai-v">${b}</span></div>`);
+  g('ainfo').innerHTML=h;
+  const ph=getPhis();
+  g('dPhiST').textContent=ph.pST.toFixed(2); g('dPhiSV').textContent=ph.pSV.toFixed(2);
+  g('dPhiCT').textContent=ph.pCT.toFixed(2); g('dPhiCV').textContent=ph.pCV.toFixed(2);
+  g('rowEh').style.display=c.head?'':'none';
+  g('ehCatalogInfo').style.display=c.head?'':'none';
+  if(g('rowAbrg'))g('rowAbrg').style.display=c.head?'':'none';
+  g('rowLh').style.display=c.hook?'':'none';
+  ['rowBondPreset','rowTauCr','rowTauUncr','rowCacBond'].forEach(id=>{if(g(id))g(id).style.display=k==='post_adh'?'':'none';});
+  if(c.head)onDaChange();
+  schedCalc();
+}
+
+function onBondPresetChange(){
+  const p=g('iBondPreset')?g('iBondPreset').value:'indoor';
+  const indoor=p==='indoor';
+  if(g('iTauCr'))g('iTauCr').value=indoor?'2.1':'1.4';
+  if(g('iTauUncr'))g('iTauUncr').value=indoor?'7.0':'4.5';
+}
+function getPhis(){
+  const steelDuct=(g('iSteelDuct')&&g('iSteelDuct').value)||'ductile';
+  const pST=steelDuct==='ductile'?0.75:0.65;
+  const pSV=steelDuct==='ductile'?0.65:0.60;
+  const hasRebar=!(g('iHasRebar')&&g('iHasRebar').value==='no');
+  const pC=hasRebar?0.75:0.70;
+  return{pST,pSV,pCT:pC,pCV:pC,steelDuct};
+}
+
+// ═══════════════════ EH CATALOG ═══════════════════
+function calcAbrgAuto(){
+  const da=nv('iDa'), eh=nv('iEh');
+  return Math.max(0,eh*eh-Math.PI/4*da*da);
+}
+function setAbrgInputState(){
+  const el=g('iAbrg'); if(!el)return;
+  el.readOnly=!ehManualMode;
+  if(ehManualMode){
+    el.style.background='var(--s2)';
+    el.style.color='var(--t1)';
+    el.style.cursor='text';
+    el.style.borderStyle='solid';
+  }else{
+    el.style.background='var(--s3)';
+    el.style.color='var(--t3)';
+    el.style.cursor='default';
+    el.style.borderStyle='dashed';
+  }
+}
+function updateAbrgAuto(force=false){
+  const el=g('iAbrg'); if(!el)return;
+  if(force || !ehManualMode || !el.value)el.value=calcAbrgAuto().toFixed(2);
+  setAbrgInputState();
+}
+function onDaChange(){
+  const da=nv('iDa');
+  const c=ACFG[g('iAT').value]||ACFG.cast_headed;
+  if(c.head&&!ehManualMode){
+    const eh=getCatEh(da);
+    g('iEh').value=eh;
+    g('ehCatalogText').textContent=EH_CAT[da]?`ASTM F1554 M${da}`:'추정 (da×1.76)';
+    g('ehCatalogVal').textContent=`eh=${eh}mm`;
+  }
+  updateAbrgAuto(!ehManualMode);
+  schedCalc();
+}
+function toggleEhManual(){
+  ehManualMode=!ehManualMode;
+  document.querySelector('.eh-manual-toggle').textContent=ehManualMode?'카탈로그 사용':'수동입력';
+  if(!ehManualMode)onDaChange();
+  else{g('ehCatalogText').textContent='수동 입력 모드';updateAbrgAuto(false);schedCalc();}
+}
+function onEhManual(){ehManualMode=true;document.querySelector('.eh-manual-toggle').textContent='카탈로그 사용';g('ehCatalogText').textContent='수동 입력 모드';updateAbrgAuto(true);schedCalc();}
+
+// ═══════════════════ DEVELOPMENT LENGTH ═══════════════════
+function calcLd(db,fc,fy=400,lambda=1.0){
+  const ld=fy*1.0*1.0/(1.1*lambda*Math.sqrt(fc))*db;
+  return Math.max(300, Math.round(ld));
+}
+
+function buildDevTable(){
+  const dias=[10,13,16,19,22,25,29,32,35];
+  const fcs=[21,24,27,30,35,40,45,50];
+  const curDv=nvi('iRb'), curFc=nv('iFc');
+  const tbl=g('devLenTable2');
+  while(tbl.rows.length>1)tbl.deleteRow(1);
+  dias.forEach(d=>{
+    const tr=document.createElement('tr');
+    const th=document.createElement('td'); th.textContent='D'+d; th.className='hdia'; tr.appendChild(th);
+    fcs.forEach(fc=>{
+      const td=document.createElement('td');
+      const ld=calcLd(d,fc);
+      td.textContent=ld+'mm';
+      if(d===curDv&&Math.abs(fc-curFc)<1)td.className='hi';
+      tr.appendChild(td);
+    });
+    const te=document.createElement('td'); te.style.fontSize='9px'; te.style.color='var(--t3)';
+    te.textContent=`400/(1.1√f'c)×${d}`; tr.appendChild(te);
+    tbl.appendChild(tr);
+  });
+}
+
+// ═══════════════════ SPACING INPUTS ═══════════════════
+function getSxArr(){const nx=Math.max(1,nvi('iNx'));const a=[];for(let i=0;i<nx-1;i++){const el=g('iSx_'+i);const v=el?parseFloat(el.value):NaN;a.push(isNaN(v)||v<=0?250:v);}return a;}
+function getSyArr(){const ny=Math.max(1,nvi('iNy'));const a=[];for(let i=0;i<ny-1;i++){const el=g('iSy_'+i);const v=el?parseFloat(el.value):NaN;a.push(isNaN(v)||v<=0?250:v);}return a;}
+function buildSpacingInputs(){
+  const nx=Math.max(1,nvi('iNx')),ny=Math.max(1,nvi('iNy'));
+  function mk(cid,dir,cnt,pfx){
+    const w=g(cid);const prev={};for(let i=0;i<10;i++){const e=g(pfx+i);if(e)prev[i]=e.value;}
+    w.innerHTML='';if(cnt<1)return;
+    const ti=document.createElement('div');ti.style.cssText='font-size:10px;color:var(--t3);padding:2px 0 1px 2px';
+    ti.textContent=dir+'방향 간격 ('+cnt+'스팬)';w.appendChild(ti);
+    for(let i=0;i<cnt;i++){
+      const r=document.createElement('div');r.className='ir';
+      r.innerHTML=`<label>${dir}${i+1}~${i+2} 간격</label><span class="sym">s${dir.toLowerCase()}${i+1}</span><input type="number" id="${pfx}${i}" value="${prev[i]||250}" min="1" oninput="schedCalc()"><span class="unt">mm</span>`;
+      w.appendChild(r);
+    }
+  }
+  mk('sxWrap','X',nx-1,'iSx_');mk('syWrap','Y',ny-1,'iSy_');
+  buildAnchorActiveGrid();
+  updateManualAnchorLoadVisibility();
+}
+function onNxNy(){buildSpacingInputs();schedCalc();}
+
+function anchorPosCalc(nx,ny,sxArr,syArr){
+  const xc=[0];sxArr.forEach((v,i)=>xc.push(xc[i]+v));
+  const yc=[0];syArr.forEach((v,i)=>yc.push(yc[i]+v));
+  const tx=xc[xc.length-1]||0,ty=yc[yc.length-1]||0;
+  return{xs:xc.map(v=>v-tx/2),ys:yc.map(v=>v-ty/2),tx,ty};
+}
+
+function getAnchorKey(ix,iy){return ix+'_'+iy;}
+function getDeletedAnchors(){
+  const vals=[];
+  document.querySelectorAll('.anchor-active-cb').forEach(cb=>{if(!cb.checked)vals.push(cb.dataset.key);});
+  return vals;
+}
+function getActiveAnchorPts(nx,ny,sxArr,syArr,deleted){
+  const pos=anchorPosCalc(nx,ny,sxArr,syArr);
+  const del=new Set(deleted||[]);
+  const pts=[];
+  for(let ix=0;ix<nx;ix++){
+    for(let iy=0;iy<ny;iy++){
+      const key=getAnchorKey(ix,iy);
+      if(!del.has(key))pts.push({ix,iy,key,x:pos.xs[ix],y:pos.ys[iy]});
+    }
+  }
+  if(!pts.length){
+    const ix=0,iy=0,key=getAnchorKey(0,0);
+    pts.push({ix,iy,key,x:pos.xs[0]||0,y:pos.ys[0]||0});
+  }
+  return{pts,xs:pos.xs,ys:pos.ys,tx:pos.tx,ty:pos.ty};
+}
+function buildAnchorActiveGrid(){
+  const box=g('anchorActiveGrid'); if(!box)return;
+  const nx=Math.max(1,nvi('iNx')), ny=Math.max(1,nvi('iNy'));
+  const prev=new Set(getDeletedAnchors());
+  const defaultDel=(nx===3&&ny===3&&prev.size===0)?new Set(['1_1']):prev;
+  let h='<div style="display:grid;grid-template-columns:repeat('+nx+',minmax(34px,1fr));gap:4px">';
+  for(let iy=ny-1;iy>=0;iy--){
+    for(let ix=0;ix<nx;ix++){
+      const key=getAnchorKey(ix,iy);
+      const checked=!defaultDel.has(key);
+      h+=`<label style="display:flex;align-items:center;justify-content:center;gap:3px;padding:4px 3px;border:1px solid var(--bd2);border-radius:4px;background:var(--bg);font-size:10px;color:var(--t2);cursor:pointer">
+        <input class="anchor-active-cb" type="checkbox" data-key="${key}" data-ix="${ix}" data-iy="${iy}" ${checked?'checked':''} onchange="onAnchorActiveChange()" style="width:12px;height:12px">
+        <span>A${ix+1}-${iy+1}</span>
+      </label>`;
+    }
+  }
+  h+='</div>';
+  box.innerHTML=h;
+}
+function onAnchorActiveChange(){
+  if(g('dActiveAnchors')){
+    const nx=Math.max(1,nvi('iNx')), ny=Math.max(1,nvi('iNy'));
+    const active=nx*ny-getDeletedAnchors().length;
+    g('dActiveAnchors').textContent=active+' / '+(nx*ny)+' ea';
+  }
+  updateManualAnchorLoadVisibility();
+  schedCalc();
+}
+function setDeletedAnchors(keys){
+  const del=new Set(keys||[]);
+  document.querySelectorAll('.anchor-active-cb').forEach(cb=>{cb.checked=!del.has(cb.dataset.key);});
+  onAnchorActiveChange();
+}
+function getManualAnchorLoads(){
+  const map={};
+  document.querySelectorAll('.manual-anchor-load-row').forEach(row=>{
+    const key=row.dataset.key;
+    const nEl=g('iManN_'+key), vEl=g('iManV_'+key);
+    map[key]={Nua:nEl?(parseFloat(nEl.value)||0):0,Vua:vEl?(parseFloat(vEl.value)||0):0};
+  });
+  return map;
+}
+function buildManualAnchorLoadInputs(){
+  const box=g('manualAnchorLoadGrid'); if(!box)return;
+  const prev=getManualAnchorLoads();
+  const nx=Math.max(1,nvi('iNx')), ny=Math.max(1,nvi('iNy'));
+  const sxArr=getSxArr(), syArr=getSyArr();
+  const active=getActiveAnchorPts(nx,ny,sxArr,syArr,getDeletedAnchors()).pts;
+  let h='<table style="width:100%;border-collapse:collapse;font-size:10.5px">';
+  h+='<tr><th style="text-align:left;padding:3px;border-bottom:1px solid var(--bd)">Anchor</th><th style="text-align:right;padding:3px;border-bottom:1px solid var(--bd)">x</th><th style="text-align:right;padding:3px;border-bottom:1px solid var(--bd)">y</th><th style="text-align:right;padding:3px;border-bottom:1px solid var(--bd)">Nua</th><th style="text-align:right;padding:3px;border-bottom:1px solid var(--bd)">Vua</th></tr>';
+  active.forEach(p=>{
+    const pv=prev[p.key]||{Nua:0,Vua:0};
+    h+=`<tr class="manual-anchor-load-row" data-key="${p.key}">
+      <td style="padding:3px;color:var(--t2)">A${p.ix+1}-${p.iy+1}</td>
+      <td style="padding:3px;text-align:right;color:var(--t3);font-family:'IBM Plex Mono',monospace">${p.x.toFixed(1)}</td>
+      <td style="padding:3px;text-align:right;color:var(--t3);font-family:'IBM Plex Mono',monospace">${p.y.toFixed(1)}</td>
+      <td style="padding:3px"><input type="number" id="iManN_${p.key}" value="${pv.Nua||0}" step="0.01" oninput="schedCalc()" style="width:72px;text-align:right"></td>
+      <td style="padding:3px"><input type="number" id="iManV_${p.key}" value="${pv.Vua||0}" step="0.01" oninput="schedCalc()" style="width:72px;text-align:right"></td>
+    </tr>`;
+  });
+  h+='</table>';
+  box.innerHTML=h;
+}
+function updateManualAnchorLoadVisibility(){
+  const manual=g('iNAMode')&&g('iNAMode').value==='manual';
+  const use=g('iManualAnchorLoadMode')&&g('iManualAnchorLoadMode').value==='yes';
+  if(g('rowManualAnchorLoadMode'))g('rowManualAnchorLoadMode').style.display=manual?'grid':'none';
+  if(g('manualAnchorLoadBox'))g('manualAnchorLoadBox').style.display=(manual&&use)?'block':'none';
+  if(manual&&use)buildManualAnchorLoadInputs();
+}
+function onManualAnchorLoadModeChange(){updateManualAnchorLoadVisibility();schedCalc();}
+
+// ═══════════════════ REBAR LAYOUT (사각 둘레 균등 배치) ═══════════════════
+function rebarPerimeterPts(Lpx,Lpy,cover,Ntot){
+  const bx=Lpx/2-cover, by=Lpy/2-cover;
+  if(Ntot<=0||bx<=0||by<=0)return[];
+  if(Ntot===1)return[{x:0,y:by}];
+  const per=2*(2*bx)+2*(2*by);
+  const step=per/Ntot;
+  const pts=[];
+  let dist=0;
+  for(let i=0;i<Ntot;i++){
+    let d=dist%per;
+    let x,y;
+    if(d<=2*bx){x=-bx+d;y=by;}
+    else if(d<=2*bx+2*by){x=bx;y=by-(d-2*bx);}
+    else if(d<=4*bx+2*by){x=bx-(d-2*bx-2*by);y=-by;}
+    else{x=-bx;y=-by+(d-4*bx-2*by);}
+    pts.push({x,y});
+    dist+=step;
+  }
+  return pts;
+}
+function calcN1Rect(){
+  const Lpx=nv('iLpx'),Lpy=nv('iLpy'),hef=nv('iHef'),C2=nv('iC2'),Ntot=nvi('iNtot');
+  const nx=Math.max(1,nvi('iNx')),ny=Math.max(1,nvi('iNy'));
+  const sxArr=getSxArr(),syArr=getSyArr();
+  const act=getActiveAnchorPts(nx,ny,sxArr,syArr,getDeletedAnchors());
+  const pts=rebarPerimeterPts(Lpx,Lpy,C2,Ntot);
+  const lim=0.5*hef;
+  let n1=0;
+  pts.forEach(rp=>{
+    let dmin=1e12;
+    act.pts.forEach(ap=>{
+      const dx=rp.x-ap.x,dy=rp.y-ap.y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<dmin)dmin=d;
+    });
+    if(dmin<=lim)n1++;
+  });
+  return{n1,pts,lim};
+}
+function onRebarChange(){
+  const r=calcN1Rect();
+  if(g('riHefHalf'))g('riHefHalf').textContent=r.lim.toFixed(0)+' mm';
+  if(g('riN1'))g('riN1').textContent=r.n1+' ea';
+  schedCalc();
+}
+
+// ═══════════════════ FRICTION / NA MODE / SHEAR LUG ═══════════════════
+function onFrictionChange(){
+  const use=g('iUseFriction').value==='yes';
+  g('frictionFields').style.display=use?'block':'none';
+  const mu=g('iMuF')?g('iMuF').value:'0.70';
+  if(g('rowMuCustom'))g('rowMuCustom').style.display=(use&&mu==='custom')?'grid':'none';
+  schedCalc();
+}
+function onNAModeChange(){
+  const manual=g('iNAMode').value==='manual';
+  g('rowNAcManual').style.display=manual?'grid':'none';
+  updateManualAnchorLoadVisibility();
+  schedCalc();
+}
+function onShearLugToggle(){
+  const use=g('iUseShearLug').value==='yes';
+  g('shearLugFields').style.display=use?'block':'none';
+  schedCalc();
+}
+
+// ═══════════════════ INPUT GATHER ═══════════════════
+function getI(){
+  const at=g('iAT').value, c=ACFG[at]||ACFG.cast_headed;
+  const nx=Math.max(1,nvi('iNx')), ny=Math.max(1,nvi('iNy'));
+  const sxArr=getSxArr(), syArr=getSyArr();
+  const deletedAnchors=getDeletedAnchors();
+  const ph=getPhis();
+  const useFriction=g('iUseFriction')&&g('iUseFriction').value==='yes';
+  let muF=0.70;
+  if(useFriction){
+    const sel=g('iMuF')?g('iMuF').value:'0.70';
+    muF=sel==='custom'?Math.max(0,nv('iMuCustom')):parseFloat(sel);
+  }
+  const naMode=(g('iNAMode')&&g('iNAMode').value)||'linear';
+  const useManualAnchorLoads=naMode==='manual'&&g('iManualAnchorLoadMode')&&g('iManualAnchorLoadMode').value==='yes';
+  const useShearLug=g('iUseShearLug')&&g('iUseShearLug').value==='yes';
+  return{
+    at,cast:c.cast,kc:c.kc,head:c.head,hook:c.hook,
+    pST:ph.pST,pSV:ph.pSV,pCT:ph.pCT,pCV:ph.pCV,steelDuct:ph.steelDuct,
+    nx,ny,sxArr,syArr,deletedAnchors,
+    da:nv('iDa'),hef:nv('iHef'),eh:nv('iEh'),AbrgOv:nv('iAbrg'),lh:nv('iLh'),
+    futa:nv('iFuta'),fya:nv('iFya'),
+    anchorWeld:(g('iAnchorWeld')&&g('iAnchorWeld').value)||'no',
+    tauCr:nv('iTauCr'),tauUncr:nv('iTauUncr'),
+    Lpx:nv('iLpx'),Lpy:nv('iLpy'),Hp:nv('iHp'),fc:nv('iFc'),
+    lam:parseFloat(g('iLam').value),cracked:g('iCr').value==='cracked',
+    Ca1Ov:g('iCa1Ov').value===''?null:nv('iCa1Ov'),
+    P:nv('iP'),Hx:nv('iHx'),Hy:nv('iHy'),Mx:nv('iMx'),My:nv('iMy'),
+    designCase:(g('iDesignCase')&&g('iDesignCase').value)||'Y',
+    naMode,NAc:nv('iNAc'),
+    useManualAnchorLoads,manualAnchorLoads:useManualAnchorLoads?getManualAnchorLoads():{},
+    Vx:nv('iVx'),Vy:nv('iVy'),
+    useFriction,muF,
+    useShearLug,bsl:nv('iBsl'),tsl:nv('iTsl'),hsl:nv('iHsl'),
+    HefslOv:g('iHefslOv')&&g('iHefslOv').value!==''?nv('iHefslOv'):null,
+    Ca1slOv:g('iCa1slOv')&&g('iCa1slOv').value!==''?nv('iCa1slOv'):null,
+    hasRebar:!(g('iHasRebar')&&g('iHasRebar').value==='no'),
+    rebarDetailMode:(g('iRebarDetailMode')&&g('iRebarDetailMode').value)||'no',
+    vnrMode:(g('iVnrMode')&&g('iVnrMode').value)||'no',
+    tieMode:(g('iTieMode')&&g('iTieMode').value)||'no',
+    dv:nvi('iRb'),Ntot:nvi('iNtot'),fy:nv('iFy'),C1:nv('iC1'),C2:nv('iC2'),
+    LdOv:g('iLdOv').value===''?null:nv('iLdOv'),
+    dhx:nvi('iDhx'),Vxtot:nvi('iVxtot'),C3x:nv('iC3x'),C4x:nv('iC4x'),
+    dhy:nvi('iDhy'),Vytot:nvi('iVytot'),C3y:nv('iC3y'),C4y:nv('iC4y'),
+    dtie:nvi('iDtie'),stie:nv('iStie'),
+    aux3d:g('iAuxRebar3D')&&g('iAuxRebar3D').checked,
+  };
+}
+
+// ═══════════════════ LOAD CASE — 축 기준 Nua/Vua 산정 ═══════════════════
+function calcAxisLoadCase(I,act){
+  const axis=I.designCase==='Y'?'Y':'X';
+  const M=axis==='Y'?I.My:I.Mx;
+  const H=axis==='Y'?I.Hx:I.Hy;
+  const P=I.P;
+  const pts=act.pts;
+  const n=pts.length;
+  const coordOf=p=>axis==='Y'?p.x:p.y;
+  const Lp=axis==='Y'?I.Lpx:I.Lpy;
+  const half=Lp/2;
+  const Ab=Math.PI/4*Math.pow(0.9*I.da,2);
+  const Es=200000,Ec=4700*Math.sqrt(Math.max(I.fc,0.0001)),nRatio=Es/Ec;
+  const out={axis,M,H,P,n,pts:[],c:null,method:I.naMode,iter:0,converged:true,note:'',
+    sumTension:0,maxTension:0,tensionCount:0,eN:0,Cc:0};
+
+  if(I.useManualAnchorLoads){
+    out.method='manual-loads';
+    let sumT=0,maxT=0,cnt=0,sumTx=0;
+    pts.forEach(p=>{
+      const ml=I.manualAnchorLoads[p.key]||{Nua:0,Vua:0};
+      const T=Math.max(0,ml.Nua);
+      out.pts.push({...p,coord:coordOf(p),T,Vman:ml.Vua||0});
+      if(T>1e-9){sumT+=T;cnt++;sumTx+=T*coordOf(p);maxT=Math.max(maxT,T);}
+    });
+    out.sumTension=sumT;out.maxTension=maxT;out.tensionCount=cnt;
+    out.eN=cnt>0&&sumT>1e-9?Math.abs(sumTx/sumT-(cnt?out.pts.filter(q=>q.T>1e-9).reduce((s,q)=>s+q.coord,0)/cnt:0)):0;
+    out.note='앵커별 직접입력 하중 사용';
+    return out;
+  }
+
+  function evalC(c){
+    let Cc=0,Mc=0,sumT=0,sumM=0;
+    const kappa=1;
+    if(axis==='Y'){
+      if(c>-half&&M>0){
+        const xw=Math.min(c,half);
+        const w=xw+half;
+        if(w>0){
+          const stress=(x)=>(c-x);
+          const b=I.Lpy;
+          const x1=-half,x2=xw;
+          const A=b*(x2-x1);
+          const int1=b*((c*(x2-x1))-((x2*x2-x1*x1)/2));
+          const int2=b*((c*(x2*x2-x1*x1)/2)-((x2*x2*x2-x1*x1*x1)/3));
+          Cc=kappa*int1;
+          Mc=-kappa*int2;
+        }
+      }else if(c<half&&M<0){
+        const xw=Math.max(c,-half);
+        const b=I.Lpy;
+        const x1=xw,x2=half;
+        const int1=b*(((x2*x2-x1*x1)/2)-c*(x2-x1));
+        const int2=b*(((x2*x2*x2-x1*x1*x1)/3)-c*(x2*x2-x1*x1)/2);
+        Cc=kappa*int1;
+        Mc=-kappa*int2;
+      }
+    }else{
+      if(c>-half&&M>0){
+        const yw=Math.min(c,half);
+        const b=I.Lpx;
+        const y1=-half,y2=yw;
+        const int1=b*((c*(y2-y1))-((y2*y2-y1*y1)/2));
+        const int2=b*((c*(y2*y2-y1*y1)/2)-((y2*y2*y2-y1*y1*y1)/3));
+        Cc=kappa*int1;
+        Mc=-kappa*int2;
+      }else if(c<half&&M<0){
+        const yw=Math.max(c,-half);
+        const b=I.Lpx;
+        const y1=yw,y2=half;
+        const int1=b*(((y2*y2-y1*y1)/2)-c*(y2-y1));
+        const int2=b*(((y2*y2*y2-y1*y1*y1)/3)-c*(y2*y2-y1*y1)/2);
+        Cc=kappa*int1;
+        Mc=-kappa*int2;
+      }
+    }
+    let anch=[];
+    pts.forEach(p=>{
+      const x=coordOf(p);
+      let s=0;
+      if(M>0&&x>c)s=nRatio*(x-c);
+      else if(M<0&&x<c)s=nRatio*(c-x);
+      const T=s*Ab;
+      anch.push({p,x,T,s});
+      sumT+=T;
+      sumM+=T*Math.abs(x-0)*Math.sign(M>=0?(x>c?1:0):(x<c?1:0));
+    });
+    let Fsum,Msum;
+    const Pn=P*1000;
+    if(M>0){
+      Fsum=Cc-sumT-Pn;
+      let Ma=0;anch.forEach(a=>{if(a.T>0)Ma+=a.T*a.x;});
+      Msum=Mc+(-1)*0 + Ma;
+      Msum=(-Mc)+Ma;
+    }else if(M<0){
+      Fsum=Cc-sumT-Pn;
+      let Ma=0;anch.forEach(a=>{if(a.T>0)Ma+=a.T*(-a.x);});
+      Msum=(-Mc)+Ma;
+    }else{
+      Fsum=Cc-sumT-Pn;Msum=0;
+    }
+    return{Fsum,Cc,Mc,anch,sumT};
+  }
+
+  let c=null;
+  if(I.naMode==='manual'){
+    c=I.NAc;
+    out.note='수동입력 중립축 사용';
+  }else if(Math.abs(M)<1e-9){
+    c=null;
+  }else{
+    let lo=-half*3, hi=half*3;
+    let fLo=evalC(lo).Fsum, fHi=evalC(hi).Fsum;
+    if(fLo*fHi>0){
+      let found=false;
+      for(let k=1;k<=8&&!found;k++){
+        lo=-half*(3+k*2);hi=half*(3+k*2);
+        fLo=evalC(lo).Fsum;fHi=evalC(hi).Fsum;
+        if(fLo*fHi<=0)found=true;
+      }
+      if(!found){out.converged=false;out.note='중립축 수렴 실패 — 하중조합 확인 필요';}
+    }
+    if(out.converged){
+      for(let it=0;it<120;it++){
+        const mid=(lo+hi)/2;
+        const f=evalC(mid).Fsum;
+        if(Math.abs(f)<1e-3){c=mid;out.iter=it+1;break;}
+        if(f*fLo<0){hi=mid;}else{lo=mid;fLo=f;}
+        c=mid;out.iter=it+1;
+      }
+    }
+  }
+
+  let res;
+  if(c===null){
+    const perT=Math.max(0,-P)*1000/n;
+    pts.forEach(p=>out.pts.push({...p,coord:coordOf(p),T:perT}));
+    out.c=null;
+    out.note=out.note||'모멘트 없음 — 축력 균등 분배';
+  }else{
+    res=evalC(c);
+    out.c=c;out.Cc=res.Cc/1000;
+    res.anch.forEach(a=>out.pts.push({...a.p,coord:a.x,T:a.T/1000}));
+  }
+  let sumT=0,maxT=0,cnt=0,sumTx=0;
+  out.pts.forEach(p=>{
+    if(p.T>1e-9){sumT+=p.T;cnt++;sumTx+=p.T*p.coord;maxT=Math.max(maxT,p.T);}
+  });
+  out.sumTension=sumT;out.maxTension=maxT;out.tensionCount=cnt;
+  if(cnt>0&&sumT>1e-9){
+    const cg=out.pts.filter(q=>q.T>1e-9).reduce((s,q)=>s+q.coord,0)/cnt;
+    out.eN=Math.abs(sumTx/sumT-cg);
+  }
+  return out;
+}
+
+// ═══════════════════ CORE CALC ═══════════════════
+function cmp(I){
+  const R={I};
+  const act=getActiveAnchorPts(I.nx,I.ny,I.sxArr,I.syArr,I.deletedAnchors);
+  R.act=act;
+  const n=act.pts.length;
+  R.n=n;
+  R.activeAnchors=act.pts;
+  const totalSx=act.tx, totalSy=act.ty;
+  R.totalSx=totalSx;R.totalSy=totalSy;
+
+  // 연단거리 (사각)
+  const Ca1x=(I.Lpx-totalSx)/2, Ca1y=(I.Lpy-totalSy)/2;
+  R.Ca1x=Ca1x;R.Ca1y=Ca1y;
+  const Ca1auto=Math.min(Ca1x,Ca1y);
+  R.Ca1=I.Ca1Ov!==null?I.Ca1Ov:Ca1auto;
+  R.Ca1IsOv=I.Ca1Ov!==null;
+
+  // 하중 Case
+  const LC=calcAxisLoadCase(I,act);
+  R.LC=LC;
+
+  // 마찰
+  const Hsel=LC.axis==='Y'?I.Hx:I.Hy;
+  R.VuaRaw=Math.abs(Hsel);
+  R.Vf=I.useFriction?I.muF*Math.max(I.P,0):0;
+  R.Vua_g=Math.max(R.VuaRaw-R.Vf,0);
+  if(I.useManualAnchorLoads){
+    let sv=0;LC.pts.forEach(p=>sv+=Math.abs(p.Vman||0));
+    R.Vua_g=sv;
+    R.VuaRaw=sv;R.Vf=0;
+  }
+  R.Vua_i=n>0?R.Vua_g/n:0;
+
+  // 수요
+  R.Nua_g=LC.sumTension;
+  R.Nua_max=LC.maxTension;
+  R.nT=LC.tensionCount;
+  R.Nua_i=R.Nua_max;
+
+  // 재료·기하 파생
+  const AseN=Math.PI/4*Math.pow(0.9*I.da,2);
+  R.AseN=AseN;R.AseV=AseN;
+  const Abrg=I.head?(I.AbrgOv>0?I.AbrgOv:Math.max(0,I.eh*I.eh-Math.PI/4*I.da*I.da)):0;
+  R.Abrg=Abrg;
+  const futaEff=Math.min(I.futa,1.9*I.fya,860);
+  R.futaEff=futaEff;
+
+  // hef′ (§17.6.2.1.2)
+  const smaxX=I.sxArr.length?Math.max(...I.sxArr):0;
+  const smaxY=I.syArr.length?Math.max(...I.syArr):0;
+  const smax=Math.max(smaxX,smaxY,0);
+  R.smax=smax;
+  let hefp=I.hef,hefpMod=false;
+  if(R.Ca1<1.5*I.hef&&n>=2){
+    hefp=Math.min(I.hef,Math.max(R.Ca1/1.5,smax/3));
+    hefpMod=hefp<I.hef-1e-9;
+  }
+  R.hefp=hefp;R.hefpMod=hefpMod;
+
+  // ── ① 인장: Steel ──
+  R.Nsa=AseN*futaEff/1000;
+  R.phiNsa=I.pST*R.Nsa;
+
+  // ── ② 인장: Concrete Breakout (그룹) ──
+  const ANco=9*hefp*hefp;
+  const wx=Math.min(Ca1x,1.5*hefp)+totalSx+Math.min(Ca1x,1.5*hefp);
+  const wy=Math.min(Ca1y,1.5*hefp)+totalSy+Math.min(Ca1y,1.5*hefp);
+  const ANc=Math.min(wx*wy,n*ANco);
+  R.ANco=ANco;R.ANc=ANc;R.ANc_wx=wx;R.ANc_wy=wy;
+  const eN=LC.eN||0;
+  R.eN=eN;
+  const psiEcN=Math.min(1,1/(1+eN/(1.5*hefp)));
+  const psiEdN=R.Ca1>=1.5*hefp?1.0:0.7+0.3*R.Ca1/(1.5*hefp);
+  const psiCN=I.cracked?1.0:1.25;
+  let psiCpN=1.0;
+  if(!I.cast){
+    const cac=I.at==='post_adh'?2*I.hef:1.5*I.hef;
+    R.cacUsed=cac;
+    if(I.cracked)psiCpN=1.0;
+    else psiCpN=R.Ca1>=cac?1.0:Math.max(R.Ca1/cac,1.5*hefp/cac);
+  }
+  R.psiEcN=psiEcN;R.psiEdN=psiEdN;R.psiCN=psiCN;R.psiCpN=psiCpN;
+  const Nb=I.kc*I.lam*Math.sqrt(I.fc)*Math.pow(hefp,1.5)/1000;
+  R.Nb=Nb;
+  R.Ncbg=(ANc/ANco)*psiEcN*psiEdN*psiCN*psiCpN*Nb;
+  R.phiNcbg=I.pCT*R.Ncbg;
+
+  // ── ②-r: Nnr 보강철근 대체 (있을 때) ──
+  R.useNnr=I.hasRebar&&I.rebarDetailMode==='yes';
+  if(R.useNnr){
+    const rr=calcN1Rect();
+    R.N1=rr.n1;
+    const Ldb=calcLd(I.dv,I.fc,I.fy,I.lam);
+    R.LdCalc=I.LdOv!==null?I.LdOv:Ldb;
+    const Ld1r=Math.max(0,I.hef-I.C1);
+    R.Ld1r=Ld1r;
+    R.LdRatio=Math.min(1,Ld1r/R.LdCalc);
+    const Ar=Math.PI/4*I.dv*I.dv;
+    R.Nnr=R.N1*Ar*I.fy*R.LdRatio/1000;
+    R.phiNnr=0.75*R.Nnr;
+  }
+
+  // ── ③ 인장: Pullout ──
+  if(I.head){
+    R.Np=8*Abrg*I.fc/1000;
+  }else if(I.hook){
+    R.Np=0.9*I.fc*I.lh*I.da/1000;
+  }else{
+    R.Np=null;
+  }
+  if(R.Np!==null){
+    const psiCP=I.cracked?1.0:1.4;
+    R.psiCP=psiCP;
+    R.Npn=psiCP*R.Np;
+    R.phiNpn=I.pCT*R.Npn;
+  }
+
+  // ── ③-b: Bond (adhesive) ──
+  if(I.at==='post_adh'){
+    const tau=I.cracked?I.tauCr:I.tauUncr;
+    R.tauUsed=tau;
+    const cNa=10*I.da*Math.sqrt(tau/7.6);
+    R.cNa=cNa;
+    const ANao=(2*cNa)*(2*cNa);
+    const wxa=Math.min(Ca1x,cNa)+totalSx+Math.min(Ca1x,cNa);
+    const wya=Math.min(Ca1y,cNa)+totalSy+Math.min(Ca1y,cNa);
+    const ANa=Math.min(wxa*wya,n*ANao);
+    R.ANao=ANao;R.ANa=ANa;
+    const psiEdNa=R.Ca1>=cNa?1.0:0.7+0.3*R.Ca1/cNa;
+    const psiEcNa=Math.min(1,1/(1+eN/cNa));
+    const cacB=2*I.hef;
+    const psiCpNa=I.cracked?1.0:(R.Ca1>=cacB?1.0:Math.max(R.Ca1/cacB,cNa/cacB));
+    R.psiEdNa=psiEdNa;R.psiEcNa=psiEcNa;R.psiCpNa=psiCpNa;
+    const Nba=I.lam*tau*Math.PI*I.da*I.hef/1000;
+    R.Nba=Nba;
+    R.Nag=(ANa/ANao)*psiEcNa*psiEdNa*psiCpNa*Nba;
+    R.phiNag=I.pCT*R.Nag;
+  }
+
+  // ── ④ 인장: Side-face Blowout ──
+  if(I.head&&R.Ca1<0.4*I.hef){
+    R.Nsb=13*R.Ca1*Math.sqrt(Abrg)*I.lam*Math.sqrt(I.fc)/1000;
+    const s_min=smax>0?Math.min(smaxX||1e9,smaxY||1e9):1e9;
+    if(n>=2&&s_min<6*R.Ca1){
+      R.Nsbg=(1+s_min/(6*R.Ca1))/2*R.Nsb*R.nT;
+    }else{
+      R.Nsbg=R.Nsb*Math.max(R.nT,1);
+    }
+    R.phiNsb=I.pCT*R.Nsbg;
+  }
+
+  // ── 인장 지배 ──
+  const tItems=[];
+  tItems.push({k:'steel',cap:R.phiNsa,dem:R.Nua_i,label:'Steel',each:true});
+  if(R.useNnr&&R.phiNnr!==undefined){
+    R.breakoutGoverning=Math.max(R.phiNcbg,R.phiNnr);
+    R.breakoutSrc=R.phiNnr>R.phiNcbg?'Nnr':'Ncbg';
+  }else{
+    R.breakoutGoverning=R.phiNcbg;R.breakoutSrc='Ncbg';
+  }
+  tItems.push({k:'breakout',cap:R.breakoutGoverning,dem:R.Nua_g,label:'Concrete Breakout(그룹)',each:false});
+  if(R.Npn!==undefined&&R.Np!==null)tItems.push({k:'pullout',cap:R.phiNpn,dem:R.Nua_i,label:'Pullout',each:true});
+  if(R.phiNag!==undefined)tItems.push({k:'bond',cap:R.phiNag,dem:R.Nua_g,label:'Bond(그룹)',each:false});
+  if(R.phiNsb!==undefined)tItems.push({k:'blowout',cap:R.phiNsb,dem:R.Nua_g,label:'Side-face Blowout',each:false});
+  let tGov=null,tRmax=0;
+  tItems.forEach(it=>{
+    it.ratio=it.cap>1e-9?it.dem/it.cap:(it.dem>1e-9?1e9:0);
+    if(it.ratio>=tRmax){tRmax=it.ratio;tGov=it;}
+  });
+  R.tItems=tItems;R.tGov=tGov;R.NRatio=tRmax;
+  R.NRatioTermCap=tGov?tGov.cap:0;
+  R.NRatioTermDem=tGov?tGov.dem:0;
+
+  // ── ⑤ 전단: Steel ──
+  R.Vsa=0.6*AseN*futaEff/1000;
+  if(I.anchorWeld==='yes')R.Vsa=AseN*futaEff/1000;
+  R.phiVsa=I.pSV*R.Vsa;
+
+  // ── ⑥ 전단: Concrete Breakout ──
+  const axis=LC.axis;
+  const Ca1V_edge=axis==='Y'?Ca1x:Ca1y;
+  const Ca2V_edge=axis==='Y'?Ca1y:Ca1x;
+  let ca1v=Ca1V_edge;
+  const hEff=I.Hp;
+  const s_perp=axis==='Y'?totalSy:totalSx;
+  const limit=Math.max(Ca2V_edge/1.5,hEff/1.5,s_perp/3);
+  let ca1vMod=false;
+  if(Ca2V_edge<1.5*ca1v&&hEff<1.5*ca1v){
+    ca1v=Math.min(ca1v,limit);
+    ca1vMod=true;
+  }
+  R.Ca1V_edge=Ca1V_edge;R.Ca2V_edge=Ca2V_edge;R.ca1v=ca1v;R.ca1vMod=ca1vMod;
+  const AVco=4.5*ca1v*ca1v;
+  const wV=Math.min(Ca2V_edge,1.5*ca1v)*2+(axis==='Y'?totalSy:totalSx);
+  const hV=Math.min(hEff,1.5*ca1v);
+  const AVc=Math.min(wV*hV,n*AVco);
+  R.AVco=AVco;R.AVc=AVc;
+  const le=Math.min(hefp,8*I.da);
+  R.le=le;
+  let Vb1=0.6*Math.pow(le/I.da,0.2)*Math.sqrt(I.da)*I.lam*Math.sqrt(I.fc)*Math.pow(ca1v,1.5)/1000;
+  let Vb2=3.7*I.lam*Math.sqrt(I.fc)*Math.pow(ca1v,1.5)/1000;
+  R.Vb=Math.min(Vb1,Vb2);
+  R.Vb1=Vb1;R.Vb2=Vb2;
+  const eV=Math.sqrt(I.Vx*I.Vx+I.Vy*I.Vy);
+  R.eV=eV;
+  const psiEcV=Math.min(1,1/(1+eV/(1.5*ca1v)));
+  const psiEdV=Ca2V_edge>=1.5*ca1v?1.0:0.7+0.3*Ca2V_edge/(1.5*ca1v);
+  let psiCV=1.0;
+  if(I.cracked){
+    if(I.tieMode==='yes'&&I.dtie>=13&&I.stie<=100)psiCV=1.4;
+    else if(I.tieMode==='yes'&&I.dtie>=13)psiCV=1.2;
+    else psiCV=1.0;
+  }else psiCV=1.4;
+  const psiHV=hEff<1.5*ca1v?Math.sqrt(1.5*ca1v/hEff):1.0;
+  R.psiEcV=psiEcV;R.psiEdV=psiEdV;R.psiCV=psiCV;R.psiHV=psiHV;
+  R.Vcbg=(AVc/AVco)*psiEcV*psiEdV*psiCV*psiHV*R.Vb;
+  R.phiVcbg=I.pCV*R.Vcbg;
+
+  // ── ⑥-r: Vnr ──
+  R.useVnr=I.hasRebar&&I.vnrMode==='yes';
+  if(R.useVnr){
+    const dh=axis==='Y'?I.dhx:I.dhy;
+    const vtot=axis==='Y'?I.Vxtot:I.Vytot;
+    const C4=axis==='Y'?I.C4x:I.C4y;
+    const Ar=Math.PI/4*dh*dh;
+    const Ldc=calcLd(dh,I.fc,I.fy,I.lam);
+    const availLd=Math.max(0,(axis==='Y'?I.Lpx:I.Lpy)-2*C4)/2;
+    const ldr=Math.min(1,availLd/Ldc);
+    R.VnrBar=dh;R.VnrCnt=vtot;R.VnrLdRatio=ldr;
+    R.Vnr=vtot*Ar*I.fy*ldr/1000;
+    R.phiVnr=0.75*R.Vnr;
+  }
+  if(R.useVnr&&R.phiVnr!==undefined){
+    R.vbreakGoverning=Math.max(R.phiVcbg,R.phiVnr);
+    R.vbreakSrc=R.phiVnr>R.phiVcbg?'Vnr':'Vcbg';
+  }else{R.vbreakGoverning=R.phiVcbg;R.vbreakSrc='Vcbg';}
+
+  // ── ⑦ 전단: Pryout ──
+  const kcp=hefp<65?1.0:2.0;
+  R.kcp=kcp;
+  R.Vcpg=kcp*R.Ncbg;
+  R.phiVcpg=I.pCV*R.Vcpg;
+
+  // ── 전단키 (§17.11) ──
+  R.hasShearLug=I.useShearLug;
+  if(I.useShearLug){
+    const SL={};
+    SL.hefsl=I.HefslOv!==null?I.HefslOv:I.hsl;
+    SL.ca1sl=I.Ca1slOv!==null?I.Ca1slOv:ca1v;
+    const dEff=Math.min(SL.hefsl,2*I.tsl);
+    SL.Aefsl=I.bsl*dEff;
+    const Pfac=I.P>0?Math.min(I.P*1000/(I.Lpx*I.Lpy*I.fc),0.2):0;
+    SL.psiBrg=1+Pfac*4;
+    if(SL.psiBrg>2)SL.psiBrg=2;
+    SL.Vbrg=1.7*I.fc*SL.Aefsl*SL.psiBrg/1000;
+    SL.phiVbrg=0.65*SL.Vbrg;
+    const AVcSl=Math.min((2*1.5*SL.ca1sl+I.bsl)*Math.min(I.Hp,1.5*SL.ca1sl),4.5*SL.ca1sl*SL.ca1sl*3);
+    SL.AVcsl=AVcSl;
+    SL.Vcb=(AVcSl/(4.5*SL.ca1sl*SL.ca1sl))*I.lam*Math.sqrt(I.fc)*Math.pow(SL.ca1sl,1.5)*0.6*Math.pow(Math.min(SL.hefsl/Math.max(I.tsl*2,1),8),0.2)/1000;
+    SL.Vcb=Math.min(SL.Vcb,(AVcSl/(4.5*SL.ca1sl*SL.ca1sl))*3.7*I.lam*Math.sqrt(I.fc)*Math.pow(SL.ca1sl,1.5)/1000);
+    SL.phiVcb=0.65*SL.Vcb;
+    SL.Vdem=R.Vua_g;
+    SL.bearOk=SL.phiVbrg>=SL.Vdem-1e-9;
+    SL.breakoutOk=SL.phiVcb>=SL.Vdem-1e-9;
+    SL.minAnchorOk=n>=4;
+    R.shearLug=SL;
+  }
+
+  // ── 전단 지배 ──
+  const vItems=[];
+  if(!I.useShearLug){
+    vItems.push({k:'steel',cap:R.phiVsa,dem:R.Vua_i,label:'Steel',each:true});
+    vItems.push({k:'breakout',cap:R.vbreakGoverning,dem:R.Vua_g,label:'Concrete Breakout(그룹)',each:false});
+    vItems.push({k:'pryout',cap:R.phiVcpg,dem:R.Vua_g,label:'Pryout(그룹)',each:false});
+  }else{
+    vItems.push({k:'sl_bearing',cap:R.shearLug.phiVbrg,dem:R.shearLug.Vdem,label:'전단키 지압(§17.11.2)',each:false});
+    vItems.push({k:'sl_breakout',cap:R.shearLug.phiVcb,dem:R.shearLug.Vdem,label:'전단키 콘크리트 파괴(§17.11.3)',each:false});
+  }
+  let vGov=null,vRmax=0;
+  vItems.forEach(it=>{
+    it.ratio=it.cap>1e-9?it.dem/it.cap:(it.dem>1e-9?1e9:0);
+    if(it.ratio>=vRmax){vRmax=it.ratio;vGov=it;}
+  });
+  R.vItems=vItems;R.vGov=vGov;R.VRatio=vRmax;
+
+  // ── 복합 ──
+  const nr=R.NRatio,vr=R.VRatio;
+  R.doCombined=nr>0.2&&vr>0.2;
+  R.IR=R.doCombined?nr+vr:Math.max(nr,vr);
+  R.combLimit=1.2;
+  R.tOk=nr<=1+1e-9;
+  R.vOk=vr<=1+1e-9;
+  R.cOk=R.doCombined?R.IR<=R.combLimit+1e-9:true;
+  R.allOk=R.tOk&&R.vOk&&R.cOk&&(!R.hasShearLug||(R.shearLug.bearOk&&R.shearLug.breakoutOk&&R.shearLug.minAnchorOk));
+  return R;
+}
+
+// ═══════════════════ RESULTS RENDER ═══════════════════
+const fmt=(v,d=2)=>v===null||v===undefined||isNaN(v)?'—':Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+let mode='all';
+function setMode(m){mode=m;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.textContent.toLowerCase()===m||m==='all'&&t.textContent==='All'));renderResults(window.LR_);}
+function setSC(id,ratio,na){
+  const el=g(id),sv=g('sv'+id.slice(2));
+  if(na){el.className='sc sna';sv.textContent='—';return;}
+  const ok=ratio<=1+1e-9;
+  el.className='sc '+(ok?'sok':'sng');
+  sv.textContent=fmt(ratio,3);
+}
+function badge(ok){return `<span class="badge ${ok?'ok':'ng'}">${ok?'O.K':'N.G'}</span>`;}
+function chkRow(label,dem,cap,unit='kN'){
+  const ok=cap>=dem-1e-9;
+  return `<div class="chk ${ok?'ok':'ng'}"><span>${label}</span><span class="chkr">${fmt(dem)} ≤ ${fmt(cap)} ${unit} — ${ok?'O.K':'N.G'}</span></div>`;
+}
+function renderResults(R){
+  window.LR_=R;
+  if(!R){return;}
+  const I=R.I,LC=R.LC;
+  g('dCa1x').textContent=fmt(R.Ca1x,1)+' mm';
+  g('dCa1y').textContent=fmt(R.Ca1y,1)+' mm';
+  g('dCa1').textContent=fmt(R.Ca1,1)+' mm'+(R.Ca1IsOv?' (Override)':'');
+  g('dHefp').textContent=fmt(R.hefp,1)+' mm'+(R.hefpMod?' (수정)':'');
+  g('hefpBox').style.display=R.hefpMod?'block':'none';
+  if(R.hefpMod)g('hefpFormula').textContent=`Ca1=${fmt(R.Ca1,1)} < 1.5hef\nhef' = max(Ca1/1.5, smax/3)\n= max(${fmt(R.Ca1/1.5,1)}, ${fmt(R.smax/3,1)}) = ${fmt(R.hefp,1)}mm`;
+  g('dCa1vp').textContent=fmt(R.ca1v,1)+' mm'+(R.ca1vMod?' (수정)':'');
+  g('ca1vpBox').style.display=R.ca1vMod?'block':'none';
+  if(R.ca1vMod)g('ca1vpFormula').textContent=`ca2, ha < 1.5ca1\nca1' = max(ca2/1.5, ha/1.5, s/3)\n= ${fmt(R.ca1v,1)}mm`;
+  if(g('dActiveAnchors'))g('dActiveAnchors').textContent=R.n+' / '+(I.nx*I.ny)+' ea';
+  if(g('dVuaRaw'))g('dVuaRaw').textContent=fmt(R.VuaRaw)+' kN';
+  if(g('dVf'))g('dVf').textContent=fmt(R.Vf)+' kN';
+  if(g('dVuaI'))g('dVuaI').textContent=fmt(R.Vua_i)+' kN';
+  if(g('riAefSl'))g('riAefSl').textContent=R.hasShearLug?fmt(R.shearLug.Aefsl,0)+' mm²':'—';
+  if(g('riPsiBrgSl'))g('riPsiBrgSl').textContent=R.hasShearLug?fmt(R.shearLug.psiBrg,3):'—';
+  if(g('riRebarDetailStatus')){
+    const st=[];
+    if(R.useNnr)st.push('Nnr 입력');
+    if(R.useVnr)st.push('Vnr 입력');
+    if(I.tieMode==='yes')st.push('띠철근 입력');
+    g('rebarDetailStatus').style.display=I.hasRebar?'block':'none';
+    g('riRebarDetailStatus').textContent=st.length?st.join(' + '):'φ만 반영 (제원 미입력)';
+  }
+  g('iLdAuto').value=calcLd(I.dv,I.fc,I.fy,I.lam);
+  g('devDa2').textContent=I.dv;g('devFc2').textContent=I.fc;
+
+  setSC('sct',R.NRatio,false);
+  setSC('scv',R.VRatio,false);
+  setSC('scc',R.doCombined?R.IR/R.combLimit:0,!R.doCombined);
+
+  const vb=g('vbg'),vd=g('vd');
+  vb.textContent=`${I.nx}×${I.ny} (활성 ${R.n})`;
+  vd.textContent=`Lpx=${I.Lpx} Lpy=${I.Lpy} Hp=${I.Hp} | da=M${I.da} hef=${I.hef} | Case ${LC.axis==='Y'?'2(Y축)':'1(X축)'} | ${R.allOk?'전체 O.K':'N.G 있음'}`;
+
+  let h='';
+  const showT=mode==='all'||mode==='tension';
+  const showV=mode==='all'||mode==='shear';
+  const showC=mode==='all'||mode==='combined';
+
+  if(showT){
+    h+=`<div class="rb"><div class="rbt"><span class="rbtx"><span class="rbn">1</span>하중 분배 — Case ${LC.axis==='Y'?'2 (Y축: P,Hx,My)':'1 (X축: P,Hy,Mx)'}</span><span class="rbrf">${LC.method==='manual-loads'?'직접입력':LC.method==='manual'?'수동 c':'Linear'}</span></div>`;
+    h+=`<table class="ct"><tr><th>항목</th><th>수식/비고</th><th>값</th><th>Ref</th></tr>`;
+    h+=`<tr><td class="s">c</td><td class="e">${LC.c===null?'중립축 없음':'중립축 좌표 ('+(LC.axis==='Y'?'x':'y')+'=c)'}</td><td class="v">${LC.c===null?'—':fmt(LC.c,2)+' mm'}</td><td class="rf">${LC.note||('iter='+LC.iter)}</td></tr>`;
+    h+=`<tr><td class="s">ΣNua</td><td class="e">인장앵커 합 (§17.6.2.1(b) 그룹수요)</td><td class="v">${fmt(R.Nua_g)} kN</td><td class="rf">${R.nT} EA 인장</td></tr>`;
+    h+=`<tr class="hl"><td class="s">Nua,max</td><td class="e">최대 인장앵커 (단일수요)</td><td class="v">${fmt(R.Nua_max)} kN</td><td class="rf">개별검토용</td></tr>`;
+    h+=`<tr><td class="s">e'N</td><td class="e">인장합력 편심</td><td class="v">${fmt(R.eN,2)} mm</td><td class="rf">ψec,N</td></tr>`;
+    h+=`<tr><td class="s">Vua,g</td><td class="e">그룹 전단수요${I.useFriction?' (마찰 감소 후)':''}</td><td class="v">${fmt(R.Vua_g)} kN</td><td class="rf">Vua,i=${fmt(R.Vua_i)}</td></tr>`;
+    h+='</table>';
+    h+=`<table class="ct"><tr><th>Anchor</th><th>좌표(${LC.axis==='Y'?'x':'y'})</th><th>Nua</th><th>Ref</th></tr>`;
+    LC.pts.forEach(p=>{
+      const isMax=Math.abs(p.T-R.Nua_max)<1e-6&&p.T>1e-9;
+      h+=`<tr${isMax?' class="hl"':''}><td class="s">A${p.ix+1}-${p.iy+1}</td><td class="e">${fmt(p.coord,1)} mm</td><td class="v">${fmt(p.T)} kN</td><td class="rf">${p.T>1e-9?'인장':'—'}</td></tr>`;
+    });
+    h+='</table></div>';
+
+    h+=`<div class="rb"><div class="rbt"><span class="rbtx"><span class="rbn">2</span>인장 검토</span>${badge(R.tOk)}</div>`;
+    h+=`<table class="ct"><tr><th>파괴모드</th><th>φNn</th><th>Nua</th><th>비율</th></tr>`;
+    R.tItems.forEach(it=>{
+      const gov=R.tGov&&R.tGov.k===it.k;
+      h+=`<tr${gov?' class="hl"':''}><td class="s">${it.label}</td><td class="v">${fmt(it.cap)} kN</td><td class="v">${fmt(it.dem)} kN</td><td class="v">${fmt(it.ratio,3)}</td></tr>`;
+    });
+    h+='</table>';
+    h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>Ref</th></tr>`;
+    h+=`<tr><td class="s">φNsa</td><td class="e">${I.pST}×Ase,N×futa = ${I.pST}×${fmt(R.AseN,1)}×${fmt(R.futaEff,0)}</td><td class="v">${fmt(R.phiNsa)} kN</td><td class="rf">§17.6.1</td></tr>`;
+    h+=`<tr><td class="s">ANc</td><td class="e">min(wx×wy, n·ANco) = min(${fmt(R.ANc_wx,0)}×${fmt(R.ANc_wy,0)}, ${R.n}×${fmt(R.ANco,0)})</td><td class="v">${fmt(R.ANc,0)} mm²</td><td class="rf">§17.6.2.1</td></tr>`;
+    h+=`<tr><td class="s">Nb</td><td class="e">${I.kc}λ√f'c·hef'^1.5</td><td class="v">${fmt(R.Nb)} kN</td><td class="rf">§17.6.2.2</td></tr>`;
+    h+=`<tr><td class="s">ψ</td><td class="e">ec,N=${fmt(R.psiEcN,3)} ed,N=${fmt(R.psiEdN,3)} c,N=${fmt(R.psiCN,2)} cp,N=${fmt(R.psiCpN,3)}</td><td class="v">—</td><td class="rf">§17.6.2.3~6</td></tr>`;
+    h+=`<tr class="hl"><td class="s">φNcbg</td><td class="e">${I.pCT}×(ANc/ANco)ψψψψNb</td><td class="v">${fmt(R.phiNcbg)} kN</td><td class="rf">그룹 vs ΣNua</td></tr>`;
+    if(R.useNnr)h+=`<tr><td class="s">φNnr</td><td class="e">0.75×N1×Ar×fy×min(1,Ld1r/Ld) [N1=${R.N1}]</td><td class="v">${fmt(R.phiNnr)} kN</td><td class="rf">보강철근 대체 (${R.breakoutSrc} 지배)</td></tr>`;
+    if(R.Np!==null&&R.Npn!==undefined)h+=`<tr><td class="s">φNpn</td><td class="e">${I.pCT}×ψc,P×Np (ψc,P=${fmt(R.psiCP,1)})</td><td class="v">${fmt(R.phiNpn)} kN</td><td class="rf">§17.6.3</td></tr>`;
+    if(R.phiNag!==undefined)h+=`<tr><td class="s">φNag</td><td class="e">${I.pCT}×(ANa/ANao)ψψψ·Nba (τ=${fmt(R.tauUsed,1)})</td><td class="v">${fmt(R.phiNag)} kN</td><td class="rf">§17.6.5</td></tr>`;
+    if(R.phiNsb!==undefined)h+=`<tr><td class="s">φNsbg</td><td class="e">Side-face Blowout (Ca1<0.4hef)</td><td class="v">${fmt(R.phiNsb)} kN</td><td class="rf">§17.6.4</td></tr>`;
+    h+='</table>';
+    h+=chkRow(`인장 지배: ${R.tGov?R.tGov.label:'—'}`,R.NRatioTermDem,R.NRatioTermCap);
+    h+='</div>';
+  }
+  if(showV){
+    h+=`<div class="rb"><div class="rbt"><span class="rbtx"><span class="rbn">3</span>전단 검토${R.hasShearLug?' — 전단키 §17.11':''}</span>${badge(R.vOk&&(!R.hasShearLug||R.shearLug.minAnchorOk))}</div>`;
+    h+=`<table class="ct"><tr><th>파괴모드</th><th>φVn</th><th>Vua</th><th>비율</th></tr>`;
+    R.vItems.forEach(it=>{
+      const gov=R.vGov&&R.vGov.k===it.k;
+      h+=`<tr${gov?' class="hl"':''}><td class="s">${it.label}</td><td class="v">${fmt(it.cap)} kN</td><td class="v">${fmt(it.dem)} kN</td><td class="v">${fmt(it.ratio,3)}</td></tr>`;
+    });
+    h+='</table>';
+    if(!R.hasShearLug){
+      h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>Ref</th></tr>`;
+      h+=`<tr><td class="s">φVsa</td><td class="e">${I.pSV}×${I.anchorWeld==='yes'?'1.0':'0.6'}×Ase,V×futa</td><td class="v">${fmt(R.phiVsa)} kN</td><td class="rf">§17.7.1</td></tr>`;
+      h+=`<tr><td class="s">ca1'</td><td class="e">${R.ca1vMod?'수정 적용':'연단거리'}</td><td class="v">${fmt(R.ca1v,1)} mm</td><td class="rf">§17.7.2.1.2</td></tr>`;
+      h+=`<tr><td class="s">Vb</td><td class="e">min(0.6(le/da)^0.2√da, 3.7)λ√f'c·ca1'^1.5</td><td class="v">${fmt(R.Vb)} kN</td><td class="rf">§17.7.2.2</td></tr>`;
+      h+=`<tr><td class="s">ψ</td><td class="e">ec,V=${fmt(R.psiEcV,3)} ed,V=${fmt(R.psiEdV,3)} c,V=${fmt(R.psiCV,2)} h,V=${fmt(R.psiHV,3)}</td><td class="v">—</td><td class="rf">§17.7.2.3~6</td></tr>`;
+      h+=`<tr class="hl"><td class="s">φVcbg</td><td class="e">${I.pCV}×(AVc/AVco)ψψψψVb</td><td class="v">${fmt(R.phiVcbg)} kN</td><td class="rf">그룹</td></tr>`;
+      if(R.useVnr)h+=`<tr><td class="s">φVnr</td><td class="e">0.75×n×Ar×fy×min(1,Ld/Ldc) [${R.VnrCnt}-D${R.VnrBar}]</td><td class="v">${fmt(R.phiVnr)} kN</td><td class="rf">보강철근 대체 (${R.vbreakSrc} 지배)</td></tr>`;
+      h+=`<tr><td class="s">φVcpg</td><td class="e">${I.pCV}×kcp×Ncbg (kcp=${R.kcp})</td><td class="v">${fmt(R.phiVcpg)} kN</td><td class="rf">§17.7.3</td></tr>`;
+      h+='</table>';
+    }else{
+      const SL=R.shearLug;
+      h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>Ref</th></tr>`;
+      h+=`<tr><td class="s">Aef,sl</td><td class="e">bsl×min(hef,sl, 2tsl) = ${I.bsl}×min(${fmt(SL.hefsl,0)}, ${2*I.tsl})</td><td class="v">${fmt(SL.Aefsl,0)} mm²</td><td class="rf">§17.11.2.1.1</td></tr>`;
+      h+=`<tr><td class="s">ψbrg,sl</td><td class="e">축하중 보정 (≤2.0)</td><td class="v">${fmt(SL.psiBrg,3)}</td><td class="rf">§17.11.2.2</td></tr>`;
+      h+=`<tr class="hl"><td class="s">φVbrg,sl</td><td class="e">0.65×1.7f'c×Aef,sl×ψbrg,sl</td><td class="v">${fmt(SL.phiVbrg)} kN</td><td class="rf">§17.11.2.1</td></tr>`;
+      h+=`<tr class="hl"><td class="s">φVcb,sl</td><td class="e">0.65×(AVc/AVco)Vb (ca1,sl=${fmt(SL.ca1sl,0)})</td><td class="v">${fmt(SL.phiVcb)} kN</td><td class="rf">§17.11.3</td></tr>`;
+      h+='</table>';
+      h+=chkRow('전단키 지압',SL.Vdem,SL.phiVbrg);
+      h+=chkRow('전단키 콘크리트 파괴',SL.Vdem,SL.phiVcb);
+      h+=`<div class="chk ${SL.minAnchorOk?'ok':'ng'}"><span>최소 앵커수 §17.11.1.1.2</span><span class="chkr">${R.n} ≥ 4 EA — ${SL.minAnchorOk?'O.K':'N.G'}</span></div>`;
+    }
+    h+='</div>';
+  }
+  if(showC){
+    h+=`<div class="rb"><div class="rbt"><span class="rbtx"><span class="rbn">4</span>복합 하중 §17.8</span>${badge(R.cOk)}</div>`;
+    if(R.doCombined){
+      h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>판정</th></tr>`;
+      h+=`<tr><td class="s">N/φNn</td><td class="e">인장 지배비</td><td class="v">${fmt(R.NRatio,3)}</td><td class="rf">${R.tGov?R.tGov.label:''}</td></tr>`;
+      h+=`<tr><td class="s">V/φVn</td><td class="e">전단 지배비</td><td class="v">${fmt(R.VRatio,3)}</td><td class="rf">${R.vGov?R.vGov.label:''}</td></tr>`;
+      h+=`<tr class="hl"><td class="s">IR</td><td class="e">N/φNn + V/φVn ≤ 1.2</td><td class="v">${fmt(R.IR,3)}</td><td class="rf">${R.cOk?'O.K':'N.G'}</td></tr>`;
+      h+='</table>';
+    }else{
+      h+=`<div class="nabox">N/φNn=${fmt(R.NRatio,3)}, V/φVn=${fmt(R.VRatio,3)} — 둘 중 하나가 0.2 이하이므로 복합식 생략 (§17.8.1)</div>`;
+    }
+    h+='</div>';
+  }
+  g('rc').innerHTML=h;
+}
+
+// ═══════════════════ 3D ISO ENGINE ═══════════════════
+const ISO={
+  cv:null,ctx:null,W:0,H:0,
+  rotX:-0.42,rotZ:0.62,zoom:1,panX:0,panY:0,
+  sd:null,
+  init(){
+    const host=g('iso3d');
+    this.cv=document.createElement('canvas');
+    host.appendChild(this.cv);
+    this.ctx=this.cv.getContext('2d');
+    const ro=new ResizeObserver(()=>this.resize());
+    ro.observe(host);
+    this._ro=ro;
+    this.resize();
+    let drag=false,pan=false,lx=0,ly=0;
+    this.cv.addEventListener('mousedown',e=>{
+      if(e.button===1){pan=true;e.preventDefault();}
+      else drag=true;
+      lx=e.clientX;ly=e.clientY;
+    });
+    this._mm=e=>{
+      if(!drag&&!pan)return;
+      const dx=e.clientX-lx,dy=e.clientY-ly;
+      lx=e.clientX;ly=e.clientY;
+      if(pan){this.panX+=dx;this.panY+=dy;}
+      else{this.rotZ+=dx*0.008;this.rotX+=dy*0.008;this.rotX=Math.max(-1.5,Math.min(0.2,this.rotX));}
+      this.draw();
+    };
+    this._mu=()=>{drag=false;pan=false;};
+    window.addEventListener('mousemove',this._mm);
+    window.addEventListener('mouseup',this._mu);
+    this.cv.addEventListener('wheel',e=>{e.preventDefault();this.zoom*=e.deltaY<0?1.1:0.9;this.zoom=Math.max(0.2,Math.min(6,this.zoom));this.draw();},{passive:false});
+  },
+  resize(){
+    const host=g('iso3d');
+    if(!host)return;
+    const r=host.getBoundingClientRect();
+    this.W=Math.max(50,r.width);this.H=Math.max(50,r.height);
+    const dpr=window.devicePixelRatio||1;
+    this.cv.width=this.W*dpr;this.cv.height=this.H*dpr;
+    this.cv.style.width=this.W+'px';this.cv.style.height=this.H+'px';
+    this.ctx.setTransform(dpr,0,0,dpr,0,0);
+    this.draw();
+  },
+  P(x,y,z){
+    const cz=Math.cos(this.rotZ),sz=Math.sin(this.rotZ);
+    const cx=Math.cos(this.rotX),sx=Math.sin(this.rotX);
+    const X=x*cz-y*sz, Y=x*sz+y*cz;
+    const Y2=Y*cx-z*sx, Z2=Y*sx+z*cx;
+    const s=this.zoom*this.sc;
+    return[this.W/2+this.panX+X*s, this.H/2+this.panY+Y2*s];
+  },
+  drawBox(x1,x2,y1,y2,z1,z2,cTop,cSide,alpha=1){
+    const c=this.ctx;
+    const p=[[x1,y1,z1],[x2,y1,z1],[x2,y2,z1],[x1,y2,z1],[x1,y1,z2],[x2,y1,z2],[x2,y2,z2],[x1,y2,z2]].map(v=>this.P(v[0],v[1],-v[2]));
+    c.globalAlpha=alpha;
+    const face=(i,j,k,l,col)=>{c.fillStyle=col;c.beginPath();c.moveTo(...p[i]);c.lineTo(...p[j]);c.lineTo(...p[k]);c.lineTo(...p[l]);c.closePath();c.fill();c.strokeStyle='rgba(0,0,0,.35)';c.lineWidth=.7;c.stroke();};
+    face(4,5,6,7,cTop);
+    face(1,2,6,5,cSide);
+    face(0,1,5,4,this.shade(cSide,-18));
+    c.globalAlpha=1;
+  },
+  drawCyl(x,z1,z2,y,r,col,alpha=1){
+    const c=this.ctx;
+    const a=this.P(x,y,-z1),b=this.P(x,y,-z2);
+    c.globalAlpha=alpha;
+    c.strokeStyle=col;c.lineWidth=Math.max(1.5,r*this.zoom*this.sc*2);
+    c.lineCap='round';
+    c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();
+    c.globalAlpha=1;
+  },
+  shade(hex,amt){
+    const n=parseInt(hex.slice(1),16);
+    let r=(n>>16)+amt,g2=((n>>8)&255)+amt,b=(n&255)+amt;
+    r=Math.max(0,Math.min(255,r));g2=Math.max(0,Math.min(255,g2));b=Math.max(0,Math.min(255,b));
+    return '#'+((r<<16)|(g2<<8)|b).toString(16).padStart(6,'0');
+  },
+  setData(d){this.sd=d;this.draw();},
+  draw(){
+    const c=this.ctx;if(!c)return;
+    c.clearRect(0,0,this.W,this.H);
+    const S=this.sd;if(!S)return;
+    const ext=Math.max(S.Lpx,S.Lpy,S.Hp*1.6);
+    this.sc=Math.min(this.W,this.H)/(ext*1.9);
+    const hx=S.Lpx/2,hy=S.Lpy/2,Hp=S.Hp;
+    this.drawBox(-hx*1.5,hx*1.5,-hy*1.5,hy*1.5,Hp,Hp+3,'#0d1b2c','#0a1522',1);
+    this.drawBox(-hx,hx,-hy,hy,0,Hp,'#1a4a90','#14396f',0.94);
+    if(S.rebar&&S.rebar.length){
+      S.rebar.forEach(rp=>this.drawCyl(rp.x,Hp-S.rebarLen,Hp-8,rp.y,S.dv/2,'#2ea84d',0.95));
+    }
+    if(S.vnrX&&S.vnrX.length){
+      c.globalAlpha=.95;
+      S.vnrX.forEach(b=>{
+        const a1=this.P(b.x1,b.y,-(Hp-b.zTop)),a2=this.P(b.x2,b.y,-(Hp-b.zTop));
+        c.strokeStyle='#19d2ff';c.lineWidth=Math.max(1.2,b.d/2*this.zoom*this.sc*2);
+        c.beginPath();c.moveTo(...a1);c.lineTo(...a2);c.stroke();
+      });
+      c.globalAlpha=1;
+    }
+    if(S.vnrY&&S.vnrY.length){
+      c.globalAlpha=.95;
+      S.vnrY.forEach(b=>{
+        const a1=this.P(b.x,b.y1,-(Hp-b.zTop)),a2=this.P(b.x,b.y2,-(Hp-b.zTop));
+        c.strokeStyle='#ff8c3a';c.lineWidth=Math.max(1.2,b.d/2*this.zoom*this.sc*2);
+        c.beginPath();c.moveTo(...a1);c.lineTo(...a2);c.stroke();
+      });
+      c.globalAlpha=1;
+    }
+    const nx=S.nx,ny=S.ny,xs=S.xs,ys=S.ys,da=S.da,hef=S.hef;
+    const del=new Set(S.deletedAnchors||[]);
+    for(let ix=0;ix<nx;ix++)for(let iz=0;iz<ny;iz++){
+      const key=getAnchorKey(ix,iz);
+      if(del.has(key))continue;
+      const bx=xs[ix],bz=ys[iz];
+      const isRF=S.rfKey!=null&&key===S.rfKey;
+      const rodCol=isRF?(S.rfColor||'#d4213a'):'#c45c0a';
+      if(S.head)this.drawBox(bx-da*.9,bx+da*.9,bz-da*.9,bz+da*.9,Hp-hef-da*.6,Hp-hef,isRF?'#7a1830':'#8a5606',isRF?'#5d1224':'#6b4204',1);
+      this.drawCyl(bx,Hp-hef,Hp+55,bz,da/2,rodCol,1);
+      if(isRF){
+        const lp=this.P(bx,bz,-(Hp+70));
+        c.fillStyle='#ff8098';c.font='700 11px "IBM Plex Mono",monospace';c.textAlign='center';
+        c.fillText('보강 대상',lp[0],lp[1]-6);
+        const rp2=this.P(bx,bz,-Hp);
+        c.strokeStyle='#ff5070';c.setLineDash([4,3]);c.lineWidth=1.4;
+        c.beginPath();c.arc(rp2[0],rp2[1],Math.max(10,da*this.zoom*this.sc*1.7),0,Math.PI*2);c.stroke();
+        c.setLineDash([]);
+      }
+    }
+    if(S.arrows){
+      const top=this.P(0,0,-(Hp+130)),base=this.P(0,0,-(Hp+18));
+      c.strokeStyle='#4da6ff';c.lineWidth=2.4;
+      if(S.arrows.N>0){c.beginPath();c.moveTo(...base);c.lineTo(...top);c.stroke();this.arrowHead(base,top,'#4da6ff');}
+      if(Math.abs(S.arrows.Vx)>1e-6){
+        const t2=this.P(160*Math.sign(S.arrows.Vx),0,-(Hp+18));
+        c.strokeStyle='#ff6060';c.beginPath();c.moveTo(...base);c.lineTo(...t2);c.stroke();this.arrowHead(base,t2,'#ff6060');
+      }
+      if(Math.abs(S.arrows.Vy)>1e-6){
+        const t3=this.P(0,160*Math.sign(S.arrows.Vy),-(Hp+18));
+        c.strokeStyle='#55ccff';c.beginPath();c.moveTo(...base);c.lineTo(...t3);c.stroke();this.arrowHead(base,t3,'#55ccff');
+      }
+    }
+    if(S.shearLug){
+      const b=S.shearLug;
+      this.drawBox(-b.bsl/2,b.bsl/2,-b.tsl/2,b.tsl/2,Hp,Hp+b.hsl,'#8890a2','#5d6577',0.96);
+    }
+  },
+  arrowHead(from,to,col){
+    const c=this.ctx;
+    const ang=Math.atan2(to[1]-from[1],to[0]-from[0]);
+    c.fillStyle=col;
+    c.beginPath();
+    c.moveTo(...to);
+    c.lineTo(to[0]-10*Math.cos(ang-0.4),to[1]-10*Math.sin(ang-0.4));
+    c.lineTo(to[0]-10*Math.cos(ang+0.4),to[1]-10*Math.sin(ang+0.4));
+    c.closePath();c.fill();
+  }
+};
+function resetView(){ISO.rotX=-0.42;ISO.rotZ=0.62;ISO.zoom=1;ISO.panX=0;ISO.panY=0;ISO.draw();}
+function setViewTop(){ISO.rotX=-1.5;ISO.rotZ=0;ISO.draw();}
+function setViewFront(){ISO.rotX=0;ISO.rotZ=0;ISO.draw();}
+function setViewSide(){ISO.rotX=0;ISO.rotZ=Math.PI/2;ISO.draw();}
+
+// ═══════════════════ 2D PLAN ═══════════════════
+const PLAN={zoom:1,panX:0,panY:0,
+  init(){
+    const cv=g('plan2d');
+    cv.addEventListener('wheel',e=>{e.preventDefault();this.zoom*=e.deltaY<0?1.1:0.9;this.zoom=Math.max(0.3,Math.min(6,this.zoom));this.draw();},{passive:false});
+    let pan=false,lx=0,ly=0;
+    cv.addEventListener('mousedown',e=>{if(e.button===1){pan=true;lx=e.clientX;ly=e.clientY;e.preventDefault();}});
+    window.addEventListener('mousemove',e=>{if(!pan)return;this.panX+=e.clientX-lx;this.panY+=e.clientY-ly;lx=e.clientX;ly=e.clientY;this.draw();});
+    window.addEventListener('mouseup',()=>pan=false);
+    cv.addEventListener('dblclick',()=>{this.zoom=1;this.panX=0;this.panY=0;this.draw();});
+    new ResizeObserver(()=>this.draw()).observe(g('cw2d'));
+  },
+  sd:null,
+  setData(d){this.sd=d;this.draw();},
+  draw(){
+    const cv=g('plan2d');if(!cv)return;
+    const host=g('cw2d');const r=host.getBoundingClientRect();
+    const dpr=window.devicePixelRatio||1;
+    cv.width=r.width*dpr;cv.height=r.height*dpr;
+    const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);
+    c.clearRect(0,0,r.width,r.height);
+    const S=this.sd;if(!S)return;
+    const sc=Math.min(r.width,r.height)/(Math.max(S.Lpx,S.Lpy)*1.35)*this.zoom;
+    const cx=r.width/2+this.panX,cy=r.height/2+this.panY;
+    const X=x=>cx+x*sc, Y=y=>cy-y*sc;
+    c.strokeStyle='#2b4a6f';c.fillStyle='rgba(20,57,111,.35)';c.lineWidth=1.5;
+    c.beginPath();c.rect(X(-S.Lpx/2),Y(S.Lpy/2),S.Lpx*sc,S.Lpy*sc);c.fill();c.stroke();
+    if(S.rebar)S.rebar.forEach(p=>{
+      c.fillStyle='#2ea84d';
+      c.beginPath();c.arc(X(p.x),Y(p.y),Math.max(2,S.dv/2*sc),0,Math.PI*2);c.fill();
+    });
+    const del=new Set(S.deletedAnchors||[]);
+    for(let ix=0;ix<S.nx;ix++)for(let iy=0;iy<S.ny;iy++){
+      const key=getAnchorKey(ix,iy);
+      const x=S.xs[ix],y=S.ys[iy];
+      const dead=del.has(key);
+      c.fillStyle=dead?'rgba(120,130,145,.35)':'#c45c0a';
+      c.beginPath();c.arc(X(x),Y(y),Math.max(3,S.da/2*sc),0,Math.PI*2);c.fill();
+      if(dead){c.strokeStyle='#8892a2';c.lineWidth=1.2;
+        const rr=Math.max(4,S.da/2*sc)+2;
+        c.beginPath();c.moveTo(X(x)-rr,Y(y)-rr);c.lineTo(X(x)+rr,Y(y)+rr);c.moveTo(X(x)+rr,Y(y)-rr);c.lineTo(X(x)-rr,Y(y)+rr);c.stroke();}
+      c.fillStyle=dead?'#6d7789':'#e8ecf3';c.font='9.5px "IBM Plex Mono",monospace';c.textAlign='center';
+      c.fillText(`A${ix+1}-${iy+1}`,X(x),Y(y)-Math.max(6,S.da/2*sc)-3);
+    }
+    c.strokeStyle='rgba(140,160,185,.4)';c.setLineDash([4,4]);c.lineWidth=1;
+    c.beginPath();c.moveTo(X(-S.Lpx/2*1.12),Y(0));c.lineTo(X(S.Lpx/2*1.12),Y(0));c.moveTo(X(0),Y(-S.Lpy/2*1.12));c.lineTo(X(0),Y(S.Lpy/2*1.12));c.stroke();c.setLineDash([]);
+  }
+};
+
+// ═══════════════════ VIEW DIVIDER ═══════════════════
+(function(){
+  const dv=g('vDivider');
+  let drag=false;
+  dv.addEventListener('mousedown',e=>{drag=true;dv.classList.add('dragging');e.preventDefault();});
+  window.addEventListener('mousemove',e=>{
+    if(!drag)return;
+    const split=g('viewSplit').getBoundingClientRect();
+    let h2=split.bottom-e.clientY;
+    h2=Math.max(60,Math.min(split.height-90,h2));
+    g('cw2d').style.height=h2+'px';
+    g('cw2d').style.flex='none';
+    ISO.resize();PLAN.draw();
+  });
+  window.addEventListener('mouseup',()=>{drag=false;dv.classList.remove('dragging');});
+})();
+
+// ═══════════════════ TOOLTIP ═══════════════════
+let tipT=null;
+function tip(ev,title,body){
+  ev.stopPropagation();
+  const t=g('tip');
+  t.innerHTML=`<div class="tt">${title}</div>${body}`;
+  t.style.display='block';
+  const r=ev.target.getBoundingClientRect();
+  let x=r.right+10,y=r.top-8;
+  t.style.left='0px';t.style.top='0px';
+  const tw=t.offsetWidth,th=t.offsetHeight;
+  if(x+tw>window.innerWidth-8)x=r.left-tw-10;
+  if(y+th>window.innerHeight-8)y=window.innerHeight-th-8;
+  t.style.left=Math.max(4,x)+'px';t.style.top=Math.max(4,y)+'px';
+  clearTimeout(tipT);
+  tipT=setTimeout(()=>t.style.display='none',5000);
+}
+document.addEventListener('click',()=>{g('tip').style.display='none';});
+
+// ═══════════════════ MODAL ═══════════════════
+function openModal(id){g(id).classList.add('show');if(id==='modalDevLen')buildDevTable();if(id==='modalCatalog')fillCatTable();if(id==='modalSave')renderSaveSlots();}
+function closeModal(id){g(id).classList.remove('show');}
+document.querySelectorAll('.modal-overlay').forEach(ov=>ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('show');}));
+
+function fillCatTable(){
+  CAT_KEYS.forEach(d=>{
+    const an=Math.PI/4*Math.pow(0.9*d,2);
+    const eh=EH_CAT[d];
+    const ab=eh*eh-Math.PI/4*d*d;
+    if(g('ca'+d+'_an'))g('ca'+d+'_an').textContent=an.toFixed(1);
+    if(g('ca'+d+'_ab'))g('ca'+d+'_ab').textContent=ab.toFixed(0);
+    const row=g('cat_row_'+d);
+    if(row)row.style.background=Math.abs(nv('iDa')-d)<0.5?'rgba(26,114,212,.14)':'';
+  });
+}
+
+// ═══════════════════ SAVE / LOAD ═══════════════════
+const LS_KEY='abolt_rect_v452_saves';
+function collectVals(){
+  const o={};
+  document.querySelectorAll('input,select').forEach(el=>{
+    if(!el.id)return;
+    if(el.type==='checkbox')o[el.id]=el.checked;
+    else o[el.id]=el.value;
+  });
+  o.__deletedAnchors=getDeletedAnchors();
+  o.__ehManual=ehManualMode;
+  return o;
+}
+function applyVals(o){
+  if(!o)return;
+  if(o.iNx)g('iNx').value=o.iNx;
+  if(o.iNy)g('iNy').value=o.iNy;
+  buildSpacingInputs();
+  Object.entries(o).forEach(([k,v])=>{
+    if(k.startsWith('__'))return;
+    const el=g(k);
+    if(!el)return;
+    if(el.type==='checkbox')el.checked=!!v;
+    else el.value=v;
+  });
+  ehManualMode=!!o.__ehManual;
+  onAT();
+  onRebarToggle();
+  onFrictionChange();
+  onNAModeChange();
+  onShearLugToggle();
+  buildSpacingInputs();
+  if(o.__deletedAnchors)setDeletedAnchors(o.__deletedAnchors);
+  onRebarChange();
+  schedCalc();
+}
+function getSaves(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch(e){return[];}}
+function setSaves(a){try{localStorage.setItem(LS_KEY,JSON.stringify(a));}catch(e){alert('저장 실패: 저장공간 오류');}}
+function saveInputs(){
+  const name=(g('saveSlotName').value||'').trim()||('케이스 '+new Date().toLocaleString('ko-KR'));
+  const a=getSaves();
+  a.unshift({name,date:new Date().toISOString(),vals:collectVals()});
+  if(a.length>30)a.length=30;
+  setSaves(a);
+  renderSaveSlots();
+  g('saveSlotName').value='';
+}
+function renderSaveSlots(){
+  const a=getSaves();
+  const box=g('saveSlotList');
+  if(!a.length){box.innerHTML='<div style="color:var(--t3);font-size:11px;padding:8px 2px">저장된 케이스가 없습니다.</div>';return;}
+  box.innerHTML=a.map((s,i)=>`
+    <div class="save-slot">
+      <span class="save-slot-name" onclick="loadSlot(${i})">${s.name}</span>
+      <span class="save-slot-date">${new Date(s.date).toLocaleString('ko-KR')}</span>
+      <button class="abtn" onclick="loadSlot(${i})">불러오기</button>
+      <button class="abtn" onclick="delSlot(${i})" style="color:var(--rd)">삭제</button>
+    </div>`).join('');
+}
+function loadSlot(i){const a=getSaves();if(!a[i])return;applyVals(a[i].vals);closeModal('modalSave');}
+function delSlot(i){const a=getSaves();a.splice(i,1);setSaves(a);renderSaveSlots();}
+function exportJSON(){
+  const data=JSON.stringify({app:'AnchorBolt_Rectangular',ver:'4.52',date:new Date().toISOString(),vals:collectVals()},null,2);
+  const bl=new Blob([data],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(bl);
+  a.download='AnchorBolt_Rect_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+}
+function importJSON(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{try{const o=JSON.parse(rd.result);applyVals(o.vals||o);alert('불러오기 완료');}catch(e){alert('JSON 파싱 실패: '+e.message);}};
+  rd.readAsText(f);
+  ev.target.value='';
+}
+
+// ═══════════════════ [이식 Range B] 한글 폰트 로더 (PDF용) ═══════════════════
+let _krFontB64=null;
+async function getKoreanFontB64(){
+  if(_krFontB64)return _krFontB64;
+  const urls=[
+    'https://cdn.jsdelivr.net/gh/fonts-archive/NanumGothic/NanumGothic.ttf',
+    'https://cdn.jsdelivr.net/npm/nanumgothic@1.0.0/fonts/NanumGothic-Regular.ttf'
+  ];
+  for(const u of urls){
+    try{
+      const res=await fetch(u);
+      if(!res.ok)continue;
+      const buf=await res.arrayBuffer();
+      let bin='';const bytes=new Uint8Array(buf);
+      const CH=8192;
+      for(let i=0;i<bytes.length;i+=CH)bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+CH));
+      _krFontB64=btoa(bin);
+      return _krFontB64;
+    }catch(e){/* 다음 URL 시도 */}
+  }
+  return null;
+}
+
+// ═══════════════════ [이식 Range A] 🔧 긴급 보강 설계 — Hilti 화학앵커 대체 ═══════════════════
+const RF_PRODUCTS=[
+  {id:'hit_re500v4_hAS', name:'HIT-RE 500 V4 + HAS-U 8.8', tauCr:8.0, tauUncr:12.0, type:'epoxy',
+   note:'고내력 에폭시. 대구경·심매입에 적합. 경화 느림(20°C 12h)', maxDa:39, futa:800, fya:640,
+   link:'https://www.hilti.co.kr/c/CLS_FASTENER_7135/CLS_INJECTABLE_ADHESIVE_ANCHORS_7135'},
+  {id:'hit_hy200r_hAS', name:'HIT-HY 200-R V3 + HAS-U 8.8', tauCr:7.0, tauUncr:10.5, type:'hybrid',
+   note:'하이브리드. 빠른 경화(20°C 1h)로 긴급보강 1순위', maxDa:30, futa:800, fya:640,
+   link:'https://www.hilti.co.kr/c/CLS_FASTENER_7135/CLS_INJECTABLE_ADHESIVE_ANCHORS_7135'},
+  {id:'hit_hy200r_rebar', name:'HIT-HY 200-R V3 + 이형철근(SD400)', tauCr:6.5, tauUncr:9.8, type:'hybrid',
+   note:'철근 케미컬 정착. 페데스탈 측면 보강근 추가 정착 시', maxDa:32, futa:560, fya:400,
+   link:'https://www.hilti.co.kr/c/CLS_FASTENER_7135/CLS_INJECTABLE_ADHESIVE_ANCHORS_7135'},
+  {id:'hst3', name:'HST3 웨지앵커 (기계식)', tauCr:null, tauUncr:null, type:'mech',
+   note:'즉시 재하 가능. 균열콘크리트 인증. 소구경·저하중 한정', maxDa:24, futa:700, fya:560,
+   link:'https://www.hilti.co.kr/c/CLS_FASTENER_7135/CLS_STUD_ANCHORS_7135'},
+];
+let rfState={scenario:'broken', brokenCount:1, split:'adjacent', prod:'hit_hy200r_hAS', da:20, key:null};
+
+function openRetrofit(){
+  const R=window.LR_;
+  if(!R){alert('먼저 계산을 실행해 주세요. (입력값을 한번 변경하면 자동 계산됩니다)');return;}
+  if(!rfState.key||!R.activeAnchors.some(p=>p.key===rfState.key))rfState.key=R.activeAnchors[0].key;
+  rfState.da=R.I.da;
+  renderRetrofit();
+  openModal('modalRetrofit');
+}
+function rfSet(k,v){rfState[k]=v;renderRetrofit();}
+function rfSetKey(v){rfState.key=v;renderRetrofit();}
+function rfSetNum(k,v){rfState[k]=parseFloat(v)||0;renderRetrofit();}
+
+function rfCalc(R){
+  const I=R.I;
+  const prod=RF_PRODUCTS.find(p=>p.id===rfState.prod)||RF_PRODUCTS[1];
+  const da=rfState.da;
+  const brokenN=Math.max(1,Math.min(rfState.brokenCount,R.n-1));
+  // 파손 앵커의 원 부담 하중
+  const target=R.activeAnchors.find(p=>p.key===rfState.key);
+  const lcPt=R.LC.pts.find(p=>p.key===rfState.key);
+  const Nlost=lcPt?Math.max(lcPt.T,R.Nua_max*0.6):R.Nua_max;
+  const Vlost=R.Vua_i;
+  const Ndem=Nlost*brokenN, Vdem=Vlost*brokenN;
+  // 대체앵커 매입깊이: 페데스탈 높이 - 여유 60mm 한도
+  const hefMax=Math.max(60,I.Hp-60);
+  let hefUse=Math.min(Math.max(8*da,I.hef*0.8),hefMax);
+  const split=rfState.split; // adjacent(인접 2개소 분산) | same(동일 위치 재시공)
+  const nNew=split==='adjacent'?brokenN*2:brokenN;
+  const NperNew=Ndem/nNew, VperNew=Vdem/nNew;
+  const out={prod,da,brokenN,nNew,Ndem,Vdem,NperNew,VperNew,hefUse,steps:[],checks:[]};
+
+  const Ase=Math.PI/4*Math.pow(0.9*da,2);
+  const futaEff=Math.min(prod.futa,1.9*prod.fya,860);
+  const phiNsa=0.65*Ase*futaEff/1000; // post-installed 취급 φ보수 적용
+  const phiVsa=0.60*0.6*Ase*futaEff/1000;
+  out.checks.push({k:'강재 인장',cap:phiNsa,dem:NperNew,ok:phiNsa>=NperNew-1e-9,ref:'φ=0.65(보수)'});
+  out.checks.push({k:'강재 전단',cap:phiVsa,dem:VperNew,ok:phiVsa>=VperNew-1e-9,ref:'φ=0.60×0.6'});
+
+  if(prod.type!=='mech'){
+    const tau=I.cracked?prod.tauCr:prod.tauUncr;
+    const Nba=I.lam*tau*Math.PI*da*hefUse/1000;
+    const cEdge=Math.min(R.Ca1x,R.Ca1y);
+    const cNa=10*da*Math.sqrt(tau/7.6);
+    const edF=cEdge>=cNa?1.0:0.7+0.3*cEdge/cNa;
+    const phiNag=0.65*edF*Nba;
+    out.tau=tau;out.cNa=cNa;out.edF=edF;
+    out.checks.push({k:'Bond (단일)',cap:phiNag,dem:NperNew,ok:phiNag>=NperNew-1e-9,ref:'τ='+tau+'MPa ×ψed'});
+  }else{
+    out.checks.push({k:'Bond',cap:null,dem:null,ok:true,ref:'기계식 — Hilti ETA 데이터 확인 필요'});
+  }
+  {
+    const kc=7; // post-installed
+    const hefB=Math.min(hefUse,Math.max(60,(Math.min(R.Ca1x,R.Ca1y))/1.5));
+    const Nb=kc*I.lam*Math.sqrt(I.fc)*Math.pow(hefB,1.5)/1000;
+    const phiNcb=0.65*Nb;
+    out.hefB=hefB;
+    out.checks.push({k:'Concrete Breakout (단일 근사)',cap:phiNcb,dem:NperNew,ok:phiNcb>=NperNew-1e-9,ref:'kc=7, hef\'='+hefB.toFixed(0)});
+  }
+  out.allOk=out.checks.every(c=>c.ok);
+
+  out.steps=[
+    ['파손/오시공 앵커 하중 재분배 확인','현 계산기 기준 파손 앵커 1개당 인장 '+fmt(Nlost)+' kN, 전단 '+fmt(Vlost)+' kN. 앵커 삭제 옵션에서 해당 앵커('+(target?('A'+(target.ix+1)+'-'+(target.iy+1)):'—')+')를 해제해 잔여 앵커의 N.G 여부를 먼저 확인.'],
+    ['천공','대체앵커 위치는 기존 철근 간섭 회피(철근탐사기 필수). 직경 '+(da+4)+'mm 내외, 깊이 '+out.hefUse.toFixed(0)+'mm. 연단거리 확보: Ca1,x='+fmt(R.Ca1x,0)+'mm / Ca1,y='+fmt(R.Ca1y,0)+'mm 이상 유지.'],
+    ['청소','브러시·에어 2회 이상 반복(Hilti SafeSet 권장). 청소불량은 Bond 강도 저하의 최대 원인.'],
+    ['주입·삽입','수지 주입 후 회전 삽입, 경화시간 준수'+(prod.type==='hybrid'?' (HY 200-R: 20°C 기준 약 1h)':prod.type==='epoxy'?' (RE 500 V4: 20°C 기준 약 12h)':' (기계식: 토크 체결 즉시 재하)')+'.' ],
+    ['검증','현장 인발시험(비파괴, 설계하중 1.25배 권장) 후 베이스플레이트 재체결. 본 검토는 예비검토로, 최종설계는 Hilti PROFIS Engineering 및 ESR/ETA 데이터로 확정.'],
+  ];
+  return out;
+}
+
+function renderRetrofit(){
+  const R=window.LR_; if(!R)return;
+  const res=rfCalc(R);
+  const anchorOpts=R.activeAnchors.map(p=>`<option value="${p.key}" ${rfState.key===p.key?'selected':''}>A${p.ix+1}-${p.iy+1} (x=${p.x.toFixed(0)}, y=${p.y.toFixed(0)})</option>`).join('');
+  let h='';
+  h+=`<div class="rf-demand" style="margin-bottom:14px">
+    <div class="d"><div class="dl">파손 앵커 인장수요(합)</div><div class="dv">${fmt(res.Ndem)} kN</div></div>
+    <div class="d"><div class="dl">파손 앵커 전단수요(합)</div><div class="dv">${fmt(res.Vdem)} kN</div></div>
+    <div class="d"><div class="dl">대체앵커 개소</div><div class="dv">${res.nNew} EA</div></div>
+    <div class="d"><div class="dl">개소당 인장</div><div class="dv">${fmt(res.NperNew)} kN</div></div>
+  </div>`;
+  h+='<div class="rf-grid"><div>';
+  h+=`<div class="rf-card"><div class="rf-card-t">① 시나리오</div>
+    <div class="rf-opt">
+      <div class="rf-o ${rfState.scenario==='broken'?'sel':''}" onclick="rfSet('scenario','broken')"><b>파손</b><span>볼트 절단·나사산 손상</span></div>
+      <div class="rf-o ${rfState.scenario==='misplaced'?'sel':''}" onclick="rfSet('scenario','misplaced')"><b>오시공</b><span>위치 이탈·매입깊이 부족</span></div>
+    </div>
+    <div class="ir"><label>대상 앵커</label><span class="sym">A</span><select onchange="rfSetKey(this.value)">${anchorOpts}</select><span class="unt"></span><span></span></div>
+    <div class="ir"><label>파손 앵커 수</label><span class="sym">nb</span><input type="number" min="1" max="${Math.max(1,R.n-1)}" value="${rfState.brokenCount}" oninput="rfSetNum('brokenCount',this.value)"><span class="unt">ea</span><span></span></div>
+  </div>`;
+  h+=`<div class="rf-card"><div class="rf-card-t">② 대체 방식</div>
+    <div class="rf-opt">
+      <div class="rf-o ${rfState.split==='adjacent'?'sel':''}" onclick="rfSet('split','adjacent')"><b>인접 분산 (2배수)</b><span>파손앵커 좌우 2개소로 하중 분산 — 권장</span></div>
+      <div class="rf-o ${rfState.split==='same'?'sel':''}" onclick="rfSet('split','same')"><b>동일 위치 재시공</b><span>코어링 제거 후 동일 위치. 간섭 위험 높음</span></div>
+    </div>
+    <div class="ir"><label>대체앵커 지름</label><span class="sym">da'</span><input type="number" min="8" max="39" value="${rfState.da}" oninput="rfSetNum('da',this.value)"><span class="unt">mm</span><span></span></div>
+  </div>`;
+  h+='</div><div>';
+  h+=`<div class="rf-card"><div class="rf-card-t">③ Hilti 제품 선택</div><div class="rf-opt" style="grid-template-columns:1fr">`;
+  RF_PRODUCTS.forEach(p=>{
+    const dis=rfState.da>p.maxDa;
+    h+=`<div class="rf-o ${rfState.prod===p.id?'sel':''}" style="${dis?'opacity:.4;pointer-events:none':''}" onclick="rfSet('prod','${p.id}')">
+      <b>${p.name}${dis?' (da 초과)':''}</b><span>${p.note} | 최대 da=${p.maxDa}mm ${p.tauCr?('| τcr='+p.tauCr+' MPa'):''}</span></div>`;
+  });
+  h+=`</div><div style="font-size:10px;color:var(--t3)">τ값은 참고용 개략치입니다. 실제 설계값은 Hilti ESR/ETA 승인문서 및 PROFIS 결과를 따르세요. <a href="${res.prod.link}" target="_blank" style="color:var(--ac3)">제품 페이지 →</a></div></div>`;
+  h+='</div></div>';
+  h+=`<div class="rf-result"><div class="rf-card-t">④ 예비 검토 결과 — ${res.prod.name} (hef'=${res.hefUse.toFixed(0)}mm)</div>`;
+  res.checks.forEach(c=>{
+    h+=`<div class="rf-row"><span class="k">${c.k} <span style="color:var(--t3);font-size:10px">${c.ref}</span></span><span class="v" style="color:${c.ok?'var(--gr)':'var(--rd)'}">${c.cap===null?'—':fmt(c.dem)+' ≤ '+fmt(c.cap)+' kN'} ${c.ok?'O.K':'N.G'}</span></div>`;
+  });
+  h+=`<div class="rf-verdict ${res.allOk?'ok':'ng'}">${res.allOk?'✔ 예비검토 만족 — PROFIS 상세검토로 확정 진행':'✖ 예비검토 불만족 — 지름 상향/개소 추가/타 제품 검토 필요'}</div></div>`;
+  h+=`<div class="rf-card" style="margin-top:14px"><div class="rf-card-t">⑤ 시공 절차</div>`;
+  res.steps.forEach((s,i)=>{h+=`<div class="rf-step"><div class="sn">${i+1}</div><div><b style="font-size:12px">${s[0]}</b><div style="color:var(--t2);margin-top:2px">${s[1]}</div></div></div>`;});
+  h+=`</div>`;
+  h+=`<div style="display:flex;gap:8px;margin-top:12px"><button class="abtn" style="background:var(--or);color:#1a0d00;font-weight:700" onclick="expRetrofitPDF()">📄 긴급보강 검토서 PDF</button><button class="abtn" onclick="rfHighlight3D()">🎯 3D에서 대상 앵커 표시</button></div>`;
+  g('retrofitBody').innerHTML=h;
+}
+function rfHighlight3D(){
+  if(!ISO.sd)return;
+  ISO.sd.rfKey=rfState.key;
+  ISO.sd.rfColor='#d4213a';
+  ISO.draw();
+  closeModal('modalRetrofit');
+}
+
+async function expRetrofitPDF(){
+  const R=window.LR_; if(!R){alert('먼저 계산을 실행해 주세요.');return;}
+  const res=rfCalc(R);
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const fb=await getKoreanFontB64();
+  let F='helvetica';
+  if(fb){doc.addFileToVFS('NanumGothic.ttf',fb);doc.addFont('NanumGothic.ttf','NanumGothic','normal');F='NanumGothic';}
+  doc.setFont(F);
+  let y=16;
+  doc.setFontSize(14);doc.text('긴급 보강 설계 예비검토서 (앵커 파손/오시공)',14,y);y+=7;
+  doc.setFontSize(9);
+  doc.text(`Project: ${g('mP').value||'-'} | Doc: ${g('mDoc').value||'-'} | Item: ${g('mItem').value||'-'} | Date: ${g('mD').value||new Date().toISOString().slice(0,10)}`,14,y);y+=5;
+  doc.text(`원설계: Rectangular ${R.I.nx}x${R.I.ny}(활성 ${R.n}EA) M${R.I.da}, hef=${R.I.hef}mm, Lpx=${R.I.Lpx}, Lpy=${R.I.Lpy}, Hp=${R.I.Hp}mm, f'c=${R.I.fc}MPa`,14,y);y+=8;
+  doc.setFontSize(11);doc.text('1. 보강 수요',14,y);y+=6;doc.setFontSize(9);
+  [['파손 시나리오',rfState.scenario==='broken'?'파손(절단/나사산 손상)':'오시공(위치이탈/매입부족)'],
+   ['대상 앵커 키',rfState.key],['파손 앵커 수',res.brokenN+' EA'],
+   ['보강 인장수요 합',fmt(res.Ndem)+' kN'],['보강 전단수요 합',fmt(res.Vdem)+' kN'],
+   ['대체 개소 / 개소당',res.nNew+' EA / N='+fmt(res.NperNew)+' kN, V='+fmt(res.VperNew)+' kN']
+  ].forEach(r=>{doc.text('- '+r[0]+': '+r[1],16,y);y+=5;});
+  y+=3;doc.setFontSize(11);doc.text('2. 적용 제품 및 예비검토',14,y);y+=6;doc.setFontSize(9);
+  doc.text('- 제품: '+res.prod.name+' (hef\'='+res.hefUse.toFixed(0)+'mm, da\'='+res.da+'mm)',16,y);y+=5;
+  res.checks.forEach(c=>{
+    doc.text('- '+c.k+': '+(c.cap===null?'ETA 확인 필요':fmt(c.dem)+' <= '+fmt(c.cap)+' kN')+' ['+(c.ok?'O.K':'N.G')+'] '+c.ref,16,y);y+=5;
+  });
+  doc.text('- 종합: '+(res.allOk?'예비검토 만족':'예비검토 불만족'),16,y);y+=8;
+  doc.setFontSize(11);doc.text('3. 시공 절차',14,y);y+=6;doc.setFontSize(8.5);
+  res.steps.forEach((s,i)=>{
+    const lines=doc.splitTextToSize((i+1)+'. '+s[0]+' — '+s[1],180);
+    lines.forEach(L=>{if(y>282){doc.addPage();doc.setFont(F);y=16;}doc.text(L,16,y);y+=4.4;});
+    y+=1.2;
+  });
+  y+=4;doc.setFontSize(8);
+  doc.text('* 본 문서는 예비검토용입니다. 최종 설계는 Hilti PROFIS Engineering 및 해당 제품 ESR/ETA 승인문서 기준으로 확정해야 합니다.',14,Math.min(y,288));
+  doc.save('Retrofit_Precheck_'+(g('mItem').value||'anchor')+'.pdf');
+}
+
+// ═══════════════════ [이식 Range A] 📄 계산서 자동 추출 (PDF/Excel) ═══════════════════
+if(window.pdfjsLib)pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+let extractCandidates=[];
+let extractedRawText='';
+
+const EX_LABELS={
+  iDa:'볼트 지름 da', iHef:'매입깊이 hef', iEh:'헤드폭 eh', iFuta:'futa', iFya:'fya',
+  iLpx:'페데스탈 X길이 Lpx', iLpy:'페데스탈 Y길이 Lpy', iHp:'페데스탈 높이 Hp', iFc:"콘크리트 f'c",
+  iFy:'철근 fy', iNtot:'철근 총수 Ntot',
+  iP:'축하중 P', iHx:'횡하중 Hx', iHy:'횡하중 Hy', iMx:'모멘트 Mx', iMy:'모멘트 My'
+};
+const EX_UNITS={iDa:'mm',iHef:'mm',iEh:'mm',iFuta:'MPa',iFya:'MPa',iLpx:'mm',iLpy:'mm',iHp:'mm',iFc:'MPa',iFy:'MPa',iNtot:'ea',iP:'kN',iHx:'kN',iHy:'kN',iMx:'kN·m',iMy:'kN·m'};
+
+const EX_PATTERNS=[
+  {id:'iDa',   re:[/anchor\s*bolt\s*dia(?:meter)?\s*[:=]?\s*M?\s*(\d{2,3})/i, /볼트\s*(?:공칭)?지름\s*[:=]?\s*M?\s*(\d{2,3})/, /\bda\s*[:=]\s*(\d{2,3})(?:\.\d+)?\s*mm/i]},
+  {id:'iHef',  re:[/(?:effective\s*)?embed(?:ment)?\s*(?:depth)?\s*[:=]?\s*(\d{2,4})(?:\.\d+)?\s*mm/i, /매입\s*깊이\s*[:=]?\s*(\d{2,4})/, /\bhef\s*[:=]\s*(\d{2,4})(?:\.\d+)?/i]},
+  {id:'iFuta', re:[/futa?\s*[:=]\s*(\d{3,4})(?:\.\d+)?\s*(?:MPa|N\/mm)/i, /(?:tensile|ultimate)\s*strength\s*[:=]?\s*(\d{3,4})\s*MPa/i]},
+  {id:'iFya',  re:[/fya?\s*[:=]\s*(\d{3,4})(?:\.\d+)?\s*(?:MPa|N\/mm)/i, /yield\s*strength\s*[:=]?\s*(\d{3,4})\s*MPa/i]},
+  {id:'iHp',   re:[/pedestal\s*(?:height|depth)\s*[:=]?\s*(\d{3,4})/i, /페데스탈\s*높이\s*[:=]?\s*(\d{3,4})/, /\b(?:Hp|ha)\s*[:=]\s*(\d{3,4})/]},
+  {id:'iFc',   re:[/f['′’]?c\s*[:=]\s*(\d{2}(?:\.\d+)?)\s*(?:MPa|N\/mm)/i, /concrete\s*strength\s*[:=]?\s*(\d{2}(?:\.\d+)?)/i, /콘크리트\s*강도\s*[:=]?\s*(\d{2}(?:\.\d+)?)/]},
+  {id:'iFy',   re:[/\bfy\s*[:=]\s*(\d{3})(?:\.\d+)?\s*(?:MPa|N\/mm)/i, /SD\s*(\d{3})/]},
+  {id:'iP',    re:[/(?:axial|vertical)\s*(?:load|force)?\s*P?u?\s*[:=]\s*(-?\d{1,5}(?:\.\d+)?)\s*kN/i, /축하중\s*[:=]?\s*(-?\d{1,5}(?:\.\d+)?)/, /\bPu?\s*[:=]\s*(-?\d{1,5}(?:\.\d+)?)\s*kN/]},
+  {id:'iHx',   re:[/\b(?:Hx|Vx|Vux)\s*[:=]\s*(-?\d{1,5}(?:\.\d+)?)\s*kN/i, /X\s*방향\s*횡하중\s*[:=]?\s*(-?\d{1,5}(?:\.\d+)?)/]},
+  {id:'iHy',   re:[/\b(?:Hy|Vy|Vuy)\s*[:=]\s*(-?\d{1,5}(?:\.\d+)?)\s*kN/i, /Y\s*방향\s*횡하중\s*[:=]?\s*(-?\d{1,5}(?:\.\d+)?)/]},
+  {id:'iMx',   re:[/\bMu?x\s*[:=]\s*(-?\d{1,6}(?:\.\d+)?)\s*kN[\.·\s]?m/i, /X\s*축\s*모멘트\s*[:=]?\s*(-?\d{1,6}(?:\.\d+)?)/]},
+  {id:'iMy',   re:[/\bMu?y\s*[:=]\s*(-?\d{1,6}(?:\.\d+)?)\s*kN[\.·\s]?m/i, /Y\s*축\s*모멘트\s*[:=]?\s*(-?\d{1,6}(?:\.\d+)?)/]},
+];
+// 결합 패턴: "800 x 800 x 1200 PED." → Lpx, Lpy, Hp
+const EX_COMBINED_DXDYHP=/(\d{3,4})\s*[x×]\s*(\d{3,4})\s*[x×]\s*(\d{3,4})\s*(?:PED|pedestal|페데스탈)/i;
+// 결합 패턴: "20-M36 ANCHOR BOLTS" → da(개수는 참고정보)
+const EX_COMBINED_N_DA=/(\d{1,2})\s*[- ]\s*M\s*(\d{2})\s*(?:anchor|bolt|앵커)/i;
+
+const EX_REQUIRED=[
+  {grp:'① 볼트 제원·재질', ids:['iDa','iHef','iFuta','iFya']},
+  {grp:'② 페데스탈·콘크리트', ids:['iLpx','iLpy','iHp','iFc']},
+  {grp:'③ 보강철근', ids:['iFy','iNtot']},
+  {grp:'④ 하중', ids:['iP','iHx','iHy','iMx','iMy']},
+];
+
+async function extractPdfText(file){
+  const buf=await file.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  let txt='';
+  const maxPg=Math.min(pdf.numPages,40);
+  for(let p=1;p<=maxPg;p++){
+    const pg=await pdf.getPage(p);
+    const tc=await pg.getTextContent();
+    txt+=tc.items.map(it=>it.str).join(' ')+'\n';
+  }
+  return txt;
+}
+
+function pushCand(id,val,conf,src,ctx){
+  if(!EX_LABELS[id])return;
+  const exist=extractCandidates.find(c=>c.id===id);
+  if(exist){
+    if(conf==='high'&&exist.conf!=='high'){exist.val=val;exist.conf=conf;exist.src=src;exist.ctx=ctx;}
+    return;
+  }
+  extractCandidates.push({id,val,conf,src,ctx});
+}
+
+function runExtraction(text,srcName){
+  extractedRawText+='\n\n===== '+srcName+' =====\n'+text;
+  const m1=text.match(EX_COMBINED_DXDYHP);
+  if(m1){
+    pushCand('iLpx',m1[1],'high',srcName,m1[0]);
+    pushCand('iLpy',m1[2],'high',srcName,m1[0]);
+    pushCand('iHp',m1[3],'high',srcName,m1[0]);
+  }
+  const m2=text.match(EX_COMBINED_N_DA);
+  if(m2){
+    pushCand('iDa',m2[2],'high',srcName,m2[0]+' (수량 '+m2[1]+'EA — nx/ny는 직접 입력)');
+  }
+  EX_PATTERNS.forEach(p=>{
+    for(const re of p.re){
+      const m=text.match(re);
+      if(m){
+        const i0=Math.max(0,m.index-25), i1=Math.min(text.length,m.index+m[0].length+25);
+        pushCand(p.id,m[1],re.source.length>30?'high':'low',srcName,text.slice(i0,i1).replace(/\s+/g,' ').trim());
+        break;
+      }
+    }
+  });
+  // Lpx만 찾히고 Lpy가 없으면 정사각 가정 후보 추가
+  const hasLpx=extractCandidates.some(c=>c.id==='iLpx');
+  const hasLpy=extractCandidates.some(c=>c.id==='iLpy');
+  if(hasLpx&&!hasLpy){
+    const lpx=extractCandidates.find(c=>c.id==='iLpx');
+    pushCand('iLpy',lpx.val,'low',srcName,'Lpx와 동일값 가정(정사각) — 반드시 확인');
+  }
+  renderExtractTable();
+}
+
+async function handlePdfFiles(files,kind){
+  if(!window.pdfjsLib){alert('pdf.js 로드 실패 — 네트워크 연결을 확인하세요.');return;}
+  const dz=g(kind==='calc'?'dzCalc':'dzVendor'), st=g(kind==='calc'?'dzCalcStatus':'dzVendorStatus');
+  st.textContent='추출 중...';
+  try{
+    for(const f of files){
+      const txt=await extractPdfText(f);
+      runExtraction(txt,f.name);
+    }
+    dz.classList.add('loaded');
+    st.textContent=files.length+'개 파일 추출 완료';
+  }catch(e){
+    st.textContent='실패: '+e.message+' (스캔 이미지 PDF일 수 있음)';
+  }
+}
+
+async function handleExcelFiles(files,kind){
+  if(!window.XLSX){alert('SheetJS 로드 실패');return;}
+  const dz=g('dzExcel'), st=g('dzExcelStatus');
+  st.textContent='추출 중...';
+  try{
+    for(const f of files){
+      const buf=await f.arrayBuffer();
+      const wb=XLSX.read(buf,{type:'array'});
+      let txt='';
+      wb.SheetNames.forEach(sn=>{
+        const ws=wb.Sheets[sn];
+        const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});
+        rows.forEach(r=>{txt+=r.filter(v=>v!=='').join(' = ')+'\n';});
+      });
+      runExtraction(txt,f.name);
+    }
+    dz.classList.add('loaded');
+    st.textContent=files.length+'개 파일 추출 완료';
+  }catch(e){st.textContent='실패: '+e.message;}
+}
+
+function renderExtractTable(){
+  const box=g('extractResults');
+  if(!extractCandidates.length){box.innerHTML='<div style="color:var(--t3);font-size:11px">추출된 후보가 없습니다. 파일 형식/텍스트 레이어 유무를 확인하세요.</div>';return;}
+  let h='<div class="extract-row hdr"><span></span><span>항목</span><span>추출값</span><span>신뢰도</span><span>출처 문맥</span></div>';
+  EX_REQUIRED.forEach(gr=>{
+    h+=`<div style="font-size:10px;color:var(--ac3);font-weight:700;margin:10px 0 3px">${gr.grp}</div>`;
+    gr.ids.forEach(id=>{
+      const c=extractCandidates.find(x=>x.id===id);
+      if(!c){
+        h+=`<div class="extract-row" style="opacity:.5"><span></span><span>${EX_LABELS[id]}</span><span style="color:var(--t3);font-size:11px">미검출 — 직접 입력</span><span></span><span></span></div>`;
+        return;
+      }
+      h+=`<div class="extract-row">
+        <input type="checkbox" id="exOn_${id}" ${c.conf==='high'?'checked':''}>
+        <span style="font-size:11.5px">${EX_LABELS[id]} <span style="color:var(--t3);font-size:9.5px">(${EX_UNITS[id]||''})</span></span>
+        <input type="text" id="exVal_${id}" value="${c.val}">
+        <span class="conf-badge ${c.conf}">${c.conf==='high'?'HIGH':'확인필요'}</span>
+        <span style="font-size:10px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(c.ctx||'').replace(/"/g,'&quot;')}">${c.src} | ${c.ctx||''}</span>
+      </div>`;
+    });
+  });
+  h+=`<div style="display:flex;gap:8px;margin-top:14px">
+    <button class="abtn" style="background:var(--gr);color:#06210f;font-weight:700" onclick="applyExtracted()">✔ 체크 항목 좌측 입력에 반영</button>
+    <button class="abtn" onclick="extractCandidates=[];extractedRawText='';renderExtractTable();['dzCalc','dzExcel','dzVendor'].forEach(i=>g(i).classList.remove('loaded'));g('dzCalcStatus').textContent='클릭 또는 드래그 (여러 개 가능)';g('dzExcelStatus').textContent='클릭 또는 드래그 (.xlsx/.xls, 여러 개 가능) — 권장';g('dzVendorStatus').textContent='클릭 또는 드래그 (여러 개 가능)'">↺ 초기화</button>
+  </div>
+  <div style="font-size:10px;color:var(--t3);margin-top:8px">※ nx/ny·앵커 간격·앵커 삭제 패턴은 자동 추출 대상이 아닙니다. 반영 후 반드시 3D/2D 뷰로 배치를 확인하세요.</div>`;
+  box.innerHTML=h;
+}
+
+function applyExtracted(){
+  let n=0;
+  extractCandidates.forEach(c=>{
+    const on=g('exOn_'+c.id);
+    if(!on||!on.checked)return;
+    const vEl=g('exVal_'+c.id);
+    const el=g(c.id);
+    if(el&&vEl&&vEl.value!==''){el.value=vEl.value;n++;}
+  });
+  if(!n){alert('반영할 체크 항목이 없습니다.');return;}
+  onDaChange();
+  buildSpacingInputs();
+  onRebarChange();
+  schedCalc();
+  alert(n+'개 항목이 반영되었습니다. 값과 배치(nx/ny/간격)를 반드시 직접 확인하세요.');
+  closeModal('modalExtract');
+}
+
+// 드래그 앤 드롭 등록
+[['dzCalc','calc','pdf'],['dzExcel','excel','xls'],['dzVendor','vendor','pdf']].forEach(([id,kind,typ])=>{
+  const el=g(id);
+  if(!el)return;
+  ['dragenter','dragover'].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();el.classList.add('dragover');}));
+  ['dragleave','drop'].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();el.classList.remove('dragover');}));
+  el.addEventListener('drop',e=>{
+    const fs=e.dataTransfer.files;
+    if(!fs||!fs.length)return;
+    if(typ==='pdf')handlePdfFiles(fs,kind);
+    else handleExcelFiles(fs,kind);
+  });
+});
+
+// ═══════════════════ PDF EXPORT (계산서) ═══════════════════
+async function expPDF(){
+  const R=window.LR_; if(!R){alert('먼저 계산을 실행해 주세요.');return;}
+  g('pdfBtn').textContent='⏳ 생성중';
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({unit:'mm',format:'a4'});
+    const fb=await getKoreanFontB64();
+    let F='helvetica';
+    if(fb){doc.addFileToVFS('NanumGothic.ttf',fb);doc.addFont('NanumGothic.ttf','NanumGothic','normal');F='NanumGothic';}
+    doc.setFont(F);
+    const I=R.I,LC=R.LC;
+    let y=15;
+    const line=(txt,size=9,dy=4.6,x=14)=>{doc.setFontSize(size);const ls=doc.splitTextToSize(txt,182);ls.forEach(L=>{if(y>285){doc.addPage();doc.setFont(F);y=15;}doc.text(L,x,y);y+=dy;});};
+    doc.setFontSize(14);doc.text('앵커 볼트 구조 계산서 — ACI 318-19 Ch.17 (Rectangular v4.52)',14,y);y+=7;
+    line(`Job: ${g('mJob').value||'-'} | Project: ${g('mP').value||'-'} | Doc: ${g('mDoc').value||'-'} | Item: ${g('mItem').value||'-'} | By: ${g('mA').value||'-'} | Date: ${g('mD').value||'-'} | Rev: ${g('mR').value||'-'}`,8.5);
+    y+=2;line('1. 입력 조건',11,6);
+    line(`- 앵커: ${ACFG[I.at].label}, ${I.nx}x${I.ny} 배치(활성 ${R.n}EA), M${I.da}, hef=${I.hef}mm, futa=${I.futa}, fya=${I.fya} MPa`);
+    line(`- 페데스탈: Lpx=${I.Lpx} x Lpy=${I.Lpy} x Hp=${I.Hp}mm, f'c=${I.fc}MPa, ${I.cracked?'균열':'무균열'}, λ=${I.lam}`);
+    line(`- 연단: Ca1x=${fmt(R.Ca1x,1)}, Ca1y=${fmt(R.Ca1y,1)}mm | hef'=${fmt(R.hefp,1)}mm${R.hefpMod?'(수정)':''} | 전단 ca1'=${fmt(R.ca1v,1)}mm${R.ca1vMod?'(수정)':''}`);
+    line(`- 하중: P=${I.P}, Hx=${I.Hx}, Hy=${I.Hy} kN | Mx=${I.Mx}, My=${I.My} kN·m | Case ${LC.axis==='Y'?'2(Y축)':'1(X축)'} | ${LC.method}`);
+    if(I.useFriction)line(`- 마찰: μ=${I.muF}, Vf=${fmt(R.Vf)}kN → Vua,g=${fmt(R.Vua_g)}kN`);
+    y+=2;line('2. 하중 분배',11,6);
+    line(`- 중립축 c=${LC.c===null?'—':fmt(LC.c,2)+'mm'} | ΣNua(그룹)=${fmt(R.Nua_g)}kN (${R.nT}EA 인장) | Nua,max=${fmt(R.Nua_max)}kN | e'N=${fmt(R.eN,2)}mm`);
+    LC.pts.forEach(p=>{if(p.T>1e-9)line(`  · A${p.ix+1}-${p.iy+1} (${LC.axis==='Y'?'x':'y'}=${fmt(p.coord,1)}): Nua=${fmt(p.T)} kN`,8.5,4.2);});
+    y+=2;line('3. 인장 검토  [지배: '+(R.tGov?R.tGov.label:'-')+', 비율 '+fmt(R.NRatio,3)+']',11,6);
+    R.tItems.forEach(it=>line(`- ${it.label}: φNn=${fmt(it.cap)} kN vs Nua=${fmt(it.dem)} kN → ratio=${fmt(it.ratio,3)} [${it.ratio<=1?'O.K':'N.G'}]`));
+    line(`  φNsa=${fmt(R.phiNsa)} | φNcbg=${fmt(R.phiNcbg)} (ANc=${fmt(R.ANc,0)}mm², ψec=${fmt(R.psiEcN,3)}, ψed=${fmt(R.psiEdN,3)}, ψc=${fmt(R.psiCN,2)}, ψcp=${fmt(R.psiCpN,3)}, Nb=${fmt(R.Nb)})`,8.5);
+    if(R.useNnr)line(`  φNnr=${fmt(R.phiNnr)} kN (N1=${R.N1}, LdRatio=${fmt(R.LdRatio,3)}) — ${R.breakoutSrc} 지배`,8.5);
+    if(R.Npn!==undefined&&R.Np!==null)line(`  φNpn=${fmt(R.phiNpn)} kN (Abrg=${fmt(R.Abrg,0)}mm²)`,8.5);
+    if(R.phiNag!==undefined)line(`  φNag=${fmt(R.phiNag)} kN (τ=${fmt(R.tauUsed,1)}MPa, ANa=${fmt(R.ANa,0)}mm²)`,8.5);
+    if(R.phiNsb!==undefined)line(`  φNsbg=${fmt(R.phiNsb)} kN (Side-face Blowout)`,8.5);
+    y+=2;line('4. 전단 검토  [지배: '+(R.vGov?R.vGov.label:'-')+', 비율 '+fmt(R.VRatio,3)+']',11,6);
+    R.vItems.forEach(it=>line(`- ${it.label}: φVn=${fmt(it.cap)} kN vs Vua=${fmt(it.dem)} kN → ratio=${fmt(it.ratio,3)} [${it.ratio<=1?'O.K':'N.G'}]`));
+    if(!R.hasShearLug){
+      line(`  φVsa=${fmt(R.phiVsa)} | φVcbg=${fmt(R.phiVcbg)} (AVc=${fmt(R.AVc,0)}mm², Vb=${fmt(R.Vb)}, ψec=${fmt(R.psiEcV,3)}, ψed=${fmt(R.psiEdV,3)}, ψc=${fmt(R.psiCV,2)}, ψh=${fmt(R.psiHV,3)}) | φVcpg=${fmt(R.phiVcpg)}`,8.5);
+      if(R.useVnr)line(`  φVnr=${fmt(R.phiVnr)} kN (${R.VnrCnt}-D${R.VnrBar}) — ${R.vbreakSrc} 지배`,8.5);
+    }else{
+      const SL=R.shearLug;
+      line(`  전단키: Aef,sl=${fmt(SL.Aefsl,0)}mm², ψbrg=${fmt(SL.psiBrg,3)}, φVbrg=${fmt(SL.phiVbrg)}kN, φVcb=${fmt(SL.phiVcb)}kN, 최소앵커 ${R.n}>=4 [${SL.minAnchorOk?'O.K':'N.G'}]`,8.5);
+    }
+    y+=2;line('5. 복합 검토 §17.8',11,6);
+    if(R.doCombined)line(`- IR = ${fmt(R.NRatio,3)} + ${fmt(R.VRatio,3)} = ${fmt(R.IR,3)} <= 1.2 [${R.cOk?'O.K':'N.G'}]`);
+    else line(`- N/φNn=${fmt(R.NRatio,3)}, V/φVn=${fmt(R.VRatio,3)} — 한쪽이 0.2 이하로 복합식 생략`);
+    y+=3;doc.setFontSize(12);
+    if(y>280){doc.addPage();doc.setFont(F);y=15;}
+    doc.text('종합 판정: '+(R.allOk?'O.K — 전 항목 만족':'N.G — 불만족 항목 존재'),14,y);
+    doc.save('AnchorBolt_Rect_'+(g('mItem').value||'calc')+'.pdf');
+  }catch(e){alert('PDF 생성 오류: '+e.message);}
+  g('pdfBtn').textContent='📄 PDF';
+}
+
+// ═══════════════════ EXCEL EXPORT ═══════════════════
+function expXLS(){
+  const R=window.LR_; if(!R){alert('먼저 계산을 실행해 주세요.');return;}
+  const I=R.I,LC=R.LC;
+  const rows=[
+    ['앵커 볼트 구조 계산서 — ACI 318-19 Ch.17 (Rectangular v4.52)'],
+    ['Job',g('mJob').value,'Project',g('mP').value,'Doc',g('mDoc').value,'Item',g('mItem').value,'By',g('mA').value,'Date',g('mD').value,'Rev',g('mR').value],
+    [],
+    ['1. 입력'],
+    ['Anchor Type',ACFG[I.at].label,'배치',I.nx+'x'+I.ny+' (활성 '+R.n+')','da',I.da,'hef',I.hef],
+    ['futa',I.futa,'fya',I.fya,'Lpx',I.Lpx,'Lpy',I.Lpy,'Hp',I.Hp],
+    ["f'c",I.fc,'균열',I.cracked?'Y':'N','λ',I.lam,'Ca1x',R.Ca1x,'Ca1y',R.Ca1y],
+    ['P',I.P,'Hx',I.Hx,'Hy',I.Hy,'Mx',I.Mx,'My',I.My,'Case',LC.axis],
+    [],
+    ['2. 하중분배'],
+    ['c',LC.c===null?'-':LC.c,'ΣNua',R.Nua_g,'Nua,max',R.Nua_max,"e'N",R.eN,'Vua,g',R.Vua_g,'Vua,i',R.Vua_i],
+    ...LC.pts.filter(p=>p.T>1e-9).map(p=>['A'+(p.ix+1)+'-'+(p.iy+1),p.coord,'Nua',p.T]),
+    [],
+    ['3. 인장'],
+    ...R.tItems.map(it=>[it.label,'φNn',it.cap,'Nua',it.dem,'ratio',it.ratio,it.ratio<=1?'O.K':'N.G']),
+    [],
+    ['4. 전단'],
+    ...R.vItems.map(it=>[it.label,'φVn',it.cap,'Vua',it.dem,'ratio',it.ratio,it.ratio<=1?'O.K':'N.G']),
+    [],
+    ['5. 복합'],
+    R.doCombined?['IR',R.IR,'limit',1.2,R.cOk?'O.K':'N.G']:['생략 (§17.8.1)'],
+    [],
+    ['종합',R.allOk?'O.K':'N.G'],
+  ];
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Calc');
+  XLSX.writeFile(wb,'AnchorBolt_Rect_'+(g('mItem').value||'calc')+'.xlsx');
+}
+
+// ═══════════════════ SCHEDULER / MAIN CALC ═══════════════════
+let calcTimer=null;
+function schedCalc(){clearTimeout(calcTimer);calcTimer=setTimeout(doCalc,120);}
+function updateRebarVisibility(I){
+  const tg=g('rebar3dToggle'),cb=g('iAuxRebar3D');
+  const can=I.hasRebar&&I.rebarDetailMode==='yes';
+  tg.classList.toggle('disabled',!can);
+  cb.disabled=!can;
+  if(!can)cb.checked=false;
+  else if(!cb.dataset.userSet)cb.checked=true;
+}
+function doCalc(){
+  let R=null;
+  try{R=cmp(getI());}catch(e){console.error(e);g('rc').innerHTML='<div class="nabox">계산 오류: '+e.message+'</div>';return;}
+  renderResults(R);
+  const I=R.I;
+  updateRebarVisibility(I);
+  const rr=(R.useNnr||I.hasRebar)?calcN1Rect():{pts:[]};
+  const showRebar=I.aux3d&&I.hasRebar&&I.rebarDetailMode==='yes';
+  const vnrX=[],vnrY=[];
+  if(showRebar&&R.useVnr){
+    const ax=R.LC.axis;
+    if(ax==='Y'){
+      for(let i=0;i<I.Vxtot;i++){
+        const yPos=I.Vxtot>1?-I.Lpy/2+I.C4x+(I.Lpy-2*I.C4x)*i/(I.Vxtot-1):0;
+        vnrX.push({x1:-I.Lpx/2+I.C4x,x2:I.Lpx/2-I.C4x,y:yPos,zTop:I.C3x,d:I.dhx});
+      }
+    }else{
+      for(let i=0;i<I.Vytot;i++){
+        const xPos=I.Vytot>1?-I.Lpx/2+I.C4y+(I.Lpx-2*I.C4y)*i/(I.Vytot-1):0;
+        vnrY.push({x:xPos,y1:-I.Lpy/2+I.C4y,y2:I.Lpy/2-I.C4y,zTop:I.C3y,d:I.dhy});
+      }
+    }
+  }
+  const prevRfKey=ISO.sd?ISO.sd.rfKey:null;
+  const prevRfColor=ISO.sd?ISO.sd.rfColor:null;
+  ISO.setData({
+    Lpx:I.Lpx,Lpy:I.Lpy,Hp:I.Hp,
+    nx:I.nx,ny:I.ny,xs:R.act.xs,ys:R.act.ys,
+    deletedAnchors:I.deletedAnchors,
+    da:I.da,hef:I.hef,head:I.head,
+    rebar:showRebar?rr.pts:[],dv:I.dv,rebarLen:Math.max(100,I.Hp-I.C1-20),
+    vnrX,vnrY,
+    arrows:{N:Math.max(0,-I.P)||R.Nua_g,Vx:I.designCase==='Y'?I.Hx:0,Vy:I.designCase==='X'?I.Hy:0},
+    shearLug:I.useShearLug?{bsl:I.bsl,tsl:I.tsl,hsl:I.hsl}:null,
+    rfKey:prevRfKey,rfColor:prevRfColor,
+  });
+  PLAN.setData({
+    Lpx:I.Lpx,Lpy:I.Lpy,nx:I.nx,ny:I.ny,xs:R.act.xs,ys:R.act.ys,
+    deletedAnchors:I.deletedAnchors,da:I.da,
+    rebar:(I.hasRebar&&I.rebarDetailMode==='yes')?rr.pts:[],dv:I.dv,
+  });
+  if(g('riHefHalf'))g('riHefHalf').textContent=(0.5*I.hef).toFixed(0)+' mm';
+  if(g('riN1')&&(R.useNnr||I.hasRebar))g('riN1').textContent=(R.N1!==undefined?R.N1:calcN1Rect().n1)+' ea';
+  updateSuggestBadge(R);
+}
+
+// ═══════════════════ REBAR TOGGLES ═══════════════════
+function onRebarToggle(){
+  const has=g('iHasRebar').value==='yes';
+  ['rowRebarDetailMode','rowVnrMode','rowTieMode'].forEach(id=>{if(g(id))g(id).style.display=has?'grid':'none';});
+  const nnr=has&&g('iRebarDetailMode').value==='yes';
+  const vnr=has&&g('iVnrMode').value==='yes';
+  const tie=has&&g('iTieMode').value==='yes';
+  g('rebarFields').style.display=nnr?'block':'none';
+  g('vnrFields').style.display=vnr?'block':'none';
+  g('tieFields').style.display=tie?'block':'none';
+  const ph=getPhis();
+  g('dPhiCT').textContent=ph.pCT.toFixed(2);
+  g('dPhiCV').textContent=ph.pCV.toFixed(2);
+  g('dPhiST').textContent=ph.pST.toFixed(2);
+  g('dPhiSV').textContent=ph.pSV.toFixed(2);
+  schedCalc();
+}
+
+// ═══════════════════ [이식 Range C] 💡 N.G 자동 개선 제안 엔진 ═══════════════════
+function _slOk(R){return !R.hasShearLug||(R.shearLug.bearOk&&R.shearLug.breakoutOk&&R.shearLug.minAnchorOk);}
+function updateSuggestBadge(R){
+  const btn=g('suggestBtn');
+  if(!btn||!R)return;
+  const t1ok=R.tOk, vok=R.vOk, iok=R.cOk, slok=_slOk(R);
+  const allOk=t1ok&&vok&&iok&&slok;
+  btn.style.borderColor=allOk?'var(--bd2)':'var(--rd)';
+  btn.style.color=allOk?'var(--t1)':'#ffb0b8';
+  btn.textContent=allOk?'💡 개선 제안':'💡 개선 제안 (N.G '+[!t1ok&&'인장',!vok&&'전단',!iok&&'복합',!slok&&'전단키'].filter(Boolean).join('·')+')';
+}
+function tryFieldValue(id,val){
+  const el=g(id); if(!el)return null;
+  const orig=el.value;
+  el.value=val;
+  let R2=null;
+  try{R2=cmp(getI());}catch(e){}
+  el.value=orig;
+  return R2;
+}
+function tryFieldValues(map){
+  const orig={};
+  for(const id in map){const el=g(id); if(!el)return null; orig[id]=el.value; el.value=map[id];}
+  let R2=null;
+  try{R2=cmp(getI());}catch(e){}
+  for(const id in orig)g(id).value=orig[id];
+  return R2;
+}
+function sweepField(id,vals,passFn){
+  for(const v of vals){
+    const R2=tryFieldValue(id,v);
+    if(R2&&passFn(R2))return{v,R:R2};
+  }
+  return null;
+}
+function sweepLp(deltas,passFn){
+  const curX=nv('iLpx'),curY=nv('iLpy');
+  for(const d of deltas){
+    const R2=tryFieldValues({iLpx:curX+d,iLpy:curY+d});
+    if(R2&&passFn(R2))return{d,R:R2};
+  }
+  return null;
+}
+function range(a,b,step){const out=[];for(let v=a;v<=b+1e-9;v+=step)out.push(Math.round(v*100)/100);return out;}
+const yieldNow=()=>new Promise(r=>setTimeout(r,0));
+
+async function generateSuggestions(R){
+  const I=R.I;
+  const S=[];
+  const allPass=r=>r.tOk&&r.vOk&&r.cOk&&_slOk(r);
+  // ── 인장 N.G ──
+  if(!R.tOk){
+    const curHef=I.hef;
+    const s1=sweepField('iHef',range(curHef+25,curHef+400,25),r=>r.tOk);
+    if(s1)S.push({cat:'인장',title:'매입깊이 증가',body:`hef: ${curHef} → <b>${s1.v}mm</b> 로 인장 O.K (지배: ${s1.R.tGov?s1.R.tGov.label:'-'}, 비율 ${fmt(s1.R.NRatio,3)}). Hp=${I.Hp}mm와의 여유 확인 필요.`});
+    await yieldNow();
+    const s2=sweepLp(range(100,1500,100),r=>r.tOk);
+    if(s2)S.push({cat:'인장',title:'페데스탈 확대 (연단거리 증가)',body:`Lpx×Lpy: ${I.Lpx}×${I.Lpy} → <b>${I.Lpx+s2.d}×${I.Lpy+s2.d}mm</b> 로 인장 O.K (비율 ${fmt(s2.R.NRatio,3)}). ANc·ψed,N 개선 효과.`});
+    await yieldNow();
+    const s3=sweepField('iDa',CAT_KEYS.filter(d=>d>I.da),r=>r.tOk);
+    if(s3)S.push({cat:'인장',title:'볼트 지름 상향',body:`da: M${I.da} → <b>M${s3.v}</b> 로 인장 O.K (비율 ${fmt(s3.R.NRatio,3)}). Steel/Pullout 지배 시 효과적.`});
+    if(!(I.hasRebar&&I.rebarDetailMode==='yes')){
+      S.push({cat:'인장',title:'인장 보강철근 Nnr 반영',body:`현재 보강철근 제원 미입력 상태입니다. Supplementary Reinforcement '있음' + Nnr 제원 입력 시 φc=0.75 상향 및 Concrete Breakout을 철근 저항으로 대체(§17.5.2.1)할 수 있습니다.`});
+    }
+    if(R.tGov&&R.tGov.k==='breakout'&&R.hefpMod){
+      S.push({cat:'인장',title:"hef' 수정 해제",body:`현재 Ca1<1.5hef로 hef'가 ${fmt(R.hefp,1)}mm로 축소 적용 중입니다(§17.6.2.1.2). 페데스탈 확대 또는 앵커 간격 확대 시 원래 hef를 회복해 φNcbg가 크게 증가합니다.`});
+    }
+  }
+  // ── 전단 N.G ──
+  if(!R.vOk){
+    if(!I.useShearLug){
+      const s4=sweepLp(range(100,1500,100),r=>r.vOk);
+      if(s4)S.push({cat:'전단',title:'페데스탈 확대 (ca1′ 증가)',body:`Lpx×Lpy: ${I.Lpx}×${I.Lpy} → <b>${I.Lpx+s4.d}×${I.Lpy+s4.d}mm</b> 로 전단 O.K (비율 ${fmt(s4.R.VRatio,3)}). Vb∝ca1'^1.5로 민감.`});
+      await yieldNow();
+      S.push({cat:'전단',title:'전단키(Shear Lug) 적용 검토',body:`§17.11 전단키를 적용하면 전단은 전단키가 전량 부담하고 앵커 Vcbg/Vcpg 검토를 대체합니다. 좌측 '전단키' 섹션에서 사용으로 전환 후 bsl/tsl/hsl을 조정하세요. (최소 4EA 앵커 필요 — 현재 ${R.n}EA)`});
+      if(!I.useFriction&&I.P>0){
+        const R2=tryFieldValues({});
+        S.push({cat:'전단',title:'마찰 저항 반영',body:`P=${I.P}kN 압축이 존재하므로 마찰 고려 시 Vf=μP=${fmt(0.7*I.P)}kN(μ=0.70)만큼 전단수요가 감소합니다. 그라우트/접촉면 조건 확인 후 적용하세요.`});
+      }
+      if(I.hasRebar&&I.vnrMode!=='yes'){
+        S.push({cat:'전단',title:'전단 보강철근 Vnr 반영',body:`Vnr 제원 입력 시 전단 Concrete Breakout을 철근 저항으로 대체할 수 있습니다(§17.5.2.1). 좌측 'Vnr 입력함' 전환 후 방향별 횡철근을 입력하세요.`});
+      }
+    }else{
+      const s5=sweepField('iBsl',range(I.bsl+50,I.bsl+500,50),r=>_slOk(r)&&r.vOk);
+      if(s5)S.push({cat:'전단키',title:'전단키 폭 확대',body:`bsl: ${I.bsl} → <b>${s5.v}mm</b> 로 전단키 검토 O.K. Aef,sl 및 φVbrg 증가.`});
+      await yieldNow();
+      const s6=sweepField('iHsl',range(I.hsl+25,I.hsl+300,25),r=>_slOk(r)&&r.vOk);
+      if(s6)S.push({cat:'전단키',title:'전단키 매입높이 증가',body:`hsl: ${I.hsl} → <b>${s6.v}mm</b> 로 전단키 검토 O.K. (tsl=${I.tsl}mm 기준 유효깊이 한도 2tsl=${2*I.tsl}mm 유의)`});
+      if(R.hasShearLug&&!R.shearLug.minAnchorOk)S.push({cat:'전단키',title:'최소 앵커수 확보',body:`§17.11.1.1.2에 따라 전단키 사용 시 앵커 최소 4EA가 필요합니다(현재 활성 ${R.n}EA). nx/ny 또는 삭제 앵커를 조정하세요.`});
+    }
+  }
+  // ── 복합 N.G ──
+  if(R.tOk&&R.vOk&&!R.cOk){
+    const s7=sweepField('iHef',range(I.hef+25,I.hef+400,25),allPass);
+    if(s7)S.push({cat:'복합',title:'매입깊이 증가로 IR 확보',body:`hef: ${I.hef} → <b>${s7.v}mm</b> 로 IR=${fmt(s7.R.IR,3)} ≤ 1.2 만족.`});
+    await yieldNow();
+    const s8=sweepLp(range(100,1500,100),allPass);
+    if(s8)S.push({cat:'복합',title:'페데스탈 확대로 IR 확보',body:`Lpx×Lpy: ${I.Lpx}×${I.Lpy} → <b>${I.Lpx+s8.d}×${I.Lpy+s8.d}mm</b> 로 IR=${fmt(s8.R.IR,3)} ≤ 1.2 만족.`});
+  }
+  // ── 전 항목 O.K인데 과다설계 ──
+  if(R.tOk&&R.vOk&&R.cOk&&_slOk(R)&&R.NRatio<0.35&&R.VRatio<0.35){
+    const s9=sweepField('iHef',range(Math.max(8*I.da,100),I.hef-25,25).reverse(),allPass);
+    if(s9&&s9.v<I.hef)S.push({cat:'최적화',title:'매입깊이 축소 여지',body:`현재 이용률이 낮습니다(인장 ${fmt(R.NRatio,3)}, 전단 ${fmt(R.VRatio,3)}). hef를 <b>${s9.v}mm</b>까지 축소해도 전 항목 O.K입니다(재검토 필수).`});
+  }
+  return S;
+}
+
+async function openSuggest(){
+  const R=window.LR_;
+  if(!R){alert('먼저 계산을 실행해 주세요.');return;}
+  openModal('modalSuggest');
+  const body=g('suggestBody');
+  const stat=[['인장',R.tOk,fmt(R.NRatio,3)],['전단',R.vOk,fmt(R.VRatio,3)],['복합',R.cOk,R.doCombined?fmt(R.IR,3)+'/1.2':'생략'],['전단키',_slOk(R),R.hasShearLug?'검토':'미사용']];
+  let head=`<div class="rf-demand" style="margin-bottom:14px">`+stat.map(s=>`<div class="d"><div class="dl">${s[0]}</div><div class="dv" style="color:${s[1]?'var(--gr)':'var(--rd)'}">${s[1]?'O.K':'N.G'} <span style="font-size:10px;color:var(--t3)">${s[2]}</span></div></div>`).join('')+`</div>`;
+  body.innerHTML=head+'<div style="color:var(--t2);font-size:12px">⏳ 실제 계산 엔진으로 대안을 재탐색 중입니다...</div>';
+  await yieldNow();
+  let S=[];
+  try{S=await generateSuggestions(R);}catch(e){body.innerHTML=head+'<div class="nabox">제안 생성 오류: '+e.message+'</div>';return;}
+  if(!S.length){
+    body.innerHTML=head+`<div class="nabox">${R.allOk?'전 항목 만족 상태이며, 탐색 범위 내 추가 최적화 제안이 없습니다.':'탐색 범위(hef +400, 페데스탈 +1500, 카탈로그 da) 내에서 단일 변수 변경으로는 O.K 해를 찾지 못했습니다. 복수 변수 동시 변경(지름+깊이), 앵커 수 증가, 전단키/보강철근 조합을 검토하세요.'}</div>`;
+    return;
+  }
+  let h=head;
+  S.forEach((s,i)=>{
+    h+=`<div class="rf-step"><div class="sn" style="background:${s.cat==='최적화'?'var(--gr)':'var(--or)'}">${i+1}</div><div><b style="font-size:12px">[${s.cat}] ${s.title}</b><div style="color:var(--t2);margin-top:2px;line-height:1.6">${s.body}</div></div></div>`;
+  });
+  h+=`<div style="font-size:10px;color:var(--t3);margin-top:10px">※ 각 제안은 현재 입력을 기준으로 <b>실제 cmp() 엔진을 재실행</b>해 검증된 단일 변수 대안입니다. 반영 후 반드시 전체 재계산·도면 정합성을 확인하세요.</div>`;
+  body.innerHTML=h;
+}
+
+// ═══════════════════ INIT ═══════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  g('mD').value=new Date().toISOString().slice(0,10);
+  buildSpacingInputs();
+  ISO.init();
+  PLAN.init();
+  onAT();
+  onRebarToggle();
+  onRebarChange();
+  doCalc();
+});
+</script>
+</body>
+</html>

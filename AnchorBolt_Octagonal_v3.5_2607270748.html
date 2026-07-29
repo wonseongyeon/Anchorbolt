@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ACI 318-19 | 앵커볼트 구조 계산서 v3.5 (Octagonal — 팔각기둥 3D·자동추출수정)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+:root{--bg:#0c1118;--s1:#141c26;--s2:#1a2535;--s3:#1f2f42;--bd:#26374a;--bd2:#304558;
+--ac:#1a72d4;--ac2:#2588f0;--ac3:#4da6ff;--gr:#3ab85a;--rd:#e84040;--yw:#d4a520;--or:#d46820;
+--t1:#dce9f6;--t2:#8aaec8;--t3:#4e6a82;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-family:'Noto Sans KR',sans-serif;font-size:13px}
+#wrapper{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#top{height:48px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--s1);border-bottom:2px solid var(--ac)}
+.logo{font-size:13px;font-weight:700;color:#fff;white-space:nowrap;line-height:1.3}
+.logo small{display:block;font-size:9.5px;color:var(--t2);font-weight:400}
+.sep{width:1px;height:28px;background:var(--bd2);flex-shrink:0}
+.tabs{display:flex;gap:2px;background:var(--bg);border:1px solid var(--bd2);border-radius:6px;padding:3px}
+.tab{padding:4px 13px;border:none;border-radius:4px;background:transparent;color:var(--t2);cursor:pointer;font-size:12px;font-family:inherit;font-weight:500;transition:all .12s}
+.tab.on{background:var(--ac);color:#fff;font-weight:700}
+.tab:hover:not(.on){background:var(--s2);color:var(--t1)}
+.acts{margin-left:auto;display:flex;gap:5px;flex-wrap:nowrap}
+.abtn{display:flex;align-items:center;gap:5px;padding:5px 9px;border-radius:5px;border:1px solid var(--bd2);background:var(--s2);color:var(--t1);cursor:pointer;font-size:11px;font-family:inherit;transition:all .12s;white-space:nowrap}
+.abtn:hover{border-color:var(--ac2);color:var(--ac3)}
+#meta{height:30px;flex-shrink:0;display:flex;align-items:center;padding:0 12px;background:var(--s2);border-bottom:1px solid var(--bd)}
+.mf{display:flex;align-items:center;gap:5px;padding:0 9px;border-right:1px solid var(--bd);height:100%}
+.ml{font-size:10px;color:var(--t3)}
+.mi{background:transparent;border:none;color:var(--t2);font-size:11px;font-family:inherit;outline:none}
+#app{flex:1;display:flex;overflow:hidden;min-height:0}
+#lp{width:380px;min-width:260px;background:var(--s1);border-right:1px solid var(--bd);overflow-y:auto;overflow-x:hidden;flex-shrink:0}
+#lp::-webkit-scrollbar{width:4px}
+#lp::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.sec{border-bottom:1px solid var(--bd);padding:10px 13px}
+.st{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--ac3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.st::after{content:'';flex:1;height:1px;background:var(--bd)}
+.ir{display:grid;grid-template-columns:1fr 42px 88px 30px 16px;align-items:center;gap:4px;margin-bottom:5px}
+.ir label{font-size:11px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sym{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--yw);text-align:right}
+.ir input,.ir select{width:100%;padding:3px 6px;background:var(--bg);border:1px solid var(--bd2);border-radius:4px;color:var(--t1);font-size:11px;font-family:'IBM Plex Mono',monospace;text-align:right;transition:border-color .12s}
+.ir input:focus,.ir select:focus{outline:none;border-color:var(--ac)}
+.ir input[readonly]{background:var(--s3);color:var(--t3);cursor:default;border-style:dashed}
+.unt{font-size:10px;color:var(--t3)}
+.hb{width:15px;height:15px;border-radius:50%;border:1px solid var(--bd2);background:transparent;color:var(--t3);font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;transition:all .12s;flex-shrink:0}
+.hb:hover{border-color:var(--ac3);color:var(--ac3)}
+.cr{display:flex;justify-content:space-between;padding:1px 0;font-size:11px;margin-bottom:2px}
+.ck{color:var(--t2);font-family:'IBM Plex Mono',monospace;font-size:10.5px}
+.cv{color:var(--yw);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px}
+.asel select{width:100%;padding:5px 7px;background:var(--bg);border:1px solid var(--bd2);border-radius:4px;color:var(--t1);font-size:12px;font-family:inherit;margin-bottom:7px}
+.ainfo{background:var(--s2);border:1px solid var(--bd2);border-radius:4px;padding:7px 9px;font-size:11px;color:var(--t2);line-height:1.7}
+.ai-t{color:var(--ac3);font-weight:600;font-size:11.5px;margin-bottom:3px}
+.ai-r{display:flex;justify-content:space-between;gap:6px}
+.ai-k{color:var(--t3);font-size:10.5px}
+.ai-v{color:var(--t1);font-family:'IBM Plex Mono',monospace;font-size:10px}
+.phi-row{display:grid;grid-template-columns:1fr 42px 88px 30px;align-items:center;gap:4px;margin-bottom:5px}
+.phi-val{width:100%;padding:3px 6px;background:var(--s3);border:1px solid var(--bd);border-radius:4px;color:var(--t3);font-size:11px;font-family:'IBM Plex Mono',monospace;text-align:right}
+.hefp-box{background:var(--s3);border:1px solid var(--yw);border-radius:4px;padding:6px 9px;margin-top:4px;font-size:10.5px}
+.warnbox{background:rgba(212,104,32,.12);border:1px solid var(--or);border-radius:4px;padding:6px 9px;margin-top:5px;font-size:10.5px;color:#ffcf9e;line-height:1.6}
+.rebar-info{background:var(--s3);border:1px solid var(--bd);border-radius:4px;padding:5px 9px;font-size:10.5px;margin-top:4px}
+.rebar-info-row{display:flex;justify-content:space-between;margin-bottom:1px}
+.rebar-info-k{color:var(--t3)}
+.rebar-info-v{color:var(--ac3);font-family:'IBM Plex Mono',monospace;font-weight:600}
+#cv{flex:1;min-width:0;display:flex;flex-direction:column;background:#07111c;overflow:hidden}
+#vh{height:29px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 12px;background:var(--s1);border-bottom:1px solid var(--bd);font-size:11px;color:var(--t2)}
+.vbg{background:var(--s3);border:1px solid var(--bd2);border-radius:3px;padding:2px 7px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--ac3);font-weight:600}
+#viewSplit{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+#cw3d{position:relative;overflow:hidden;min-height:80px}
+#iso3d{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%}
+#vDivider{height:6px;background:var(--bd2);cursor:ns-resize;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+#vDivider:hover,#vDivider.dragging{background:var(--ac)}
+#vDivider::after{content:'⋯';color:var(--t3);font-size:14px;letter-spacing:2px}
+#cw2d{position:relative;overflow:hidden;min-height:60px;background:#07111c}
+#plan2d{position:absolute;top:0;left:0;width:100%;height:100%}
+#plan2d-label{position:absolute;top:5px;left:8px;font-size:10px;font-weight:700;color:var(--ac3);background:rgba(7,17,28,.85);padding:2px 7px;border-radius:3px;border:1px solid var(--bd2);pointer-events:none;z-index:3}
+#legbox{position:absolute;bottom:8px;left:8px;background:rgba(7,17,28,.88);border:1px solid var(--bd2);border-radius:5px;padding:7px 10px;font-size:11px;line-height:1.9;pointer-events:none;z-index:2}
+.lr{display:flex;align-items:center;gap:7px}
+.ld{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ll{width:18px;height:3px;border-radius:2px;flex-shrink:0}
+#vctrls{position:absolute;bottom:8px;right:8px;display:flex;flex-direction:column;gap:4px;z-index:2}
+.vc{width:28px;height:28px;background:var(--s1);border:1px solid var(--bd2);border-radius:4px;color:var(--t2);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.vc:hover{border-color:var(--ac);color:var(--ac3)}
+#rp{width:460px;min-width:340px;background:var(--s1);border-left:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+#sbar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 10px;background:var(--s2);border-bottom:1px solid var(--bd);flex-shrink:0}
+.sc{background:var(--s1);border:1px solid var(--bd2);border-radius:5px;padding:5px 7px;text-align:center}
+.sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px}
+.sv{font-size:13px;font-weight:700;font-family:'IBM Plex Mono',monospace}
+.sc.sok .sv{color:var(--gr)}.sc.sng .sv{color:var(--rd)}.sc.sna .sv{color:var(--t3)}
+#rc{flex:1;overflow-y:auto;padding:12px}
+#rc::-webkit-scrollbar{width:4px}
+#rc::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.rb{margin-bottom:13px}
+.rbt{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;padding-bottom:5px;border-bottom:2px solid var(--bd2)}
+.rbn{width:18px;height:18px;border-radius:50%;background:var(--ac);color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:6px}
+.rbtx{font-size:12px;font-weight:700;display:flex;align-items:center}
+.rbrf{font-size:10px;color:var(--t3)}
+.badge{padding:2px 7px;border-radius:9px;font-size:10px;font-weight:700}
+.badge.ok{background:rgba(58,184,90,.13);color:var(--gr);border:1px solid rgba(58,184,90,.4)}
+.badge.ng{background:rgba(232,64,64,.13);color:var(--rd);border:1px solid rgba(232,64,64,.4)}
+.ct{width:100%;border-collapse:collapse;margin-bottom:6px}
+.ct th{background:var(--s3);padding:4px 6px;font-size:9.5px;font-weight:600;color:var(--t2);text-align:left;border-bottom:1px solid var(--bd2)}
+.ct td{padding:4px 6px;border-bottom:1px solid rgba(38,55,74,.6);font-size:11px}
+.ct tr:hover td{background:rgba(26,114,212,.04)}
+.ct td.s{font-family:'IBM Plex Mono',monospace;color:var(--yw);font-size:10px;white-space:nowrap;width:70px}
+.ct td.e{font-family:'IBM Plex Mono',monospace;color:var(--t2);font-size:10px;word-break:break-all;line-height:1.5}
+.ct td.v{font-family:'IBM Plex Mono',monospace;color:var(--ac3);font-weight:600;text-align:right;white-space:nowrap;width:78px}
+.ct th:last-child,.ct td.rf{white-space:nowrap;width:82px;min-width:82px;text-align:right;font-size:9px;color:var(--t3)}
+.ct tr.hl td{background:rgba(26,114,212,.09)}
+.ct tr.hl td.s{color:var(--ac2)}
+.ct tr.hl td.v{color:#fff;font-size:11.5px}
+.chk{display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:5px;margin-top:5px;font-size:11.5px;font-weight:600}
+.chk.ok{background:rgba(58,184,90,.09);border:1px solid rgba(58,184,90,.3)}
+.chk.ng{background:rgba(232,64,64,.09);border:1px solid rgba(232,64,64,.3)}
+.chkr{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px}
+.nabox{padding:7px 9px;border-radius:4px;background:var(--s2);border:1px solid var(--bd);color:var(--t3);font-size:11px}
+#tip{position:fixed;background:var(--s2);border:1px solid var(--ac);border-radius:7px;padding:11px 13px;max-width:300px;font-size:11.5px;line-height:1.7;color:var(--t1);z-index:9999;display:none;box-shadow:0 8px 30px rgba(0,0,0,.7);pointer-events:none}
+#tip .tt{font-weight:700;color:var(--ac3);margin-bottom:5px;font-size:12px;padding-bottom:4px;border-bottom:1px solid var(--bd2)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:8888;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--s1);border:1px solid var(--bd2);border-radius:10px;width:700px;max-width:95vw;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+.modal-head{padding:14px 18px;background:var(--s2);border-bottom:1px solid var(--bd2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-head h3{font-size:13px;font-weight:700;color:var(--ac3)}
+.modal-close{background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;padding:0 4px}
+.modal-close:hover{color:var(--t1)}
+.modal-body{overflow-y:auto;padding:16px 18px;flex:1}
+.rf-card{background:var(--s2);border:1px solid var(--bd2);border-radius:9px;padding:14px 16px;margin-bottom:14px}
+.rf-card-t{font-size:11px;font-weight:700;color:var(--ac3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.rf-opt{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px}
+.rf-o{border:1.5px solid var(--bd2);background:var(--bg);border-radius:8px;padding:10px 11px;cursor:pointer;font-size:11.5px}
+.rf-o:hover{border-color:var(--ac3)}.rf-o.sel{border-color:var(--or);background:rgba(212,104,32,.14)}
+.rf-o b{display:block;color:var(--t1);margin-bottom:2px;font-size:12px}
+.rf-o span{color:var(--t3);font-size:10px;line-height:1.35}
+.rf-demand{display:flex;gap:14px;flex-wrap:wrap}
+.rf-demand .d{background:var(--bg);border-radius:8px;padding:8px 12px;min-width:110px}
+.rf-demand .d .dl{font-size:9.5px;color:var(--t3)}
+.rf-demand .d .dv{font-size:15px;font-weight:700;color:var(--ac3);font-family:'IBM Plex Mono',monospace}
+.rf-result{background:var(--bg);border-radius:9px;padding:14px 16px;margin-top:6px}
+.rf-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--bd);font-size:11.5px}
+.rf-row .k{color:var(--t2)}.rf-row .v{font-weight:700;font-family:'IBM Plex Mono',monospace}
+.rf-verdict{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin-top:10px;font-weight:700;font-size:12.5px}
+.rf-verdict.ok{background:rgba(58,184,90,.13);color:var(--gr);border:1px solid rgba(58,184,90,.4)}
+.rf-verdict.ng{background:rgba(232,64,64,.13);color:var(--rd);border:1px solid rgba(232,64,64,.4)}
+.rf-step{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:11.5px}
+.rf-step .sn{width:20px;height:20px;border-radius:50%;background:var(--or);color:#1a0d00;font-weight:800;font-size:10.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.drop-zone{border:2px dashed var(--bd2);border-radius:10px;padding:22px;text-align:center;background:var(--s2);cursor:pointer;transition:all .15s}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--ac3);background:var(--s3)}
+.drop-zone .dz-ico{font-size:28px;margin-bottom:6px}
+.drop-zone .dz-t{font-size:12.5px;font-weight:700;color:var(--t1)}
+.drop-zone .dz-s{font-size:10.5px;color:var(--t3);margin-top:3px}
+.drop-zone.loaded{border-style:solid;border-color:var(--gr);background:rgba(58,184,90,.08)}
+.extract-row{display:grid;grid-template-columns:26px 1fr 1fr 90px 2fr;gap:8px;align-items:center;padding:7px 4px;border-bottom:1px solid var(--bd)}
+.extract-row.hdr{font-size:9.5px;font-weight:700;color:var(--t3);text-transform:uppercase;border-bottom:2px solid var(--bd2)}
+.extract-row input[type=checkbox]{width:15px;height:15px;accent-color:var(--gr)}
+.extract-row input[type=text]{width:100%;padding:5px 7px;background:var(--bg);border:1px solid var(--bd2);border-radius:5px;color:var(--t1);font-size:11.5px;font-family:'IBM Plex Mono',monospace}
+.conf-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;text-align:center}
+.conf-badge.high{background:rgba(58,184,90,.15);color:var(--gr)}
+.conf-badge.low{background:rgba(212,165,32,.15);color:var(--yw)}
+select option{background:var(--bg)}
+</style>
+</head>
+<body>
+<div id="wrapper">
+<div id="top">
+  <div class="logo">앵커 볼트 구조 계산서<small>Anchor Bolt Structural Design — ACI 318-19 Ch.17 (Octagonal Pedestal v3.5 — <span style="color:#d46820">팔각기둥 3D·자동추출수정</span>)</small></div>
+  <div class="sep"></div>
+  <div class="tabs">
+    <button class="tab on" onclick="setMode('all')">All</button>
+    <button class="tab" onclick="setMode('tension')">Tension</button>
+    <button class="tab" onclick="setMode('shear')">Shear</button>
+    <button class="tab" onclick="setMode('combined')">Combined</button>
+  </div>
+  <div class="acts">
+    <button class="abtn" onclick="openModal('modalSave')">💾 저장</button>
+    <button class="abtn" onclick="openModal('modalCatalog')">📋 카탈로그</button>
+    <button class="abtn" id="pdfBtn" onclick="expPDF()">📄 PDF</button>
+    <button class="abtn" onclick="expXLS()">📊 Excel</button>
+    <button class="abtn" id="retrofitBtn" onclick="openRetrofit()" style="border-color:var(--or);color:#ffcf9e">🔧 긴급 보강</button>
+    <button class="abtn" id="suggestBtn" onclick="openSuggest()">💡 개선 제안</button>
+    <button class="abtn" onclick="openModal('modalExtract')" style="border-color:#4da6ff;color:#a8d4ff">📄 자동추출(베타)</button>
+  </div>
+</div>
+<div id="meta">
+  <div class="mf"><span class="ml">Job No.</span><input class="mi" id="mJob" placeholder="Job No." style="width:80px"></div>
+  <div class="mf"><span class="ml">Project</span><input class="mi" id="mP" placeholder="Project" style="width:120px"></div>
+  <div class="mf"><span class="ml">Doc. No.</span><input class="mi" id="mDoc" placeholder="Doc. No." style="width:110px"></div>
+  <div class="mf"><span class="ml">Item</span><input class="mi" id="mItem" placeholder="Item" style="width:80px"></div>
+  <div class="mf"><span class="ml">작성자</span><input class="mi" id="mA" placeholder="작성자" style="width:55px"></div>
+  <div class="mf"><span class="ml">날짜</span><input class="mi" id="mD" type="date" style="width:108px"></div>
+  <div class="mf" style="border:none"><span class="ml">Rev.</span><input class="mi" id="mR" placeholder="A" style="width:28px"></div>
+</div>
+<div id="app">
+<div id="lp">
+  <div class="sec"><div class="st">앵커 타입</div>
+    <div class="asel"><select id="iAT" onchange="onAT()">
+      <optgroup label="── Cast-in Place ──">
+        <option value="cast_headed" selected>Cast-in Headed Bolt</option>
+        <option value="cast_hooked">Cast-in Hooked Bolt</option>
+      </optgroup>
+      <optgroup label="── Post-installed ──">
+        <option value="post_exp">Post-installed Expansion</option>
+        <option value="post_uc">Post-installed Undercut</option>
+        <option value="post_adh">Post-installed Adhesive</option>
+      </optgroup>
+    </select></div>
+    <div class="ainfo" id="ainfo"></div>
+  </div>
+  <div class="sec"><div class="st">앵커 배치 (원형 BCD)</div>
+    <div class="ir"><label>앵커 개수 (N)</label><span class="sym">N</span><input type="number" id="iNbolt" value="8" min="2" max="32" oninput="schedCalc()"><span class="unt">EA</span><button class="hb" onclick="tip(event,'N','원형 등간격 배치 앵커 총수')">?</button></div>
+    <div class="ir"><label>볼트 서클 지름 (BCD)</label><span class="sym">BCD</span><input type="number" id="iBCD" value="800" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'BCD','앵커군 중심 원의 지름')">?</button></div>
+    <div class="ir"><label>앵커 시작각도</label><span class="sym">θ₀</span><input type="number" id="iTheta0" value="22.5" step="0.5" oninput="schedCalc()"><span class="unt">°</span><button class="hb" onclick="tip(event,'θ₀','첫 번째 앵커의 각도 (X축 기준, 반시계)')">?</button></div>
+    <div class="cr"><span class="ck">앵커 간격 s</span><span class="cv" id="dS">—</span></div>
+  </div>
+  <div class="sec"><div class="st">앵커 볼트 제원</div>
+    <div class="ir"><label>볼트 공칭지름 (da)</label><span class="sym">da</span><input type="number" id="iDa" value="36" oninput="onDaChange()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'da','Ase,N=π/4×(0.9da)²')">?</button></div>
+    <div class="ir"><label>유효 매입 깊이 (hef)</label><span class="sym">hef</span><input type="number" id="iHef" value="300" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'hef','§17.6.2.1.2 hef′ 수정 적용')">?</button></div>
+    <div class="ir" id="rowEh"><label>헤드 지압 폭 (eh)</label><span class="sym">eh</span><input type="number" id="iEh" value="63.5" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'eh','Abrg=eh²-π/4×da²')">?</button></div>
+    <div id="ehCatalog" style="font-size:10px;color:var(--t3);margin-bottom:5px;padding:2px 0">ASTM F1554 카탈로그 적용 중</div>
+    <div class="ir" id="rowLh" style="display:none"><label>훅 길이 (lhook)</label><span class="sym">lhk</span><input type="number" id="iLh" value="80" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'lhook','Np=0.9f′c×lh×da')">?</button></div>
+    <div class="ir"><label>앵커 극한강도 (futa)</label><span class="sym">futa</span><input type="number" id="iFuta" value="400" oninput="schedCalc()"><span class="unt">MPa</span><button class="hb" onclick="tip(event,'futa','≤min(1.9fya,860)')">?</button></div>
+    <div class="ir"><label>앵커 항복강도 (fya)</label><span class="sym">fya</span><input type="number" id="iFya" value="240" oninput="schedCalc()"><span class="unt">MPa</span><button class="hb" onclick="tip(event,'fya','A325:635, A490:895')">?</button></div>
+    <div class="ir"><label>앵커 용접 여부</label><span class="sym">weld</span><select id="iWeld" onchange="schedCalc()"><option value="no" selected>No</option><option value="yes">Yes</option></select><span class="unt"></span><button class="hb" onclick="tip(event,'용접','Vsa 계수 변경')">?</button></div>
+    <div class="ir"><label>강재요소 거동</label><span class="sym">duct</span><select id="iSteelDuct" onchange="schedCalc()"><option value="ductile" selected>연성강재요소</option><option value="brittle">취성강재요소</option></select><span class="unt"></span><button class="hb" onclick="tip(event,'강재거동','Table 17.5.3(a) φs 결정')">?</button></div>
+    <div class="ir" id="rowBondPreset" style="display:none"><label>Bond 기본값</label><span class="sym">env</span><select id="iBondPreset" onchange="onBondPreset()"><option value="indoor" selected>Indoor/Dry</option><option value="outdoor">Outdoor/Wet</option></select><span class="unt"></span><button class="hb" onclick="tip(event,'Bond','Table 17.6.5.2.5')">?</button></div>
+    <div class="ir" id="rowTauCr" style="display:none"><label>τcr (균열)</label><span class="sym">τcr</span><input type="number" id="iTauCr" value="2.1" step="0.1" oninput="schedCalc()"><span class="unt">MPa</span></div>
+    <div class="ir" id="rowTauUncr" style="display:none"><label>τuncr (무균열)</label><span class="sym">τun</span><input type="number" id="iTauUncr" value="7.0" step="0.1" oninput="schedCalc()"><span class="unt">MPa</span></div>
+  </div>
+  <div class="sec"><div class="st">콘크리트 페데스탈 (팔각형)</div>
+    <div class="ir"><label>페데스탈 외경 (D)</label><span class="sym">D</span><input type="number" id="iD" value="1100" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'D','팔각형 최소 외접원 지름. Ca1=(D-BCD)/2')">?</button></div>
+    <div class="ir"><label>페데스탈 높이 (Ha)</label><span class="sym">Ha</span><input type="number" id="iHa" value="450" oninput="schedCalc()"><span class="unt">mm</span><button class="hb" onclick="tip(event,'Ha','Ha≥hef 권장')">?</button></div>
+    <div class="ir"><label>콘크리트 강도 (f′c)</label><span class="sym">f′c</span><input type="number" id="iFc" value="30" oninput="schedCalc()"><span class="unt">MPa</span></div>
+    <div class="ir"><label>경량계수 (λ)</label><span class="sym">λ</span><select id="iLam" onchange="schedCalc()"><option value="1.0" selected>1.0 일반</option><option value="0.85">0.85 모래경량</option><option value="0.75">0.75 전경량</option></select><span class="unt"></span></div>
+    <div class="ir"><label>균열 조건</label><span class="sym">ψc</span><select id="iCr" onchange="schedCalc()"><option value="cracked">균열</option><option value="uncracked">무균열</option></select><span class="unt"></span></div>
+    <div class="cr"><span class="ck">Ca1 = (D−BCD)/2</span><span class="cv" id="dCa1">—</span></div>
+    <div class="hefp-box" id="hefpBox" style="display:none">
+      <div style="color:var(--ac3);font-weight:700;font-size:10px;margin-bottom:3px">hef′ 수정 §17.6.2.1.2</div>
+      <div id="hefpFormula" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);white-space:pre-line;line-height:1.7"></div>
+    </div>
+    <div class="cr"><span class="ck">hef′</span><span class="cv" id="dHefp">—</span></div>
+    <div class="hefp-box" id="ca1vpBox" style="display:none">
+      <div style="color:var(--ac3);font-weight:700;font-size:10px;margin-bottom:3px">전단 ca1′ 수정 §17.7.2.1.2</div>
+      <div id="ca1vpFormula" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);white-space:pre-line;line-height:1.7"></div>
+    </div>
+    <div class="cr"><span class="ck">전단 ca1′</span><span class="cv" id="dCa1vp">—</span></div>
+  </div>
+  <div class="sec"><div class="st">하중 입력</div>
+    <div class="ir"><label>축하중 P (압축+, 인발−)</label><span class="sym">P</span><input type="number" id="iP" value="150" oninput="schedCalc()"><span class="unt">kN</span><button class="hb" onclick="tip(event,'P','압축+, 인발−')">?</button></div>
+    <div class="ir"><label>횡하중 H</label><span class="sym">H</span><input type="number" id="iH" value="80" oninput="schedCalc()"><span class="unt">kN</span><button class="hb" onclick="tip(event,'H','전단 수요')">?</button></div>
+    <div class="ir"><label>설계 모멘트 M</label><span class="sym">M</span><input type="number" id="iM" value="60" oninput="schedCalc()"><span class="unt">kN·m</span><button class="hb" onclick="tip(event,'M','탄성 단면계수법: Nua=−P/N+M·1000·x/Σx²')">?</button></div>
+    <div class="ir"><label>마찰 고려</label><span class="sym">Vf</span><select id="iUseFriction" onchange="onFriction()"><option value="no" selected>미고려</option><option value="yes">고려</option></select><span class="unt"></span></div>
+    <div id="frictionFields" style="display:none">
+      <div class="ir"><label>마찰계수 μ</label><span class="sym">μ</span><select id="iMuF" onchange="onFriction()"><option value="0.70" selected>0.70 그라우트</option><option value="0.90">0.90 플레이트</option><option value="custom">직접입력</option></select><span class="unt"></span></div>
+      <div class="ir" id="rowMuC" style="display:none"><label>μ 직접입력</label><span class="sym">μ*</span><input type="number" id="iMuC" value="0.70" step="0.01" oninput="schedCalc()"><span class="unt">—</span></div>
+      <div class="rebar-info">
+        <div class="rebar-info-row"><span class="rebar-info-k">Vua 원값</span><span class="rebar-info-v" id="dVuaRaw">—</span></div>
+        <div class="rebar-info-row"><span class="rebar-info-k">Vf = μP</span><span class="rebar-info-v" id="dVf">—</span></div>
+        <div class="rebar-info-row"><span class="rebar-info-k">Vua,i</span><span class="rebar-info-v" id="dVuaI">—</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec"><div class="st">전단키 §17.11</div>
+    <div class="ir"><label>전단키 사용</label><span class="sym">SL</span><select id="iUseSL" onchange="onSLToggle()"><option value="no" selected>미사용</option><option value="yes">사용</option></select><span class="unt"></span></div>
+    <div id="slFields" style="display:none">
+      <div class="ir"><label>전단키 폭 bsl</label><span class="sym">bsl</span><input type="number" id="iBsl" value="300" oninput="schedCalc()"><span class="unt">mm</span></div>
+      <div class="ir"><label>전단키 두께 tsl</label><span class="sym">tsl</span><input type="number" id="iTsl" value="25" oninput="schedCalc()"><span class="unt">mm</span></div>
+      <div class="ir"><label>전단키 매입높이 hsl</label><span class="sym">hsl</span><input type="number" id="iHsl" value="150" oninput="schedCalc()"><span class="unt">mm</span></div>
+      <div class="rebar-info">
+        <div class="rebar-info-row"><span class="rebar-info-k">Aef,sl</span><span class="rebar-info-v" id="riAefSl">—</span></div>
+        <div class="rebar-info-row"><span class="rebar-info-k">ψbrg,sl</span><span class="rebar-info-v" id="riPsiSl">—</span></div>
+      </div>
+      <div class="warnbox">⚠ 최소 4EA 앵커 필요 (§17.11.1.1.2)</div>
+    </div>
+  </div>
+  <div class="sec"><div class="st">강도감소계수 φ</div>
+    <div class="phi-row"><label style="font-size:11px;color:var(--t2)">φ 강재 인장</label><span class="sym">φs,t</span><div class="phi-val" id="dPhiST">0.75</div><span class="unt">—</span></div>
+    <div class="phi-row"><label style="font-size:11px;color:var(--t2)">φ 강재 전단</label><span class="sym">φs,v</span><div class="phi-val" id="dPhiSV">0.65</div><span class="unt">—</span></div>
+    <div class="phi-row"><label style="font-size:11px;color:var(--t2)">φ 콘크리트 인장</label><span class="sym">φc,t</span><div class="phi-val" id="dPhiCT">0.70</div><span class="unt">—</span></div>
+    <div class="phi-row"><label style="font-size:11px;color:var(--t2)">φ 콘크리트 전단</label><span class="sym">φc,v</span><div class="phi-val" id="dPhiCV">0.70</div><span class="unt">—</span></div>
+  </div>
+  <div class="sec"><div class="st">보강 철근 (Nnr)</div>
+    <div class="ir"><label>Supplementary Reinforcement</label><span class="sym">SR</span><select id="iHasRebar" onchange="onRebarToggle()"><option value="no" selected>없음</option><option value="yes">있음</option></select><span class="unt"></span></div>
+    <div id="rebarFields" style="display:none">
+      <div class="ir"><label>Nnr 입력</label><span class="sym">Nnr</span><select id="iNnrMode" onchange="onRebarToggle()"><option value="no" selected>입력안함</option><option value="yes">입력함</option></select><span class="unt"></span></div>
+      <div id="nnrDetail" style="display:none">
+        <div class="ir"><label>수직 철근 지름</label><span class="sym">dv</span><select id="iRb" onchange="onRebarChange()"><option value="13">D13</option><option value="16">D16</option><option value="19">D19</option><option value="22">D22</option><option value="25">D25</option><option value="29">D29</option><option value="32" selected>D32</option><option value="35">D35</option></select><span class="unt"></span></div>
+        <div class="ir"><label>페데스탈 배치 철근 수</label><span class="sym">Nv</span><input type="number" id="iNtot" value="16" min="0" oninput="onRebarChange()"><span class="unt">EA</span></div>
+        <div class="ir"><label>철근 항복강도 (fy)</label><span class="sym">fy</span><input type="number" id="iFy" value="400" oninput="schedCalc()"><span class="unt">MPa</span></div>
+        <div class="ir"><label>상단~철근 거리 (C1)</label><span class="sym">C1</span><input type="number" id="iC1" value="50" oninput="schedCalc()"><span class="unt">mm</span></div>
+        <div class="ir"><label>피복두께 (C2)</label><span class="sym">C2</span><input type="number" id="iC2" value="75" oninput="schedCalc()"><span class="unt">mm</span></div>
+        <div class="rebar-info">
+          <div class="rebar-info-row"><span class="rebar-info-k">0.5hef 범위</span><span class="rebar-info-v" id="riHefHalf">—</span></div>
+          <div class="rebar-info-row"><span class="rebar-info-k">N1(0.5hef 내)</span><span class="rebar-info-v" id="riN1">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="height:16px"></div>
+</div>
+<div id="cv">
+  <div id="vh"><span id="vbg" class="vbg">—</span><span id="vd" style="color:var(--t2)">—</span></div>
+  <div id="viewSplit">
+    <div id="cw3d" style="flex:1;min-height:80px">
+      <div id="iso3d"></div>
+      <div id="legbox">
+        <div style="font-size:10px;font-weight:700;color:var(--ac3);margin-bottom:3px">범례</div>
+        <div class="lr"><span class="ld" style="background:#1a4a90"></span><span>페데스탈 (팔각기둥)</span></div>
+        <div class="lr"><span class="ld" style="background:#c45c0a"></span><span>앵커 볼트</span></div>
+        <div class="lr"><span class="ld" style="background:#2ea84d"></span><span>보강 철근</span></div>
+        <div class="lr"><span class="ll" style="background:rgba(150,60,220,.6)"></span><span>중립축 N.A.</span></div>
+        <div class="lr"><span class="ll" style="background:#4da6ff"></span><span>↑ Nua</span></div>
+        <div class="lr"><span class="ll" style="background:#ff6060"></span><span>H →</span></div>
+      </div>
+      <div id="vctrls">
+        <button class="vc" onclick="resetView()">⌂</button>
+        <button class="vc" onclick="setViewTop()">T</button>
+        <button class="vc" onclick="setViewFront()">F</button>
+      </div>
+    </div>
+    <div id="vDivider"></div>
+    <div id="cw2d" style="height:200px;min-height:60px">
+      <canvas id="plan2d"></canvas>
+      <div id="plan2d-label">2D 평면도 — 팔각형 페데스탈 + BCD 앵커 배치</div>
+    </div>
+  </div>
+</div>
+<div id="rp">
+  <div id="sbar">
+    <div class="sc sna" id="sct"><div class="sl">인장</div><div class="sv" id="svt">—</div></div>
+    <div class="sc sna" id="scv"><div class="sl">전단</div><div class="sv" id="svv">—</div></div>
+    <div class="sc sna" id="scc"><div class="sl">복합</div><div class="sv" id="svc">—</div></div>
+  </div>
+  <div id="rc"><div style="text-align:center;padding:50px 0;color:var(--t3)"><div style="font-size:32px;margin-bottom:10px">📐</div><div>입력값 변경 시 자동 계산됩니다</div></div></div>
+</div>
+</div></div>
+<div id="tip"></div>
+<!-- 모달 -->
+<div class="modal-overlay" id="modalCatalog"><div class="modal"><div class="modal-head"><h3>📋 Headed Bolt 카탈로그</h3><button class="modal-close" onclick="closeModal('modalCatalog')">✕</button></div><div class="modal-body" id="catBody"></div></div></div>
+<div class="modal-overlay" id="modalSave"><div class="modal" style="width:520px"><div class="modal-head"><h3>💾 저장 / 불러오기</h3><button class="modal-close" onclick="closeModal('modalSave')">✕</button></div><div class="modal-body"><div style="display:flex;gap:8px;margin-bottom:10px"><input id="saveSlotName" placeholder="케이스 이름" style="flex:1;padding:6px 10px;background:var(--bg);border:1px solid var(--bd2);border-radius:5px;color:var(--t1);font-size:12px;outline:none"><button class="abtn" onclick="saveInputs()" style="background:var(--ac);color:#fff">저장</button></div><div id="saveSlotList"></div><div style="display:flex;gap:8px;margin-top:10px;border-top:1px solid var(--bd);padding-top:10px"><button class="abtn" onclick="exportJSON()" style="flex:1">📤 JSON</button><label class="abtn" style="flex:1;cursor:pointer">📥 불러오기<input type="file" accept=".json" style="display:none" onchange="importJSON(event)"></label></div></div></div></div>
+<div class="modal-overlay" id="modalRetrofit"><div class="modal" style="width:920px;max-width:96vw"><div class="modal-head"><h3>🔧 긴급 보강 설계</h3><button class="modal-close" onclick="closeModal('modalRetrofit')">✕</button></div><div class="modal-body" id="retrofitBody"></div></div></div>
+<div class="modal-overlay" id="modalSuggest"><div class="modal" style="width:820px;max-width:96vw"><div class="modal-head"><h3>💡 N.G 개선 제안</h3><button class="modal-close" onclick="closeModal('modalSuggest')">✕</button></div><div class="modal-body" id="suggestBody"></div></div></div>
+<div class="modal-overlay" id="modalExtract"><div class="modal" style="width:1000px;max-width:97vw"><div class="modal-head"><h3>📄 계산서 자동 추출 (베타)</h3><button class="modal-close" onclick="closeModal('modalExtract')">✕</button></div><div class="modal-body" id="extractBody">
+  <div class="warnbox" style="margin-bottom:14px">⚠ 베타 기능. PDF 텍스트 레이어·Excel 라벨에서 후보를 찾습니다. 스캔 PDF 불가. 모든 값은 직접 확인 후 반영하세요. N/BCD/θ₀는 자동 추출 대상 아님.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px">
+    <div><div class="drop-zone" id="dzCalc" onclick="g('fileCalc').click()"><div class="dz-ico">📊</div><div class="dz-t">계산서 PDF</div><div class="dz-s" id="dzCalcSt">클릭/드래그</div></div><input type="file" id="fileCalc" accept="application/pdf" multiple style="display:none" onchange="handlePdfFiles(this.files,'calc')"></div>
+    <div><div class="drop-zone" id="dzExcel" onclick="g('fileExcel').click()"><div class="dz-ico">📗</div><div class="dz-t">계산서 Excel</div><div class="dz-s" id="dzExcelSt">클릭/드래그 (권장)</div></div><input type="file" id="fileExcel" accept=".xlsx,.xls" multiple style="display:none" onchange="handleExcelFiles(this.files)"></div>
+    <div><div class="drop-zone" id="dzVendor" onclick="g('fileVendor').click()"><div class="dz-ico">📐</div><div class="dz-t">Vendor Print PDF</div><div class="dz-s" id="dzVendorSt">클릭/드래그</div></div><input type="file" id="fileVendor" accept="application/pdf" multiple style="display:none" onchange="handlePdfFiles(this.files,'vendor')"></div>
+  </div>
+  <div id="extractResults"></div>
+</div></div></div>
+<script>
+// ═══ CATALOG & CONSTANTS ═══
+const EH_CAT={16:27.7,20:34.6,24:41.6,27:47.3,30:53.1,36:63.5,42:75.1,48:86.6,56:98.1,64:109.7};
+const CAT_KEYS=[16,20,24,27,30,36,42,48,56,64];
+const g=id=>document.getElementById(id);
+const nv=id=>{const v=parseFloat(g(id)?g(id).value:'0');return isNaN(v)?0:v;};
+const nvi=id=>{const v=parseInt(g(id)?g(id).value:'0');return isNaN(v)?0:v;};
+const fmt=(v,d=2)=>v===null||v===undefined||isNaN(v)?'—':Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+const ACFG={
+  cast_headed:{label:'Cast-in Headed Bolt',cast:true,kc:17,head:true,hook:false,info:[['설치','타설 전'],['kc','17 §17.6.2.2.2'],['Pullout','Np=8×Abrg×f′c']]},
+  cast_hooked:{label:'Cast-in Hooked Bolt',cast:true,kc:17,head:false,hook:true,info:[['설치','타설 전'],['Pullout','Np=0.9f′c×lh×da']]},
+  post_exp:{label:'Post-installed Expansion',cast:false,kc:10,head:true,hook:false,info:[['설치','팽창식']]},
+  post_uc:{label:'Post-installed Undercut',cast:false,kc:10,head:true,hook:false,info:[['설치','언더컷']]},
+  post_adh:{label:'Post-installed Adhesive',cast:false,kc:10,head:false,hook:false,info:[['설치','화학앵커'],['추가','§17.6.5 Bond']]},
+};
+
+// ═══ UI ═══
+function onAT(){
+  const k=g('iAT').value,c=ACFG[k]||ACFG.cast_headed;
+  let h=`<div class="ai-t">📌 ${c.label}</div>`;
+  c.info.forEach(([a,b])=>h+=`<div class="ai-r"><span class="ai-k">${a}</span><span class="ai-v">${b}</span></div>`);
+  g('ainfo').innerHTML=h;
+  g('rowEh').style.display=c.head?'':'none';
+  g('rowLh').style.display=c.hook?'':'none';
+  ['rowBondPreset','rowTauCr','rowTauUncr'].forEach(id=>g(id)&&(g(id).style.display=k==='post_adh'?'':'none'));
+  if(c.head)onDaChange();
+  updatePhis();schedCalc();
+}
+function onBondPreset(){
+  const p=g('iBondPreset').value;
+  if(g('iTauCr'))g('iTauCr').value=p==='indoor'?'2.1':'1.4';
+  if(g('iTauUncr'))g('iTauUncr').value=p==='indoor'?'7.0':'4.5';
+}
+function getPhis(){
+  const duct=g('iSteelDuct').value==='ductile';
+  const pST=duct?0.75:0.65,pSV=duct?0.65:0.60;
+  const pC=g('iHasRebar').value==='yes'?0.75:0.70;
+  return{pST,pSV,pCT:pC,pCV:pC};
+}
+function updatePhis(){
+  const p=getPhis();
+  g('dPhiST').textContent=p.pST.toFixed(2);g('dPhiSV').textContent=p.pSV.toFixed(2);
+  g('dPhiCT').textContent=p.pCT.toFixed(2);g('dPhiCV').textContent=p.pCV.toFixed(2);
+}
+function onDaChange(){
+  const da=nv('iDa'),c=ACFG[g('iAT').value]||ACFG.cast_headed;
+  if(c.head){
+    const eh=EH_CAT[da]||(da*1.76);
+    g('iEh').value=eh;
+    g('ehCatalog').textContent=EH_CAT[da]?`ASTM F1554 M${da} eh=${eh}mm`:'추정 (da×1.76)';
+  }
+  schedCalc();
+}
+function onFriction(){
+  const use=g('iUseFriction').value==='yes';
+  g('frictionFields').style.display=use?'block':'none';
+  if(g('rowMuC'))g('rowMuC').style.display=(use&&g('iMuF').value==='custom')?'grid':'none';
+  schedCalc();
+}
+function onSLToggle(){g('slFields').style.display=g('iUseSL').value==='yes'?'block':'none';schedCalc();}
+function onRebarToggle(){
+  const has=g('iHasRebar').value==='yes';
+  g('rebarFields').style.display=has?'block':'none';
+  const nnr=has&&g('iNnrMode').value==='yes';
+  if(g('nnrDetail'))g('nnrDetail').style.display=nnr?'block':'none';
+  updatePhis();schedCalc();
+}
+function onRebarChange(){
+  const hef=nv('iHef');
+  if(g('riHefHalf'))g('riHefHalf').textContent=(0.5*hef).toFixed(0)+' mm';
+  schedCalc();
+}
+
+// ═══ 앵커 좌표 (원형 BCD) ═══
+function getAnchorPts(){
+  const N=Math.max(2,nvi('iNbolt')),BCD=nv('iBCD'),theta0=nv('iTheta0')*Math.PI/180;
+  const r=BCD/2,pts=[];
+  for(let i=0;i<N;i++){const a=theta0+2*Math.PI*i/N;pts.push({i,x:r*Math.cos(a),y:r*Math.sin(a)});}
+  return pts;
+}
+
+// ═══ 하중 분배 (탄성 단면계수법 — v3.4와 동일, 이미 올바름) ═══
+function calcLoads(){
+  const N=Math.max(2,nvi('iNbolt')),BCD=nv('iBCD');
+  const P=nv('iP'),H=nv('iH'),M=nv('iM');
+  const pts=getAnchorPts();
+  const Ix=pts.reduce((s,p)=>s+p.x*p.x,0);
+  let sumT=0,maxT=0,maxIdx=0;
+  pts.forEach((p,idx)=>{
+    const Nua=Ix>1e-6?(-P/N+M*1000*p.x/Ix):(-P/N);
+    p.Nua=Nua;
+    if(Nua>1e-9){sumT+=Nua;if(Nua>maxT){maxT=Nua;maxIdx=idx;}}
+  });
+  const nT=pts.filter(p=>p.Nua>1e-9).length;
+  let eN=0;
+  if(nT>1&&sumT>1e-9){
+    const cgX=pts.filter(p=>p.Nua>1e-9).reduce((s,p)=>s+p.x,0)/nT;
+    const resX=pts.filter(p=>p.Nua>1e-9).reduce((s,p)=>s+p.Nua*p.x,0)/sumT;
+    eN=Math.abs(resX-cgX);
+  }
+  // 중립축 x좌표
+  const c_na=(Math.abs(M)>1e-9&&Ix>1e-6)?P*Ix/(N*M*1000):null;
+  const useFr=g('iUseFriction').value==='yes';
+  let muF=0.70;
+  if(useFr){const sel=g('iMuF').value;muF=sel==='custom'?Math.max(0,nv('iMuC')):parseFloat(sel);}
+  const Vua_raw=Math.abs(H);
+  const Vf=useFr?muF*Math.max(P,0):0;
+  const Vua_g=Math.max(Vua_raw-Vf,0);
+  const Vua_i=Vua_g/N;
+  if(g('dVuaRaw'))g('dVuaRaw').textContent=fmt(Vua_raw)+' kN';
+  if(g('dVf'))g('dVf').textContent=fmt(Vf)+' kN';
+  if(g('dVuaI'))g('dVuaI').textContent=fmt(Vua_i)+' kN';
+  return{pts,N,P,H,M,sumT,maxT,maxIdx,nT,eN,Vua_g,Vua_i,Vua_raw,Vf,useFr,c_na};
+}
+
+// ═══ CORE CALC ═══
+function calcLd(db,fc,fy=400,lam=1.0){return Math.max(300,Math.round(fy/(1.1*lam*Math.sqrt(fc))*db));}
+
+function cmpOct(){
+  const at=g('iAT').value,c=ACFG[at]||ACFG.cast_headed;
+  const ph=getPhis();
+  const N=Math.max(2,nvi('iNbolt')),BCD=nv('iBCD'),D=nv('iD'),Ha=nv('iHa');
+  const da=nv('iDa'),hef=nv('iHef'),eh=nv('iEh'),futa=nv('iFuta'),fya=nv('iFya');
+  const fc=nv('iFc'),lam=parseFloat(g('iLam').value),cracked=g('iCr').value==='cracked';
+  const s=Math.PI*BCD/N;
+  g('dS').textContent=fmt(s,1)+' mm (호)';
+  const Ca1=(D-BCD)/2;
+  g('dCa1').textContent=fmt(Ca1,1)+' mm';
+  let hefp=hef,hefpMod=false;
+  if(Ca1<1.5*hef&&N>=2){hefp=Math.min(hef,Math.max(Ca1/1.5,s/3));hefpMod=hefp<hef-1e-9;}
+  g('dHefp').textContent=fmt(hefp,1)+' mm'+(hefpMod?' (수정)':'');
+  g('hefpBox').style.display=hefpMod?'block':'none';
+  if(hefpMod)g('hefpFormula').textContent=`Ca1=${fmt(Ca1,1)} < 1.5hef\nhef'=max(Ca1/1.5,s/3)=max(${fmt(Ca1/1.5,1)},${fmt(s/3,1)})=${fmt(hefp,1)}mm`;
+  let ca1v=Ca1,ca1vMod=false;
+  const lim2=Math.max(Ca1/1.5,Ha/1.5,s/3);
+  if(Ha<1.5*ca1v){ca1v=Math.min(ca1v,lim2);ca1vMod=ca1v<Ca1-1e-9;}
+  g('dCa1vp').textContent=fmt(ca1v,1)+' mm'+(ca1vMod?' (수정)':'');
+  g('ca1vpBox').style.display=ca1vMod?'block':'none';
+  if(ca1vMod)g('ca1vpFormula').textContent=`ha=${Ha}<1.5ca1\nca1'=max(Ca1/1.5,ha/1.5,s/3)=${fmt(ca1v,1)}mm`;
+
+  const AseN=Math.PI/4*Math.pow(0.9*da,2);
+  const futaEff=Math.min(futa,1.9*fya,860);
+  const Abrg=c.head?Math.max(0,eh*eh-Math.PI/4*da*da):0;
+  const loads=calcLoads();
+  const{sumT,maxT,nT,eN,Vua_g,Vua_i}=loads;
+
+  // ── 인장 Steel ──
+  const Nsa=AseN*futaEff/1000;const phiNsa=ph.pST*Nsa;
+
+  // ── 인장 Concrete Breakout (환형 ANc) ──
+  const ANco=9*hefp*hefp;
+  const r_bolt=BCD/2;
+  const r_out=r_bolt+Math.min(Ca1,1.5*hefp);
+  const r_in=Math.max(0,r_bolt-1.5*hefp);
+  const ANc_ann=Math.PI*(r_out*r_out-r_in*r_in);
+  const ANc=Math.min(ANc_ann,N*ANco);
+  const psiEcN=Math.min(1,1/(1+eN/(1.5*hefp)));
+  const psiEdN=Ca1>=1.5*hefp?1.0:0.7+0.3*Ca1/(1.5*hefp);
+  const psiCN=cracked?1.0:1.25;
+  let psiCpN=1.0;
+  if(!c.cast){const cac=at==='post_adh'?2*hef:1.5*hef;if(!cracked)psiCpN=Ca1>=cac?1.0:Math.max(Ca1/cac,1.5*hefp/cac);}
+  const Nb=c.kc*lam*Math.sqrt(fc)*Math.pow(hefp,1.5)/1000;
+  const Ncbg=(ANc/ANco)*psiEcN*psiEdN*psiCN*psiCpN*Nb;
+  const phiNcbg=ph.pCT*Ncbg;
+
+  // ── Nnr ──
+  const useNnr=g('iHasRebar').value==='yes'&&g('iNnrMode').value==='yes';
+  let phiNnr,N1_out=0,LdRatio=0;
+  if(useNnr){
+    const dv=nvi('iRb'),Ntot=nvi('iNtot'),fy=nv('iFy'),C1=nv('iC1'),C2=nv('iC2');
+    const r_rb=D/2-C2,lim3=0.5*hef;
+    const anchPts=getAnchorPts(),rbPts=[];
+    for(let i=0;i<Ntot;i++){const a=2*Math.PI*i/Ntot;rbPts.push({x:r_rb*Math.cos(a),y:r_rb*Math.sin(a)});}
+    N1_out=rbPts.filter(rp=>Math.min(...anchPts.map(ap=>Math.hypot(rp.x-ap.x,rp.y-ap.y)))<=lim3).length;
+    const Ldb=calcLd(dv,fc,fy,lam);
+    const Ld1r=Math.max(0,hef-C1);
+    LdRatio=Math.min(1,Ld1r/Ldb);
+    const Ar=Math.PI/4*dv*dv;
+    const Nnr=N1_out*Ar*fy*LdRatio/1000;
+    phiNnr=0.75*Nnr;
+    if(g('riN1'))g('riN1').textContent=N1_out+' ea';
+  }
+  if(g('riHefHalf'))g('riHefHalf').textContent=(0.5*hef).toFixed(0)+' mm';
+  const breakoutCap=useNnr&&phiNnr>phiNcbg?phiNnr:phiNcbg;
+  const breakoutSrc=useNnr&&phiNnr>phiNcbg?'Nnr':'Ncbg';
+
+  // ── Pullout ──
+  let Npn,phiNpn,psiCP,Np=null;
+  if(c.head){Np=8*Abrg*fc/1000;psiCP=cracked?1.0:1.4;Npn=psiCP*Np;phiNpn=ph.pCT*Npn;}
+  else if(c.hook){Np=0.9*fc*nv('iLh')*da/1000;psiCP=cracked?1.0:1.4;Npn=psiCP*Np;phiNpn=ph.pCT*Npn;}
+
+  // ── Bond ──
+  let phiNag,ANa,ANao,Nba,psiEdNa,psiEcNa,tauUsed,cNa;
+  if(at==='post_adh'){
+    tauUsed=cracked?nv('iTauCr'):nv('iTauUncr');
+    cNa=10*da*Math.sqrt(tauUsed/7.6);
+    ANao=(2*cNa)*(2*cNa);
+    const r_outa=r_bolt+Math.min(Ca1,cNa),r_ina=Math.max(0,r_bolt-cNa);
+    ANa=Math.min(Math.PI*(r_outa*r_outa-r_ina*r_ina),N*ANao);
+    psiEdNa=Ca1>=cNa?1.0:0.7+0.3*Ca1/cNa;
+    psiEcNa=Math.min(1,1/(1+eN/cNa));
+    Nba=lam*tauUsed*Math.PI*da*hef/1000;
+    phiNag=ph.pCT*(ANa/ANao)*psiEcNa*psiEdNa*Nba;
+  }
+
+  // ── Side-face Blowout ──
+  let phiNsb;
+  if(c.head&&Ca1<0.4*hef){
+    const Nsb=13*Ca1*Math.sqrt(Abrg)*lam*Math.sqrt(fc)/1000;
+    phiNsb=ph.pCT*Nsb*Math.max(nT,1);
+  }
+
+  // ── 인장 tItems ──
+  const tItems=[{k:'steel',cap:phiNsa,dem:maxT,label:'Steel (개별)',ok:phiNsa>=maxT-1e-9}];
+  tItems.push({k:'breakout',cap:breakoutCap,dem:sumT,label:`Concrete Breakout(그룹) [${breakoutSrc}]`,ok:breakoutCap>=sumT-1e-9});
+  if(phiNpn!==undefined)tItems.push({k:'pullout',cap:phiNpn,dem:maxT,label:'Pullout (개별)',ok:phiNpn>=maxT-1e-9});
+  if(phiNag!==undefined)tItems.push({k:'bond',cap:phiNag,dem:sumT,label:'Bond (그룹)',ok:phiNag>=sumT-1e-9});
+  if(phiNsb!==undefined)tItems.push({k:'blowout',cap:phiNsb,dem:sumT,label:'Side-face Blowout',ok:phiNsb>=sumT-1e-9});
+  tItems.forEach(it=>it.ratio=it.cap>1e-9?it.dem/it.cap:(it.dem>1e-9?1e9:0));
+  const tGov=tItems.reduce((a,b)=>b.ratio>a.ratio?b:a,tItems[0]);
+  const NRatio=tGov.ratio;
+
+  // ── 전단 Steel ──
+  const Vsa=g('iWeld').value==='yes'?AseN*futaEff/1000:0.6*AseN*futaEff/1000;
+  const phiVsa=ph.pSV*Vsa;
+
+  // ── 전단 Breakout ──
+  const AVco=4.5*ca1v*ca1v;
+  const r_vout=r_bolt+Math.min(Ca1,1.5*ca1v),r_vin=Math.max(0,r_bolt-1.5*ca1v);
+  const hV=Math.min(Ha,1.5*ca1v);
+  const AVc_calc=Math.PI*(r_vout*r_vout-r_vin*r_vin)/2*hV/(1.5*ca1v);
+  const AVc=Math.min(Math.max(AVc_calc,AVco),N*AVco);
+  const le=Math.min(hefp,8*da);
+  const Vb1=0.6*Math.pow(le/da,0.2)*Math.sqrt(da)*lam*Math.sqrt(fc)*Math.pow(ca1v,1.5)/1000;
+  const Vb2=3.7*lam*Math.sqrt(fc)*Math.pow(ca1v,1.5)/1000;
+  const Vb=Math.min(Vb1,Vb2);
+  const psiEcV=1.0,psiEdV=Ca1>=1.5*ca1v?1.0:0.7+0.3*Ca1/(1.5*ca1v);
+  const psiCV=cracked?1.0:1.4,psiHV=Ha<1.5*ca1v?Math.sqrt(1.5*ca1v/Ha):1.0;
+  const Vcbg=(AVc/AVco)*psiEcV*psiEdV*psiCV*psiHV*Vb;
+  const phiVcbg=ph.pCV*Vcbg;
+
+  // ── Pryout ──
+  const kcp=hefp<65?1.0:2.0;
+  const phiVcpg=ph.pCV*kcp*Ncbg;
+
+  // ── 전단키 ──
+  const useSL=g('iUseSL').value==='yes';
+  let SL={};
+  if(useSL){
+    const bsl=nv('iBsl'),tsl=nv('iTsl'),hsl=nv('iHsl');
+    SL.Aefsl=bsl*Math.min(hsl,2*tsl);
+    const Pf=nv('iP')>0?Math.min(nv('iP')*1000/(Math.PI*(D/2)*(D/2)*fc),0.2):0;
+    SL.psiBrg=Math.min(1+Pf*4,2);
+    SL.phiVbrg=0.65*1.7*fc*SL.Aefsl*SL.psiBrg/1000;
+    const AVcSl=Math.min((2*1.5*ca1v+bsl)*Math.min(Ha,1.5*ca1v),4.5*ca1v*ca1v*3);
+    SL.Vcb=(AVcSl/(4.5*ca1v*ca1v))*3.7*lam*Math.sqrt(fc)*Math.pow(ca1v,1.5)/1000;
+    SL.phiVcb=0.65*SL.Vcb;
+    SL.Vdem=Vua_g;
+    SL.bearOk=SL.phiVbrg>=Vua_g-1e-9;SL.breakoutOk=SL.phiVcb>=Vua_g-1e-9;SL.minAnchorOk=N>=4;
+    if(g('riAefSl'))g('riAefSl').textContent=fmt(SL.Aefsl,0)+' mm²';
+    if(g('riPsiSl'))g('riPsiSl').textContent=fmt(SL.psiBrg,3);
+  }
+
+  const vItems=[];
+  if(!useSL){
+    vItems.push({k:'steel',cap:phiVsa,dem:Vua_i,label:'Steel (개별)'});
+    vItems.push({k:'breakout',cap:phiVcbg,dem:Vua_g,label:'Concrete Breakout (그룹)'});
+    vItems.push({k:'pryout',cap:phiVcpg,dem:Vua_g,label:'Pryout (그룹)'});
+  }else{
+    vItems.push({k:'sl_brg',cap:SL.phiVbrg,dem:Vua_g,label:'전단키 지압 §17.11.2'});
+    vItems.push({k:'sl_cb',cap:SL.phiVcb,dem:Vua_g,label:'전단키 Breakout §17.11.3'});
+  }
+  vItems.forEach(it=>it.ratio=it.cap>1e-9?it.dem/it.cap:(it.dem>1e-9?1e9:0));
+  const vGov=vItems.reduce((a,b)=>b.ratio>a.ratio?b:a,vItems[0]);
+  const VRatio=vGov.ratio;
+
+  const nr=NRatio,vr=VRatio;
+  const doCombined=nr>0.2&&vr>0.2;
+  const IR=doCombined?nr+vr:Math.max(nr,vr);
+  const tOk=nr<=1+1e-9,vOk=vr<=1+1e-9,cOk=doCombined?IR<=1.2+1e-9:true;
+  const slOk=!useSL||(SL.bearOk&&SL.breakoutOk&&SL.minAnchorOk);
+  const allOk=tOk&&vOk&&cOk&&slOk;
+
+  return{N,BCD,D,Ha,da,hef,Ca1,hefp,hefpMod,ca1v,ca1vMod,fc,lam,cracked,
+    AseN,Abrg,futaEff,loads,sumT,maxT,nT,eN,Vua_g,Vua_i,
+    ANc,ANco,r_out,r_in,Nb,psiEcN,psiEdN,psiCN,psiCpN,Ncbg,phiNcbg,
+    useNnr,phiNnr,N1_out,LdRatio,breakoutCap,breakoutSrc,
+    Np,Npn,psiCP,phiNpn,phiNag,ANa,ANao,psiEdNa,psiEcNa,tauUsed,cNa,Nba,phiNsb,
+    tItems,tGov,NRatio,
+    Vb,Vb1,Vb2,AVc,AVco,le,psiEcV,psiEdV,psiCV,psiHV,Vcbg,phiVcbg,kcp,phiVcpg,
+    phiNsa,phiVsa,SL,useSL,vItems,vGov,VRatio,
+    doCombined,IR,tOk,vOk,cOk,slOk,allOk,ph,at,c};
+}
+// ═══ RESULTS RENDER ═══
+let mode='all';
+function setMode(m){mode=m;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.textContent.toLowerCase()===m||m==='all'&&t.textContent==='All'));renderResults(window.LR_);}
+function setSC(id,ratio,na){const el=g(id),sv=g('sv'+id.slice(2));if(na){el.className='sc sna';sv.textContent='—';return;}el.className='sc '+(ratio<=1+1e-9?'sok':'sng');sv.textContent=fmt(ratio,3);}
+function badge(ok){return`<span class="badge ${ok?'ok':'ng'}">${ok?'O.K':'N.G'}</span>`;}
+function chkRow(label,dem,cap){const ok=cap>=dem-1e-9;return`<div class="chk ${ok?'ok':'ng'}"><span>${label}</span><span class="chkr">${fmt(dem)} ≤ ${fmt(cap)} kN — ${ok?'O.K':'N.G'}</span></div>`;}
+
+function renderResults(R){
+  window.LR_=R;if(!R)return;
+  const I=R;
+  setSC('sct',R.NRatio,false);setSC('scv',R.VRatio,false);
+  setSC('scc',R.doCombined?R.IR/1.2:0,!R.doCombined);
+  g('vbg').textContent=`N=${R.N}, BCD=${R.BCD}, D=${R.D}`;
+  g('vd').textContent=`M${R.da} hef=${R.hef}mm Ca1=${fmt(R.Ca1,1)}mm hef'=${fmt(R.hefp,1)}mm | ${R.allOk?'전체 O.K':'N.G 있음'}`;
+  let h='';
+  const showT=mode==='all'||mode==='tension',showV=mode==='all'||mode==='shear',showC=mode==='all'||mode==='combined';
+
+  if(showT){
+    h+=`<div class="rb"><div class="rbt"><span class="rbtx"><span class="rbn">1</span>하중 분배 — 탄성 단면계수법</span><span class="rbrf">Nua=−P/N+M·1000·x/Σx²</span></div>`;
+    h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>Ref</th></tr>`;
+    h+=`<tr><td class="s">Σx²=Ix</td><td class="e">앵커군 단면 2차 모멘트</td><td class="v">${fmt(R.loads.pts.reduce((s,p)=>s+p.x*p.x,0),0)} mm²</td><td class="rf">—</td></tr>`;
+    h+=`<tr><td class="s">c (중립축)</td><td class="e">Nua=0 위치</td><td class="v">${R.loads.c_na!==null?fmt(R.loads.c_na,2)+' mm':'—'}</td><td class="rf">참고용</td></tr>`;
+    h+=`<tr><td class="s">ΣNua</td><td class="e">인장앵커 합 ← Breakout 수요</td><td class="v">${fmt(R.sumT)} kN</td><td class="rf">${R.nT} EA</td></tr>`;
+    h+=`<tr class="hl"><td class="s">Nua,max</td><td class="e">최대 인장앵커 ← Steel 수요</td><td class="v">${fmt(R.maxT)} kN</td><td class="rf">개별</td></tr>`;
+    h+=`<tr><td class="s">e'N</td><td class="e">인장합력 편심</td><td class="v">${fmt(R.eN,2)} mm</td><td class="rf">ψec,N</td></tr>`;
+    h+=`<tr><td class="s">Vua,g</td><td class="e">그룹 전단수요</td><td class="v">${fmt(R.Vua_g)} kN</td><td class="rf">Vua,i=${fmt(R.Vua_i,2)}</td></tr>`;
+    h+='</table>';
+    h+=`<table class="ct"><tr><th>앵커</th><th>위치 x</th><th>Nua,i</th><th>상태</th></tr>`;
+    R.loads.pts.forEach(p=>{
+      const isM=Math.abs(p.Nua-R.maxT)<1e-6&&p.Nua>1e-9;
+      h+=`<tr${isM?' class="hl"':''}><td class="s">A${p.i+1}</td><td class="e">${fmt(p.x,1)} mm</td><td class="v">${fmt(p.Nua,2)} kN</td><td class="rf">${p.Nua>1e-9?'인장 ✓':'—'}</td></tr>`;
+    });
+    h+='</table></div>';
+
+    h+=`<div class="rb"><div class="rbt"><span class="rbtx"><span class="rbn">2</span>인장 검토</span>${badge(R.tOk)}</div>`;
+    h+=`<table class="ct"><tr><th>파괴모드</th><th>φNn</th><th>Nua</th><th>비율</th></tr>`;
+    R.tItems.forEach(it=>{const gov=R.tGov&&R.tGov.k===it.k;h+=`<tr${gov?' class="hl"':''}><td class="s">${it.label}</td><td class="v">${fmt(it.cap)} kN</td><td class="v">${fmt(it.dem)} kN</td><td class="v">${fmt(it.ratio,3)}</td></tr>`;});
+    h+='</table>';
+    h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>Ref</th></tr>`;
+    h+=`<tr><td class="s">φNsa</td><td class="e">${R.ph.pST}×AseN×futa</td><td class="v">${fmt(R.phiNsa)} kN</td><td class="rf">§17.6.1</td></tr>`;
+    h+=`<tr><td class="s">ANc</td><td class="e">π(R_out²−R_in²) → min(n·ANco)</td><td class="v">${fmt(R.ANc,0)} mm²</td><td class="rf">§17.6.2.1 ★</td></tr>`;
+    h+=`<tr><td class="s">Nb</td><td class="e">${R.c.kc}λ√f'c·hef'^1.5</td><td class="v">${fmt(R.Nb)} kN</td><td class="rf">§17.6.2.2</td></tr>`;
+    h+=`<tr><td class="s">ψ</td><td class="e">ec,N=${fmt(R.psiEcN,3)} ed,N=${fmt(R.psiEdN,3)} c,N=${fmt(R.psiCN,2)} cp,N=${fmt(R.psiCpN,3)}</td><td class="v">—</td><td class="rf">§17.6.2.3~6</td></tr>`;
+    h+=`<tr class="hl"><td class="s">φNcbg</td><td class="e">${R.ph.pCT}×(ANc/ANco)ψψψψNb vs ΣNua</td><td class="v">${fmt(R.phiNcbg)} kN</td><td class="rf">그룹수요</td></tr>`;
+    if(R.useNnr)h+=`<tr><td class="s">φNnr</td><td class="e">0.75×N1×Ar×fy×Ld_ratio [N1=${R.N1_out}]</td><td class="v">${fmt(R.phiNnr)} kN</td><td class="rf">${R.breakoutSrc} 지배</td></tr>`;
+    if(R.phiNpn!==undefined&&R.Np!==null)h+=`<tr><td class="s">φNpn</td><td class="e">${R.ph.pCT}×ψc,P×Np (ψc,P=${fmt(R.psiCP,1)}) vs Nua,max</td><td class="v">${fmt(R.phiNpn)} kN</td><td class="rf">개별수요</td></tr>`;
+    if(R.phiNag!==undefined)h+=`<tr><td class="s">φNag</td><td class="e">${R.ph.pCT}×(ANa/ANao)ψψNba (τ=${fmt(R.tauUsed,1)})</td><td class="v">${fmt(R.phiNag)} kN</td><td class="rf">§17.6.5</td></tr>`;
+    if(R.phiNsb!==undefined)h+=`<tr><td class="s">φNsbg</td><td class="e">Side-face Blowout</td><td class="v">${fmt(R.phiNsb)} kN</td><td class="rf">§17.6.4</td></tr>`;
+    h+='</table>';
+    h+=chkRow(`인장 지배: ${R.tGov?R.tGov.label:'—'}`,R.tGov?R.tGov.dem:0,R.tGov?R.tGov.cap:0);
+    h+='</div>';
+  }
+  if(showV){
+    h+=`<div class="rb"><div class="rbt"><span class="rbtx"><span class="rbn">3</span>전단 검토${R.useSL?' — 전단키':''}</span>${badge(R.vOk&&R.slOk)}</div>`;
+    h+=`<table class="ct"><tr><th>파괴모드</th><th>φVn</th><th>Vua</th><th>비율</th></tr>`;
+    R.vItems.forEach(it=>{const gov=R.vGov&&R.vGov.k===it.k;h+=`<tr${gov?' class="hl"':''}><td class="s">${it.label}</td><td class="v">${fmt(it.cap)} kN</td><td class="v">${fmt(it.dem)} kN</td><td class="v">${fmt(it.ratio,3)}</td></tr>`;});
+    h+='</table>';
+    if(!R.useSL){
+      h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>Ref</th></tr>`;
+      h+=`<tr><td class="s">φVsa</td><td class="e">${R.ph.pSV}×${g('iWeld').value==='yes'?'1.0':'0.6'}×AseV×futa</td><td class="v">${fmt(R.phiVsa)} kN</td><td class="rf">§17.7.1</td></tr>`;
+      h+=`<tr><td class="s">ca1'</td><td class="e">${R.ca1vMod?'수정 적용':'연단거리'}</td><td class="v">${fmt(R.ca1v,1)} mm</td><td class="rf">§17.7.2.1.2</td></tr>`;
+      h+=`<tr><td class="s">Vb</td><td class="e">min(Vb1,Vb2)</td><td class="v">${fmt(R.Vb)} kN</td><td class="rf">§17.7.2.2</td></tr>`;
+      h+=`<tr><td class="s">ψ</td><td class="e">ec,V=${fmt(R.psiEcV,3)} ed,V=${fmt(R.psiEdV,3)} c,V=${fmt(R.psiCV,2)} h,V=${fmt(R.psiHV,3)}</td><td class="v">—</td><td class="rf"></td></tr>`;
+      h+=`<tr class="hl"><td class="s">φVcbg</td><td class="e">${R.ph.pCV}×(AVc/AVco)ψψψψVb</td><td class="v">${fmt(R.phiVcbg)} kN</td><td class="rf">그룹</td></tr>`;
+      h+=`<tr><td class="s">φVcpg</td><td class="e">${R.ph.pCV}×kcp×Ncbg (kcp=${R.kcp})</td><td class="v">${fmt(R.phiVcpg)} kN</td><td class="rf">§17.7.3</td></tr>`;
+      h+='</table>';
+    }else{
+      const SL=R.SL;
+      h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>Ref</th></tr>`;
+      h+=`<tr><td class="s">Aef,sl</td><td class="e">bsl×min(hef,sl,2tsl)</td><td class="v">${fmt(SL.Aefsl,0)} mm²</td><td class="rf">§17.11.2.1.1</td></tr>`;
+      h+=`<tr><td class="s">ψbrg,sl</td><td class="e">축하중 보정 ≤2.0</td><td class="v">${fmt(SL.psiBrg,3)}</td><td class="rf">§17.11.2.2</td></tr>`;
+      h+=`<tr class="hl"><td class="s">φVbrg,sl</td><td class="e">0.65×1.7f'c×Aef,sl×ψbrg,sl</td><td class="v">${fmt(SL.phiVbrg)} kN</td><td class="rf">§17.11.2.1</td></tr>`;
+      h+=`<tr class="hl"><td class="s">φVcb,sl</td><td class="e">0.65×(AVc/AVco)Vb</td><td class="v">${fmt(SL.phiVcb)} kN</td><td class="rf">§17.11.3</td></tr>`;
+      h+='</table>';
+      h+=chkRow('전단키 지압',SL.Vdem,SL.phiVbrg)+chkRow('전단키 파괴',SL.Vdem,SL.phiVcb);
+      h+=`<div class="chk ${SL.minAnchorOk?'ok':'ng'}"><span>최소 앵커수 §17.11</span><span class="chkr">${R.N} ≥ 4 EA — ${SL.minAnchorOk?'O.K':'N.G'}</span></div>`;
+    }
+    h+='</div>';
+  }
+  if(showC){
+    h+=`<div class="rb"><div class="rbt"><span class="rbtx"><span class="rbn">4</span>복합 하중 §17.8</span>${badge(R.cOk)}</div>`;
+    if(R.doCombined){
+      h+=`<table class="ct"><tr><th>항목</th><th>수식</th><th>값</th><th>판정</th></tr>`;
+      h+=`<tr><td class="s">N/φNn</td><td class="e">인장 지배비</td><td class="v">${fmt(R.NRatio,3)}</td><td class="rf">${R.tGov?R.tGov.label:''}</td></tr>`;
+      h+=`<tr><td class="s">V/φVn</td><td class="e">전단 지배비</td><td class="v">${fmt(R.VRatio,3)}</td><td class="rf">${R.vGov?R.vGov.label:''}</td></tr>`;
+      h+=`<tr class="hl"><td class="s">IR</td><td class="e">≤ 1.2</td><td class="v">${fmt(R.IR,3)}</td><td class="rf">${R.cOk?'O.K':'N.G'}</td></tr>`;
+      h+='</table>';
+    }else h+=`<div class="nabox">N/φNn=${fmt(R.NRatio,3)}, V/φVn=${fmt(R.VRatio,3)} — 0.2 이하 항목 있어 복합식 생략 (§17.8.1)</div>`;
+    h+='</div>';
+  }
+  g('rc').innerHTML=h;
+}
+// ═══ 3D ISO ENGINE v3.5 — 팔각기둥 + 실사볼트 + 중립축 + 치수선 ═══
+const ISO={
+  cv:null,ctx:null,W:0,H:0,
+  rotX:-0.40,rotZ:0.60,zoom:1,panX:0,panY:0,sd:null,
+
+  init(){
+    const host=g('iso3d');
+    this.cv=document.createElement('canvas');
+    host.appendChild(this.cv);
+    this.ctx=this.cv.getContext('2d');
+    new ResizeObserver(()=>this.resize()).observe(host);
+    this.resize();
+    let drag=false,pan=false,lx=0,ly=0;
+    this.cv.addEventListener('mousedown',e=>{
+      if(e.button===1){pan=true;e.preventDefault();}else drag=true;
+      lx=e.clientX;ly=e.clientY;
+    });
+    window.addEventListener('mousemove',e=>{
+      if(!drag&&!pan)return;
+      const dx=e.clientX-lx,dy=e.clientY-ly;
+      lx=e.clientX;ly=e.clientY;
+      if(pan){this.panX+=dx;this.panY+=dy;}
+      else{this.rotZ+=dx*.008;this.rotX+=dy*.008;this.rotX=Math.max(-1.5,Math.min(.2,this.rotX));}
+      this.draw();
+    });
+    window.addEventListener('mouseup',()=>{drag=false;pan=false;});
+    this.cv.addEventListener('wheel',e=>{
+      e.preventDefault();
+      this.zoom*=e.deltaY<0?1.1:.9;
+      this.zoom=Math.max(.2,Math.min(6,this.zoom));
+      this.draw();
+    },{passive:false});
+  },
+
+  resize(){
+    const host=g('iso3d');if(!host)return;
+    const r=host.getBoundingClientRect();
+    this.W=Math.max(50,r.width);this.H=Math.max(50,r.height);
+    const dpr=window.devicePixelRatio||1;
+    this.cv.width=this.W*dpr;this.cv.height=this.H*dpr;
+    this.cv.style.width=this.W+'px';this.cv.style.height=this.H+'px';
+    this.ctx.setTransform(dpr,0,0,dpr,0,0);
+    this.draw();
+  },
+
+  // 3D→2D 투영
+  P(x,y,z){
+    const cz=Math.cos(this.rotZ),sz=Math.sin(this.rotZ);
+    const cx=Math.cos(this.rotX),sx=Math.sin(this.rotX);
+    const X=x*cz-y*sz, Y=x*sz+y*cz;
+    const Y2=Y*cx-z*sx;
+    const s=this.zoom*this.sc;
+    return[this.W/2+this.panX+X*s, this.H/2+this.panY+Y2*s];
+  },
+
+  // 팔각형 꼭짓점 (반지름 R, z높이)
+  octPts(R,z){
+    const pts=[];
+    for(let i=0;i<8;i++){
+      const a=Math.PI/8+i*Math.PI/4;
+      pts.push(this.P(R*Math.cos(a),R*Math.sin(a),-z));
+    }
+    return pts;
+  },
+
+  // 팔각기둥 측면 렌더링 (face별 조명)
+  drawOctSides(R,Hp){
+    const c=this.ctx;
+    for(let i=0;i<8;i++){
+      const a1=Math.PI/8+i*Math.PI/4, a2=Math.PI/8+(i+1)*Math.PI/4;
+      const aMid=(a1+a2)/2;
+      // 조명: rotZ 기준 정면 방향에서 밝게
+      const facing=Math.cos(aMid-this.rotZ+Math.PI/2);
+      if(facing<-0.12)continue; // 뒷면 컬링
+      const lum=Math.floor(14+facing*58);
+      const lumB=Math.floor(22+facing*82);
+      c.fillStyle=`rgb(${lum},${lum+18},${lumB})`;
+      const p0=this.P(R*Math.cos(a1),R*Math.sin(a1),-Hp);
+      const p1=this.P(R*Math.cos(a2),R*Math.sin(a2),-Hp);
+      const p2=this.P(R*Math.cos(a2),R*Math.sin(a2),0);
+      const p3=this.P(R*Math.cos(a1),R*Math.sin(a1),0);
+      c.beginPath();c.moveTo(...p0);c.lineTo(...p1);c.lineTo(...p2);c.lineTo(...p3);c.closePath();c.fill();
+      c.strokeStyle=`rgba(60,120,180,${0.12+facing*0.18})`;c.lineWidth=0.5;c.stroke();
+    }
+  },
+
+  // 팔각형 상/하면
+  drawOctFace(R,z,col,alpha=0.92,stroke=true){
+    const c=this.ctx;
+    const pts=this.octPts(R,z);
+    c.globalAlpha=alpha;
+    c.fillStyle=col;
+    c.beginPath();c.moveTo(...pts[0]);
+    pts.slice(1).forEach(p=>c.lineTo(...p));
+    c.closePath();c.fill();
+    if(stroke){c.strokeStyle='rgba(60,120,200,.55)';c.lineWidth=1.0;c.stroke();}
+    c.globalAlpha=1;
+  },
+
+  // 압축존 상단면 표시
+  drawCompressionZone(R,Hp,c_na,axis){
+    const c=this.ctx;
+    // 중립축에서 압축쪽 팔각형 영역 클리핑
+    const segs=64;
+    const pts2d=[];
+    for(let i=0;i<=segs;i++){
+      const a=2*Math.PI*i/segs;
+      const rx=R*Math.cos(a),ry=R*Math.sin(a);
+      // axis='Y': x>c_na 압축 / axis='X': y>c_na 압축
+      const coord=axis==='Y'?rx:ry;
+      if(coord>=c_na)pts2d.push(this.P(rx,ry,-Hp));
+    }
+    if(pts2d.length<2)return;
+    c.globalAlpha=0.35;
+    c.fillStyle='rgba(180,60,60,.7)';
+    c.beginPath();c.moveTo(...pts2d[0]);
+    pts2d.slice(1).forEach(p=>c.lineTo(...p));
+    c.closePath();c.fill();
+    c.globalAlpha=1;
+  },
+
+  // 볼트 로드
+  drawCyl(x,z1,z2,y,r,col,alpha=1){
+    const c=this.ctx;
+    const a=this.P(x,y,-z1),b=this.P(x,y,-z2);
+    c.globalAlpha=alpha;
+    c.strokeStyle=col;c.lineWidth=Math.max(2,r*this.zoom*this.sc*2);c.lineCap='round';
+    c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();
+    c.globalAlpha=1;
+  },
+
+  // 헥사곤 볼트 헤드 (3D 위치에서 2D 헥사곤)
+  drawBoltHead(bx,bz,by,da,col,strokeCol='rgba(220,160,60,.6)'){
+    const c=this.ctx;
+    const center=this.P(bx,by,-bz);
+    const r=Math.max(5,da*0.9*this.zoom*this.sc);
+    c.fillStyle=col;c.strokeStyle=strokeCol;c.lineWidth=1.0;
+    c.beginPath();
+    for(let i=0;i<6;i++){
+      const a=Math.PI/6+i*Math.PI/3;
+      if(i===0)c.moveTo(center[0]+r*Math.cos(a),center[1]+r*Math.sin(a));
+      else c.lineTo(center[0]+r*Math.cos(a),center[1]+r*Math.sin(a));
+    }
+    c.closePath();c.fill();c.stroke();
+  },
+
+  // 화살표 머리
+  arrowHead(from,to,col,sz=10){
+    const c=this.ctx;
+    const ang=Math.atan2(to[1]-from[1],to[0]-from[0]);
+    c.fillStyle=col;
+    c.beginPath();c.moveTo(...to);
+    c.lineTo(to[0]-sz*Math.cos(ang-.4),to[1]-sz*Math.sin(ang-.4));
+    c.lineTo(to[0]-sz*Math.cos(ang+.4),to[1]-sz*Math.sin(ang+.4));
+    c.closePath();c.fill();
+  },
+
+  // 3D 라벨
+  label3d(x,y,z,txt,col='#cce8ff',sz='9.5px',align='center'){
+    const c=this.ctx,p=this.P(x,y,-z);
+    c.font=`600 ${sz} "IBM Plex Mono",monospace`;
+    c.fillStyle=col;c.textAlign=align;c.textBaseline='middle';
+    const m=c.measureText(txt),pw=m.width+6,ph=13;
+    const bx=p[0]-(align==='center'?pw/2:align==='left'?-2:pw)-2,by=p[1]-ph/2;
+    c.globalAlpha=.78;c.fillStyle='rgba(7,17,28,.9)';
+    c.beginPath();c.rect(bx,by,pw+4,ph);c.fill();
+    c.globalAlpha=1;c.fillStyle=col;c.fillText(txt,p[0],p[1]);
+  },
+
+  // 점선 (3D)
+  dashedLine3d(x1,y1,z1,x2,y2,z2,col='#d4a520',w=1,dash=[6,4]){
+    const c=this.ctx;
+    const a=this.P(x1,y1,-z1),b=this.P(x2,y2,-z2);
+    c.strokeStyle=col;c.lineWidth=w;c.setLineDash(dash);
+    c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();
+    c.setLineDash([]);
+  },
+
+  // 치수 양방향 화살표
+  dimArrow(p1,p2,col='#d4a520'){
+    const c=this.ctx;
+    c.strokeStyle=col;c.lineWidth=1.2;
+    c.beginPath();c.moveTo(...p1);c.lineTo(...p2);c.stroke();
+    this.arrowHead(p1,p2,col,7);
+    this.arrowHead(p2,p1,col,7);
+  },
+
+  setData(d){this.sd=d;this.draw();},
+
+  draw(){
+    const c=this.ctx;if(!c)return;
+    c.clearRect(0,0,this.W,this.H);
+    const S=this.sd;if(!S)return;
+
+    const R=S.D/2,Hp=S.Ha,hef=S.hef||300,da=S.da||36;
+    const BCD=S.BCD||R*1.5;
+    const ext=Math.max(S.D*1.9,Hp*2.8);
+    this.sc=Math.min(this.W,this.H)/(ext*2.1);
+
+    // ─── 1. 지반 슬래브 (팔각형 shadow) ───
+    this.drawOctFace(R*1.7,0,'#0c1a2e',1,false);
+    this.drawOctFace(R*1.7,0,'#1a3550',0.5,true);
+
+    // ─── 2. 팔각기둥 측면 ───
+    this.drawOctSides(R,Hp);
+
+    // ─── 3. 하단면 ───
+    this.drawOctFace(R,0,'#122a4a',0.95,true);
+
+    // ─── 4. 상단면 ───
+    this.drawOctFace(R,Hp,'#1a4a8e',0.92,true);
+
+    // ─── 5. 압축존 (c_na 있을 때) ───
+    if(S.c_na!==null&&S.c_na!==undefined){
+      this.drawCompressionZone(R,Hp,S.c_na,'Y');
+    }
+
+    // ─── 6. BCD 원 (상단 점선) ───
+    {
+      const segs=60,rb=BCD/2;
+      const bcdPts=[];
+      for(let i=0;i<=segs;i++){const a=2*Math.PI*i/segs;bcdPts.push(this.P(rb*Math.cos(a),rb*Math.sin(a),-Hp));}
+      c.globalAlpha=.55;c.strokeStyle='#4da6ff';c.lineWidth=1.1;c.setLineDash([5,4]);
+      c.beginPath();c.moveTo(...bcdPts[0]);bcdPts.slice(1).forEach(p=>c.lineTo(...p));c.stroke();
+      c.setLineDash([]);c.globalAlpha=1;
+    }
+
+    // ─── 7. 중립축 반투명 평면 ───
+    if(S.c_na!==null&&S.c_na!==undefined){
+      const cn=S.c_na;
+      const h1=Math.min(1,Math.abs(cn)/R);
+      // 중립축 면: x=c_na 평면이 원기둥을 자르는 직사각형
+      const yMax=Math.sqrt(Math.max(0,R*R-cn*cn));
+      const naFace=[
+        this.P(cn,-yMax,-0),this.P(cn,yMax,-0),
+        this.P(cn,yMax,-Hp),this.P(cn,-yMax,-Hp)
+      ];
+      c.globalAlpha=0.28;
+      c.fillStyle='rgba(150,60,220,.8)';
+      c.beginPath();c.moveTo(...naFace[0]);naFace.slice(1).forEach(p=>c.lineTo(...p));c.closePath();c.fill();
+      c.globalAlpha=0.65;
+      c.strokeStyle='rgba(200,100,255,.9)';c.lineWidth=1.5;c.setLineDash([6,4]);
+      c.beginPath();c.moveTo(...naFace[0]);naFace.slice(1).forEach(p=>c.lineTo(...p));c.stroke();
+      c.setLineDash([]);c.globalAlpha=1;
+      this.label3d(cn,0,Hp+10,'N.A.','#cc88ff','9px');
+    }
+
+    // ─── 8. 보강철근 ───
+    if(S.rebar&&S.rebar.length){
+      const rlen=Math.max(80,hef*.7);
+      S.rebar.forEach(rp=>this.drawCyl(rp.x,Hp-rlen,Hp-10,rp.y,S.dv/2,'#2ea84d',0.9));
+    }
+
+    // ─── 9. 앵커볼트 (헥사 헤드 + 로드 + Nua 화살표) ───
+    const maxT=S.maxT||1;
+    S.bolts.forEach((b,idx)=>{
+      const headZ=Hp-hef;
+      // 헥사곤 헤드
+      this.drawBoltHead(b.x,headZ,b.y,da,'#8a5006','rgba(200,140,60,.6)');
+      // 로드 (헤드~상단 돌출 60mm)
+      this.drawCyl(b.x,headZ,Hp+60,b.y,da/2,'#c45c0a',1);
+      // 번호 라벨
+      this.label3d(b.x,b.y,Hp+76,`A${b.i+1}`,'#a8cfee','9px');
+
+      // Nua 삼각 화살표 (인장앵커만)
+      if(S.anchorLoads&&b.i<S.anchorLoads.length){
+        const T=S.anchorLoads[b.i];
+        if(T>1e-9){
+          const ratio=Math.min(1,T/maxT);
+          const arH=Math.min(85,28+ratio*62)*this.zoom;
+          const base=this.P(b.x,b.y,-Hp);
+          const tip=[base[0],base[1]-arH];
+          const w=Math.max(4,5+ratio*7)*this.zoom;
+          c.globalAlpha=0.85;
+          c.fillStyle='#3ec4ff';
+          c.beginPath();c.moveTo(tip[0],tip[1]);
+          c.lineTo(base[0]-w,base[1]-9);c.lineTo(base[0]+w,base[1]-9);
+          c.closePath();c.fill();
+          c.strokeStyle='#5dd4ff';c.lineWidth=1.5;
+          c.beginPath();c.moveTo(tip[0],tip[1]);c.lineTo(tip[0],tip[1]-10*this.zoom);c.stroke();
+          c.globalAlpha=1;
+        }
+      }
+    });
+
+    // ─── 10. 치수선 ───
+    const xEdge=R+22;
+    // hef 구간 점선
+    this.dashedLine3d(xEdge,0,0,xEdge,0,hef,'#4488cc',.9,[3,5]);
+    this.dashedLine3d(xEdge,0,hef,xEdge,0,Hp,'#4488cc',.9,[3,5]);
+    this.label3d(xEdge+16,0,(Hp+hef)/2,`hef=${hef}`,'#88bbdd','8.5px','left');
+
+    // Hp 전체 높이
+    const xEdge2=R+52;
+    this.dashedLine3d(xEdge2,0,0,xEdge2,0,Hp,'#6699bb',.8);
+    const pe1=this.P(xEdge2,0,0),pe2=this.P(xEdge2,0,-Hp);
+    this.dimArrow(pe1,pe2,'#6699bb');
+    this.label3d(xEdge2+18,0,Hp/2,`Hp=${Hp}`,'#88aacc','8.5px','left');
+
+    // D 치수 (수평, 상단)
+    const zDim=Hp+32;
+    this.dashedLine3d(-R-22,0,zDim,R+22,0,zDim,'#d4a520',.9,[5,4]);
+    const dp1=this.P(-R,0,-zDim),dp2=this.P(R,0,-zDim);
+    this.dimArrow(dp1,dp2,'#d4a520');
+    this.label3d(0,0,zDim+16,`D=${S.D}`,'#d4c040','9px');
+
+    // BCD 치수
+    const zDim2=Hp+14;
+    const bp1=this.P(-BCD/2,0,-zDim2),bp2=this.P(BCD/2,0,-zDim2);
+    this.dimArrow(bp1,bp2,'#5a9fcc');
+    this.label3d(0,0,zDim2+10,`BCD=${BCD}`,'#7abfee','9px');
+
+    // ─── 11. 하중 화살표 ───
+    if(S.arrows){
+      const Htot=Hp+52;
+      // ΣNua (위방향)
+      if(S.arrows.N>0.1){
+        const base=this.P(0,0,-Htot),top2=this.P(0,0,-(Htot+115));
+        c.strokeStyle='#3ec4ff';c.lineWidth=2.5;
+        c.beginPath();c.moveTo(...base);c.lineTo(...top2);c.stroke();
+        this.arrowHead(base,top2,'#3ec4ff',10);
+        const mid=[(base[0]+top2[0])/2,(base[1]+top2[1])/2];
+        c.font='600 9.5px "IBM Plex Mono",monospace';c.fillStyle='#7ad8ff';c.textAlign='left';
+        c.fillText(`↑ ΣNua=${S.arrows.N.toFixed(1)}kN`,mid[0]+8,mid[1]);
+      }
+      // H 전단 (수평)
+      if(S.arrows.H&&Math.abs(S.arrows.H)>0.1){
+        const theta0=(S.theta0||22.5)*Math.PI/180;
+        const base=this.P(0,0,-(Htot+20));
+        const tip=this.P(R*.55*Math.cos(theta0)*Math.sign(S.arrows.H),
+                          R*.55*Math.sin(theta0)*Math.sign(S.arrows.H),-(Htot+20));
+        c.strokeStyle='#ff5555';c.lineWidth=2.5;
+        c.beginPath();c.moveTo(...base);c.lineTo(...tip);c.stroke();
+        this.arrowHead(base,tip,'#ff5555',10);
+        c.font='600 9.5px "IBM Plex Mono",monospace';c.fillStyle='#ff8888';c.textAlign='left';
+        c.fillText(`H=${Math.abs(S.arrows.H).toFixed(1)}kN`,tip[0]+4,tip[1]-2);
+      }
+    }
+
+    // ─── 12. hef 수평 원 (내부 점선) ───
+    {
+      const rf=R*0.97,segs=40;
+      const hefPts=[];
+      for(let i=0;i<=segs;i++){const a=2*Math.PI*i/segs;hefPts.push(this.P(rf*Math.cos(a),rf*Math.sin(a),-hef));}
+      c.globalAlpha=0.25;c.strokeStyle='#4488bb';c.lineWidth=0.7;c.setLineDash([3,6]);
+      c.beginPath();c.moveTo(...hefPts[0]);hefPts.slice(1).forEach(p=>c.lineTo(...p));c.stroke();
+      c.setLineDash([]);c.globalAlpha=1;
+    }
+  }
+};
+
+function resetView(){ISO.rotX=-0.40;ISO.rotZ=0.60;ISO.zoom=1;ISO.panX=0;ISO.panY=0;ISO.draw();}
+function setViewTop(){ISO.rotX=-1.5;ISO.rotZ=0;ISO.draw();}
+function setViewFront(){ISO.rotX=0;ISO.rotZ=0;ISO.draw();}
+// ═══ 2D PLAN (원형) ═══
+const PLAN={zoom:1,panX:0,panY:0,sd:null,
+  init(){
+    const cv=g('plan2d');
+    cv.addEventListener('wheel',e=>{e.preventDefault();this.zoom*=e.deltaY<0?1.1:.9;this.zoom=Math.max(.3,Math.min(6,this.zoom));this.draw();},{passive:false});
+    let pan=false,lx=0,ly=0;
+    cv.addEventListener('mousedown',e=>{if(e.button===1){pan=true;lx=e.clientX;ly=e.clientY;e.preventDefault();}});
+    window.addEventListener('mousemove',e=>{if(!pan)return;this.panX+=e.clientX-lx;this.panY+=e.clientY-ly;lx=e.clientX;ly=e.clientY;this.draw();});
+    window.addEventListener('mouseup',()=>pan=false);
+    cv.addEventListener('dblclick',()=>{this.zoom=1;this.panX=0;this.panY=0;this.draw();});
+    new ResizeObserver(()=>this.draw()).observe(g('cw2d'));
+  },
+  setData(d){this.sd=d;this.draw();},
+  draw(){
+    const cv=g('plan2d');if(!cv)return;
+    const host=g('cw2d'),r=host.getBoundingClientRect();const dpr=window.devicePixelRatio||1;
+    cv.width=r.width*dpr;cv.height=r.height*dpr;
+    const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,r.width,r.height);
+    const S=this.sd;if(!S)return;
+    const sc=Math.min(r.width,r.height)/(S.D*1.35)*this.zoom;
+    const cx=r.width/2+this.panX,cy=r.height/2+this.panY;
+    const X=x=>cx+x*sc,Y=y=>cy-y*sc;
+    // 팔각형
+    c.strokeStyle='#2b4a6f';c.fillStyle='rgba(20,57,111,.35)';c.lineWidth=1.5;
+    c.beginPath();
+    for(let i=0;i<=8;i++){const a=Math.PI/8+2*Math.PI*i/8;if(i===0)c.moveTo(X(S.D/2*Math.cos(a)),Y(S.D/2*Math.sin(a)));else c.lineTo(X(S.D/2*Math.cos(a)),Y(S.D/2*Math.sin(a)));}
+    c.closePath();c.fill();c.stroke();
+    // BCD 원
+    c.strokeStyle='rgba(78,106,130,.5)';c.setLineDash([3,4]);c.lineWidth=1;
+    c.beginPath();c.arc(X(0),Y(0),S.BCD/2*sc,0,Math.PI*2);c.stroke();c.setLineDash([]);
+    // 중립축
+    if(S.c_na!==null&&S.c_na!==undefined){
+      c.strokeStyle='rgba(180,80,240,.7)';c.lineWidth=1.5;c.setLineDash([6,4]);
+      c.beginPath();c.moveTo(X(S.c_na),Y(-S.D/2));c.lineTo(X(S.c_na),Y(S.D/2));c.stroke();c.setLineDash([]);
+      c.font='10px monospace';c.fillStyle='#cc88ff';c.textAlign='left';
+      c.fillText('N.A.',X(S.c_na)+3,Y(0));
+    }
+    // 보강철근
+    if(S.rebar)S.rebar.forEach(p=>{c.fillStyle='#2ea84d';c.beginPath();c.arc(X(p.x),Y(p.y),Math.max(2,S.dv/2*sc),0,Math.PI*2);c.fill();});
+    // 앵커볼트
+    S.bolts.forEach(b=>{
+      c.fillStyle='#c45c0a';c.beginPath();c.arc(X(b.x),Y(b.y),Math.max(3,S.da/2*sc),0,Math.PI*2);c.fill();
+      c.fillStyle='#e8ecf3';c.font='9.5px "IBM Plex Mono",monospace';c.textAlign='center';
+      c.fillText(`A${b.i+1}`,X(b.x),Y(b.y)-Math.max(6,S.da/2*sc)-2);
+    });
+    // 중심선
+    c.strokeStyle='rgba(140,160,185,.35)';c.setLineDash([4,4]);c.lineWidth=1;
+    c.beginPath();c.moveTo(X(-S.D/2*1.1),Y(0));c.lineTo(X(S.D/2*1.1),Y(0));c.moveTo(X(0),Y(-S.D/2*1.1));c.lineTo(X(0),Y(S.D/2*1.1));c.stroke();c.setLineDash([]);
+  }
+};
+
+// ═══ VIEW DIVIDER ═══
+(function(){const dv=g('vDivider');let drag=false;dv.addEventListener('mousedown',e=>{drag=true;dv.classList.add('dragging');e.preventDefault();});window.addEventListener('mousemove',e=>{if(!drag)return;const split=g('viewSplit').getBoundingClientRect();let h2=split.bottom-e.clientY;h2=Math.max(60,Math.min(split.height-90,h2));g('cw2d').style.height=h2+'px';g('cw2d').style.flex='none';ISO.resize();PLAN.draw();});window.addEventListener('mouseup',()=>{drag=false;dv.classList.remove('dragging');});})();
+
+// ═══ TOOLTIP ═══
+let tipT=null;
+function tip(ev,title,body){ev.stopPropagation();const t=g('tip');t.innerHTML=`<div class="tt">${title}</div>${body}`;t.style.display='block';const r=ev.target.getBoundingClientRect();let x=r.right+10,y=r.top-8;t.style.left='0px';t.style.top='0px';const tw=t.offsetWidth,th=t.offsetHeight;if(x+tw>window.innerWidth-8)x=r.left-tw-10;if(y+th>window.innerHeight-8)y=window.innerHeight-th-8;t.style.left=Math.max(4,x)+'px';t.style.top=Math.max(4,y)+'px';clearTimeout(tipT);tipT=setTimeout(()=>t.style.display='none',5000);}
+document.addEventListener('click',()=>g('tip').style.display='none');
+
+// ═══ MODAL ═══
+function openModal(id){g(id).classList.add('show');if(id==='modalCatalog')fillCat();if(id==='modalSave')renderSaveSlots();}
+function closeModal(id){g(id).classList.remove('show');}
+document.querySelectorAll('.modal-overlay').forEach(ov=>ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('show');}));
+function fillCat(){
+  let h='<table style="width:100%;border-collapse:collapse;font-size:11px"><tr style="background:var(--s3)"><th style="padding:4px 8px;border:1px solid var(--bd2)">da</th><th style="padding:4px 8px;border:1px solid var(--bd2)">eh</th><th style="padding:4px 8px;border:1px solid var(--bd2)">Ase,N</th><th style="padding:4px 8px;border:1px solid var(--bd2)">Abrg</th></tr>';
+  const curDa=nv('iDa');
+  CAT_KEYS.forEach(d=>{const eh=EH_CAT[d],an=Math.PI/4*Math.pow(.9*d,2),ab=Math.max(0,eh*eh-Math.PI/4*d*d);h+=`<tr style="background:${Math.abs(curDa-d)<.5?'rgba(26,114,212,.14)':''}"><td style="padding:4px 8px;border:1px solid var(--bd2);color:var(--yw);font-family:monospace">M${d}</td><td style="padding:4px 8px;border:1px solid var(--bd2);font-family:monospace">${eh}mm</td><td style="padding:4px 8px;border:1px solid var(--bd2);font-family:monospace">${an.toFixed(1)}mm²</td><td style="padding:4px 8px;border:1px solid var(--bd2);font-family:monospace">${ab.toFixed(0)}mm²</td></tr>`;});
+  h+='</table>';g('catBody').innerHTML=h;
+}
+
+// ═══ SAVE/LOAD ═══
+const LS_KEY='abolt_oct_v35_saves';
+function collectVals(){const o={};document.querySelectorAll('input,select').forEach(el=>{if(!el.id)return;o[el.id]=el.type==='checkbox'?el.checked:el.value;});return o;}
+function applyVals(o){if(!o)return;Object.entries(o).forEach(([k,v])=>{const el=g(k);if(!el)return;el.type==='checkbox'?el.checked=!!v:el.value=v;});onAT();onRebarToggle();onFriction();onSLToggle();schedCalc();}
+function getSaves(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch(e){return[];}}
+function setSaves(a){try{localStorage.setItem(LS_KEY,JSON.stringify(a));}catch(e){alert('저장 실패');}}
+function saveInputs(){const name=(g('saveSlotName').value||'').trim()||('케이스 '+new Date().toLocaleString('ko-KR'));const a=getSaves();a.unshift({name,date:new Date().toISOString(),vals:collectVals()});if(a.length>30)a.length=30;setSaves(a);renderSaveSlots();g('saveSlotName').value='';}
+function renderSaveSlots(){const a=getSaves();const box=g('saveSlotList');if(!a.length){box.innerHTML='<div style="color:var(--t3);font-size:11px;padding:8px">저장된 케이스 없음</div>';return;}box.innerHTML=a.map((s,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--bd2);border-radius:6px;background:var(--s2);margin-bottom:6px"><span style="flex:1;font-size:12px;font-weight:600;cursor:pointer" onclick="loadSlot(${i})">${s.name}</span><span style="font-size:10px;color:var(--t3)">${new Date(s.date).toLocaleString('ko-KR')}</span><button class="abtn" onclick="loadSlot(${i})">불러오기</button><button class="abtn" onclick="delSlot(${i})" style="color:var(--rd)">삭제</button></div>`).join('');}
+function loadSlot(i){const a=getSaves();if(!a[i])return;applyVals(a[i].vals);closeModal('modalSave');}
+function delSlot(i){const a=getSaves();a.splice(i,1);setSaves(a);renderSaveSlots();}
+function exportJSON(){const bl=new Blob([JSON.stringify({app:'AnchorBolt_Octagonal',ver:'3.5',date:new Date().toISOString(),vals:collectVals()},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='AnchorBolt_Oct35_'+new Date().toISOString().slice(0,10)+'.json';a.click();}
+function importJSON(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);applyVals(o.vals||o);alert('불러오기 완료');}catch(e){alert('JSON 파싱 실패: '+e.message);}};rd.readAsText(f);ev.target.value='';}
+
+// ═══ 개선 제안 ═══
+function _slOk(R){return !R.useSL||(R.SL.bearOk&&R.SL.breakoutOk&&R.SL.minAnchorOk);}
+function updateSuggestBadge(R){
+  const btn=g('suggestBtn');if(!btn||!R)return;
+  const ok=R.tOk&&R.vOk&&R.cOk&&_slOk(R);
+  btn.style.borderColor=ok?'var(--bd2)':'var(--rd)';
+  btn.style.color=ok?'var(--t1)':'#ffb0b8';
+  btn.textContent=ok?'💡 개선 제안':'💡 개선 제안 (N.G '+[!R.tOk&&'인장',!R.vOk&&'전단',!R.cOk&&'복합',!_slOk(R)&&'전단키'].filter(Boolean).join('·')+')';
+}
+function tryVal(id,val){const el=g(id);if(!el)return null;const orig=el.value;el.value=val;let R2=null;try{R2=cmpOct();}catch(e){}el.value=orig;return R2;}
+function sweepFld(id,vals,fn){for(const v of vals){const R2=tryVal(id,v);if(R2&&fn(R2))return{v,R:R2};}return null;}
+function sweepD(deltas,fn){const cur=nv('iD');for(const d of deltas){const R2=tryVal('iD',cur+d);if(R2&&fn(R2))return{d,R:R2};}return null;}
+function range(a,b,step){const o=[];for(let v=a;v<=b+1e-9;v+=step)o.push(Math.round(v*100)/100);return o;}
+const yieldNow=()=>new Promise(r=>setTimeout(r,0));
+async function genSuggestions(R){
+  const S=[],allPass=r=>r.tOk&&r.vOk&&r.cOk&&_slOk(r);
+  if(!R.tOk){
+    const s1=sweepFld('iHef',range(R.hef+25,R.hef+400,25),r=>r.tOk);
+    if(s1)S.push({cat:'인장',title:'매입깊이 증가',body:`hef: ${R.hef} → <b>${s1.v}mm</b> 로 인장 O.K (비율 ${fmt(s1.R.NRatio,3)})`});
+    await yieldNow();
+    const s2=sweepD(range(100,1500,100),r=>r.tOk);
+    if(s2)S.push({cat:'인장',title:'페데스탈 외경 확대',body:`D: ${R.D} → <b>${R.D+s2.d}mm</b> 로 인장 O.K (Ca1 증가)`});
+    await yieldNow();
+    const s3=sweepFld('iDa',CAT_KEYS.filter(d=>d>R.da),r=>r.tOk);
+    if(s3)S.push({cat:'인장',title:'볼트 지름 상향',body:`da: M${R.da} → <b>M${s3.v}</b> 로 인장 O.K`});
+  }
+  if(!R.vOk&&!R.useSL){
+    const s4=sweepD(range(100,1500,100),r=>r.vOk);
+    if(s4)S.push({cat:'전단',title:'페데스탈 외경 확대 (ca1′ 증가)',body:`D: ${R.D} → <b>${R.D+s4.d}mm</b> 로 전단 O.K`});
+    S.push({cat:'전단',title:'전단키 §17.11 적용',body:`전단키 사용 시 전단을 전담. 최소 ${R.N}EA ≥ 4EA ${R.N>=4?'(충족)':'(부족)'}`});
+  }
+  if(R.tOk&&R.vOk&&!R.cOk){
+    const s6=sweepFld('iHef',range(R.hef+25,R.hef+400,25),allPass);
+    if(s6)S.push({cat:'복합',title:'매입깊이 증가',body:`hef → <b>${s6.v}mm</b> 로 IR=${fmt(s6.R.IR,3)} ≤ 1.2`});
+  }
+  if(R.tOk&&R.vOk&&R.cOk&&_slOk(R)&&R.NRatio<0.35&&R.VRatio<0.35){
+    const s7=sweepFld('iHef',range(Math.max(8*R.da,100),R.hef-25,25).reverse(),allPass);
+    if(s7&&s7.v<R.hef)S.push({cat:'최적화',title:'매입깊이 축소 여지',body:`hef <b>${s7.v}mm</b>까지 축소 가능 (이용률 낮음)`});
+  }
+  return S;
+}
+async function openSuggest(){
+  const R=window.LR_;if(!R){alert('먼저 계산을 실행해 주세요.');return;}
+  openModal('modalSuggest');
+  const body=g('suggestBody');
+  const stat=[['인장',R.tOk,fmt(R.NRatio,3)],['전단',R.vOk,fmt(R.VRatio,3)],['복합',R.cOk,R.doCombined?fmt(R.IR,3)+'/1.2':'생략'],['전단키',_slOk(R),R.useSL?'검토':'미사용']];
+  let head=`<div class="rf-demand" style="margin-bottom:14px">`+stat.map(s=>`<div class="d"><div class="dl">${s[0]}</div><div class="dv" style="color:${s[1]?'var(--gr)':'var(--rd)'}">${s[1]?'O.K':'N.G'} <span style="font-size:10px;color:var(--t3)">${s[2]}</span></div></div>`).join('')+`</div>`;
+  body.innerHTML=head+'<div style="color:var(--t2);font-size:12px">⏳ 탐색 중...</div>';
+  await yieldNow();
+  let S=[];try{S=await genSuggestions(R);}catch(e){body.innerHTML=head+'<div class="nabox">오류: '+e.message+'</div>';return;}
+  if(!S.length){body.innerHTML=head+`<div class="nabox">${R.allOk?'전 항목 만족.':'탐색 범위 내 해 없음. 복수 변수 조합 검토 필요.'}</div>`;return;}
+  let h=head;
+  S.forEach((s,i)=>h+=`<div class="rf-step"><div class="sn" style="background:${s.cat==='최적화'?'var(--gr)':'var(--or)'}">${i+1}</div><div><b>[${s.cat}] ${s.title}</b><div style="color:var(--t2);margin-top:2px;line-height:1.6">${s.body}</div></div></div>`);
+  body.innerHTML=h;
+}
+
+// ═══ 긴급 보강 (v3.4와 동일, 간소화) ═══
+const RF_PRODUCTS=[
+  {id:'hit_hy200r',name:'HIT-HY 200-R V3 + HAS-U 8.8',tauCr:7.0,tauUncr:10.5,type:'hybrid',note:'빠른경화(1h). 긴급보강 1순위',maxDa:30,futa:800,fya:640},
+  {id:'hit_re500v4',name:'HIT-RE 500 V4 + HAS-U 8.8',tauCr:8.0,tauUncr:12.0,type:'epoxy',note:'고내력 에폭시. 심매입 적합',maxDa:39,futa:800,fya:640},
+];
+let rfState={scenario:'broken',brokenCount:1,split:'adjacent',prod:'hit_hy200r',da:20,boltIdx:0};
+function openRetrofit(){
+  const R=window.LR_;if(!R){alert('먼저 계산을 실행해 주세요.');return;}
+  rfState.da=R.da;
+  renderRetrofit();openModal('modalRetrofit');
+}
+function rfSet(k,v){rfState[k]=v;renderRetrofit();}
+function rfSetNum(k,v){rfState[k]=parseFloat(v)||0;renderRetrofit();}
+function rfCalc(R){
+  const prod=RF_PRODUCTS.find(p=>p.id===rfState.prod)||RF_PRODUCTS[0];
+  const da=rfState.da,brokenN=Math.max(1,Math.min(rfState.brokenCount,R.N-1));
+  const boltPt=R.loads.pts[rfState.boltIdx]||R.loads.pts[0];
+  const Nlost=Math.max(boltPt.Nua,R.maxT*.6),Vlost=R.Vua_i;
+  const Ndem=Nlost*brokenN,Vdem=Vlost*brokenN;
+  const nNew=rfState.split==='adjacent'?brokenN*2:brokenN;
+  const NperNew=Ndem/nNew,VperNew=Vdem/nNew;
+  const hefUse=Math.min(Math.max(8*da,R.hef*.8),Math.max(60,R.Ha-60));
+  const out={prod,da,brokenN,nNew,Ndem,Vdem,NperNew,VperNew,hefUse,checks:[],steps:[]};
+  const Ase=Math.PI/4*Math.pow(.9*da,2),futaEff=Math.min(prod.futa,1.9*prod.fya,860);
+  const phiNsa=.65*Ase*futaEff/1000,phiVsa=.60*.6*Ase*futaEff/1000;
+  out.checks.push({k:'강재 인장',cap:phiNsa,dem:NperNew,ok:phiNsa>=NperNew-1e-9,ref:'φ=0.65'});
+  out.checks.push({k:'강재 전단',cap:phiVsa,dem:VperNew,ok:phiVsa>=VperNew-1e-9,ref:'φ=0.36'});
+  if(prod.type!=='mech'){
+    const tau=R.cracked?prod.tauCr:prod.tauUncr;
+    const Nba=R.lam*tau*Math.PI*da*hefUse/1000;
+    const cNa=10*da*Math.sqrt(tau/7.6),edF=R.Ca1>=cNa?1.0:0.7+0.3*R.Ca1/cNa;
+    out.checks.push({k:'Bond(단일)',cap:.65*edF*Nba,dem:NperNew,ok:.65*edF*Nba>=NperNew-1e-9,ref:'τ='+tau+'MPa'});
+  }
+  {const phiNcb=.65*7*R.lam*Math.sqrt(R.fc)*Math.pow(Math.min(hefUse,R.Ca1/1.5),1.5)/1000;out.checks.push({k:'Breakout(근사)',cap:phiNcb,dem:NperNew,ok:phiNcb>=NperNew-1e-9,ref:'kc=7'});}
+  out.allOk=out.checks.every(c=>c.ok);
+  out.steps=[['하중 재분배','해당 앵커 비활성화 후 잔여 앵커 N.G 여부 확인'],['천공',`∅${da+4}mm×${hefUse.toFixed(0)}mm. Ca1=${R.Ca1.toFixed(0)}mm 이상 유지`],['청소','브러시+에어 2회'],['주입',prod.type==='hybrid'?'HY 200-R: 1h 경화':'RE 500 V4: 12h 경화'],['검증','인발시험(1.25배) 후 재체결. PROFIS 확정 필요']];
+  return out;
+}
+function renderRetrofit(){
+  const R=window.LR_;if(!R)return;
+  const res=rfCalc(R);
+  const opts=R.loads.pts.map((p,i)=>`<option value="${i}" ${rfState.boltIdx===i?'selected':''}>A${p.i+1} (Nua=${fmt(p.Nua)}kN)</option>`).join('');
+  let h=`<div class="rf-demand" style="margin-bottom:14px">
+    <div class="d"><div class="dl">보강 인장수요(합)</div><div class="dv">${fmt(res.Ndem)} kN</div></div>
+    <div class="d"><div class="dl">보강 전단수요(합)</div><div class="dv">${fmt(res.Vdem)} kN</div></div>
+    <div class="d"><div class="dl">대체 개소</div><div class="dv">${res.nNew} EA</div></div>
+    <div class="d"><div class="dl">개소당 인장</div><div class="dv">${fmt(res.NperNew)} kN</div></div>
+  </div>`;
+  h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">`;
+  h+=`<div class="rf-card"><div class="rf-card-t">① 시나리오</div>
+    <div class="rf-opt"><div class="rf-o ${rfState.scenario==='broken'?'sel':''}" onclick="rfSet('scenario','broken')"><b>파손</b><span>절단·나사산 손상</span></div><div class="rf-o ${rfState.scenario==='misplaced'?'sel':''}" onclick="rfSet('scenario','misplaced')"><b>오시공</b><span>위치이탈·매입 부족</span></div></div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:4px">대상 앵커</div>
+    <select onchange="rfState.boltIdx=parseInt(this.value);renderRetrofit()" style="width:100%;padding:4px;background:var(--bg);border:1px solid var(--bd2);color:var(--t1);border-radius:4px;font-size:11px">${opts}</select>
+    <div style="margin-top:6px;font-size:11px;color:var(--t2)">파손 수</div>
+    <input type="number" min="1" max="${Math.max(1,R.N-1)}" value="${rfState.brokenCount}" oninput="rfSetNum('brokenCount',this.value)" style="width:60px;padding:3px 6px;background:var(--bg);border:1px solid var(--bd2);color:var(--t1);border-radius:4px;font-size:11px;text-align:right"> ea
+  </div>`;
+  h+=`<div class="rf-card"><div class="rf-card-t">② 제품 선택</div>`;
+  RF_PRODUCTS.forEach(p=>{h+=`<div class="rf-o ${rfState.prod===p.id?'sel':''}" onclick="rfSet('prod','${p.id}')" style="margin-bottom:6px"><b>${p.name}</b><span>${p.note}</span></div>`;});
+  h+=`<div style="margin-top:6px;font-size:11px;color:var(--t2)">대체 지름 da'</div>
+    <input type="number" min="8" max="39" value="${rfState.da}" oninput="rfSetNum('da',this.value)" style="width:60px;padding:3px 6px;background:var(--bg);border:1px solid var(--bd2);color:var(--t1);border-radius:4px;font-size:11px;text-align:right"> mm
+  </div></div>`;
+  h+=`<div class="rf-result" style="margin-top:12px"><div class="rf-card-t">③ 예비 검토 (hef'=${res.hefUse.toFixed(0)}mm)</div>`;
+  res.checks.forEach(c=>{h+=`<div class="rf-row"><span class="k">${c.k} <span style="color:var(--t3);font-size:10px">${c.ref}</span></span><span class="v" style="color:${c.ok?'var(--gr)':'var(--rd)'}">${fmt(c.dem)} ≤ ${fmt(c.cap)} kN ${c.ok?'O.K':'N.G'}</span></div>`;});
+  h+=`<div class="rf-verdict ${res.allOk?'ok':'ng'}">${res.allOk?'✔ 예비검토 만족':'✖ 예비검토 불만족'}</div></div>`;
+  h+=`<div class="rf-card" style="margin-top:12px"><div class="rf-card-t">④ 시공 절차</div>`;
+  res.steps.forEach((s,i)=>h+=`<div class="rf-step"><div class="sn">${i+1}</div><div><b>${s[0]}</b><div style="color:var(--t2);margin-top:2px">${s[1]}</div></div></div>`);
+  h+=`</div>`;
+  g('retrofitBody').innerHTML=h;
+}
+
+// ═══ 자동추출 (★ pdfjsLib 초기화 수정) ═══
+function initPdfJs(){
+  if(window.pdfjsLib&&!pdfjsLib.GlobalWorkerOptions.workerSrc){
+    try{pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}catch(e){}
+  }
+}
+let extractCandidates=[];
+const EX_LABELS={iDa:'볼트지름 da',iHef:'매입깊이 hef',iFuta:'futa',iFya:'fya',iD:'페데스탈 D',iHa:'페데스탈 Ha',iFc:"f'c",iFy:'fy',iP:'P(축하중)',iH:'H(횡하중)',iM:'M(모멘트)',iBCD:'BCD'};
+const EX_UNITS={iDa:'mm',iHef:'mm',iFuta:'MPa',iFya:'MPa',iD:'mm',iHa:'mm',iFc:'MPa',iFy:'MPa',iP:'kN',iH:'kN',iM:'kN·m',iBCD:'mm'};
+const EX_PATTERNS=[
+  {id:'iDa',re:[/\bda\s*[:=]\s*(\d{2,3})(?:\.\d+)?\s*mm/i,/M\s*(\d{2,3})\s*anchor/i,/볼트\s*지름\s*[:=]?\s*M?\s*(\d{2,3})/]},
+  {id:'iHef',re:[/\bhef\s*[:=]\s*(\d{2,4})(?:\.\d+)?/i,/매입\s*깊이\s*[:=]?\s*(\d{2,4})/,/embed\w*\s*depth\s*[:=]?\s*(\d{2,4})/i]},
+  {id:'iFuta',re:[/futa?\s*[:=]\s*(\d{3,4})(?:\.\d+)?\s*MPa/i]},
+  {id:'iFya',re:[/fya?\s*[:=]\s*(\d{3,4})(?:\.\d+)?\s*MPa/i]},
+  {id:'iD',re:[/pedestal\s*diam\w*\s*[:=]?\s*(\d{3,4})/i,/페데스탈\s*(?:외)?경\s*[:=]?\s*(\d{3,4})/,/\bD\s*[:=]\s*(\d{3,4})(?:\.\d+)?\s*mm/]},
+  {id:'iBCD',re:[/BCD\s*[:=]\s*(\d{3,4})(?:\.\d+)?/i,/bolt\s*circle\s*[:=]?\s*(\d{3,4})/i]},
+  {id:'iHa',re:[/Ha\s*[:=]\s*(\d{3,4})(?:\.\d+)?/i,/pedestal\s*height\s*[:=]?\s*(\d{3,4})/i]},
+  {id:'iFc',re:[/f['′]?c\s*[:=]\s*(\d{2}(?:\.\d+)?)\s*MPa/i]},
+  {id:'iP',re:[/\bPu?\s*[:=]\s*(-?\d{1,5}(?:\.\d+)?)\s*kN/,/축하중\s*[:=]?\s*(-?\d{1,5}(?:\.\d+)?)/]},
+  {id:'iH',re:[/\b[VH]u?\s*[:=]\s*(-?\d{1,5}(?:\.\d+)?)\s*kN/,/횡하중\s*[:=]?\s*(-?\d{1,5}(?:\.\d+)?)/]},
+  {id:'iM',re:[/\bMu?\s*[:=]\s*(-?\d{1,6}(?:\.\d+)?)\s*kN[\.·]?m/i,/모멘트\s*[:=]?\s*(-?\d{1,6}(?:\.\d+)?)/]},
+  {id:'_combo_ped',re:[/(\d{3,4})\s*[xX×]\s*(\d{3,4})\s*[xX×]\s*(\d{3,4})\s*(?:PED|pedestal)/i]},
+  {id:'_combo_bolt',re:[/(\d{1,2})\s*[-]\s*M\s*(\d{2})\s*(?:anchor|bolt)/i]},
+];
+function pushCand(id,val,conf,src,ctx){if(!EX_LABELS[id])return;const e=extractCandidates.find(c=>c.id===id);if(e){if(conf==='high'&&e.conf!=='high'){e.val=val;e.conf=conf;e.src=src;e.ctx=ctx;}return;}extractCandidates.push({id,val,conf,src,ctx});}
+function runExtraction(text,srcName){
+  EX_PATTERNS.forEach(p=>{for(const re of p.re){const m=text.match(re);if(!m)continue;const i0=Math.max(0,m.index-25),i1=Math.min(text.length,m.index+m[0].length+25);const ctx=text.slice(i0,i1).replace(/\s+/g,' ').trim();if(p.id==='_combo_ped'){pushCand('iD',m[1],'high',srcName,ctx);pushCand('iHa',m[3],'high',srcName,ctx);}else if(p.id==='_combo_bolt'){pushCand('iDa',m[2],'high',srcName,ctx);}else{pushCand(p.id,m[1],re.source.length>25?'high':'low',srcName,ctx);}break;}});
+  renderExtractTable();
+}
+async function extractPdfText(file){
+  initPdfJs();
+  if(!window.pdfjsLib)throw new Error('pdf.js 로드 실패');
+  const buf=await file.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  let txt='';
+  for(let p=1;p<=Math.min(pdf.numPages,40);p++){const pg=await pdf.getPage(p);const tc=await pg.getTextContent();txt+=tc.items.map(it=>it.str).join(' ')+'\n';}
+  return txt;
+}
+async function handlePdfFiles(files,kind){
+  const dzId=kind==='calc'?'dzCalc':'dzVendor',stId=kind==='calc'?'dzCalcSt':'dzVendorSt';
+  g(stId).textContent='추출 중...';
+  try{for(const f of files){const txt=await extractPdfText(f);runExtraction(txt,f.name);}g(dzId).classList.add('loaded');g(stId).textContent=files.length+'개 완료';}
+  catch(e){g(stId).textContent='실패: '+e.message;}
+}
+async function handleExcelFiles(files){
+  if(!window.XLSX){g('dzExcelSt').textContent='SheetJS 로드 실패';return;}
+  g('dzExcelSt').textContent='추출 중...';
+  try{
+    for(const f of files){const buf=await f.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});let txt='';wb.SheetNames.forEach(sn=>{const ws=wb.Sheets[sn];const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});rows.forEach(r=>{txt+=r.filter(v=>v!=='').join(' = ')+'\n';});});runExtraction(txt,f.name);}
+    g('dzExcel').classList.add('loaded');g('dzExcelSt').textContent=files.length+'개 완료';
+  }catch(e){g('dzExcelSt').textContent='실패: '+e.message;}
+}
+function renderExtractTable(){
+  const box=g('extractResults');if(!extractCandidates.length){box.innerHTML='<div style="color:var(--t3);font-size:11px">추출된 후보 없음.</div>';return;}
+  let h='<div class="extract-row hdr"><span></span><span>항목</span><span>추출값</span><span>신뢰도</span><span>출처</span></div>';
+  Object.keys(EX_LABELS).forEach(id=>{const c=extractCandidates.find(x=>x.id===id);if(!c){h+=`<div class="extract-row" style="opacity:.5"><span></span><span>${EX_LABELS[id]}</span><span style="color:var(--t3);font-size:11px">미검출</span><span></span><span></span></div>`;return;}h+=`<div class="extract-row"><input type="checkbox" id="exOn_${id}" ${c.conf==='high'?'checked':''}><span>${EX_LABELS[id]} <span style="color:var(--t3);font-size:9.5px">(${EX_UNITS[id]||''})</span></span><input type="text" id="exVal_${id}" value="${c.val}"><span class="conf-badge ${c.conf}">${c.conf==='high'?'HIGH':'확인필요'}</span><span style="font-size:10px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.src}|${c.ctx||''}</span></div>`;});
+  h+=`<div style="display:flex;gap:8px;margin-top:14px"><button class="abtn" style="background:var(--gr);color:#06210f;font-weight:700" onclick="applyExtracted()">✔ 반영</button><button class="abtn" onclick="resetExtract()">↺ 초기화</button></div>`;
+  box.innerHTML=h;
+}
+function applyExtracted(){let n=0;extractCandidates.forEach(c=>{const on=g('exOn_'+c.id);if(!on||!on.checked)return;const vEl=g('exVal_'+c.id);const el=g(c.id);if(el&&vEl&&vEl.value!==''){el.value=vEl.value;n++;}});if(!n){alert('반영할 항목 없음');return;}onDaChange();schedCalc();alert(n+'개 반영 완료. 직접 확인하세요.');closeModal('modalExtract');}
+function resetExtract(){extractCandidates=[];renderExtractTable();['dzCalc','dzExcel','dzVendor'].forEach(id=>{if(g(id))g(id).classList.remove('loaded');});if(g('dzCalcSt'))g('dzCalcSt').textContent='클릭/드래그';if(g('dzExcelSt'))g('dzExcelSt').textContent='클릭/드래그 (권장)';if(g('dzVendorSt'))g('dzVendorSt').textContent='클릭/드래그';}
+['dzCalc','dzVendor'].forEach(id=>{const el=g(id);if(!el)return;['dragenter','dragover'].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();el.classList.add('dragover');}));['dragleave','drop'].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();el.classList.remove('dragover');}));el.addEventListener('drop',e=>{const fs=e.dataTransfer.files;if(fs&&fs.length)handlePdfFiles(fs,id==='dzCalc'?'calc':'vendor');});});
+const dzE=g('dzExcel');if(dzE){['dragenter','dragover'].forEach(ev=>dzE.addEventListener(ev,e=>{e.preventDefault();dzE.classList.add('dragover');}));['dragleave','drop'].forEach(ev=>dzE.addEventListener(ev,e=>{e.preventDefault();dzE.classList.remove('dragover');}));dzE.addEventListener('drop',e=>{const fs=e.dataTransfer.files;if(fs&&fs.length)handleExcelFiles(fs);});}
+
+// ═══ PDF/Excel EXPORT ═══
+let _krFontB64=null;
+async function getKrFont(){if(_krFontB64)return _krFontB64;try{const res=await fetch('https://cdn.jsdelivr.net/gh/fonts-archive/NanumGothic/NanumGothic.ttf');if(!res.ok)return null;const buf=await res.arrayBuffer();let bin='';const bytes=new Uint8Array(buf);const CH=8192;for(let i=0;i<bytes.length;i+=CH)bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+CH));_krFontB64=btoa(bin);return _krFontB64;}catch(e){return null;}}
+async function expPDF(){
+  const R=window.LR_;if(!R){alert('먼저 계산을 실행해 주세요.');return;}
+  g('pdfBtn').textContent='⏳ 생성중';
+  try{
+    const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+    const fb=await getKrFont();let F='helvetica';
+    if(fb){doc.addFileToVFS('NanumGothic.ttf',fb);doc.addFont('NanumGothic.ttf','NanumGothic','normal');F='NanumGothic';}
+    doc.setFont(F);let y=15;
+    const line=(txt,sz=9,dy=4.6)=>{doc.setFontSize(sz);doc.splitTextToSize(txt,182).forEach(L=>{if(y>285){doc.addPage();doc.setFont(F);y=15;}doc.text(L,14,y);y+=dy;});};
+    doc.setFontSize(14);doc.text('앵커 볼트 구조 계산서 — ACI 318-19 Ch.17 (Octagonal v3.5)',14,y);y+=7;
+    line(`Job:${g('mJob').value||'-'} | Proj:${g('mP').value||'-'} | Doc:${g('mDoc').value||'-'} | Item:${g('mItem').value||'-'} | By:${g('mA').value||'-'} | Date:${g('mD').value||'-'}`,8.5);
+    y+=2;line('1. 입력',11,6);
+    line(`앵커: ${ACFG[R.at].label}, N=${R.N}EA, M${R.da}, hef=${R.hef}mm, BCD=${R.BCD}mm, D=${R.D}mm, Ha=${R.Ha}mm`);
+    line(`재료: futa=${R.futaEff.toFixed(0)}MPa, f'c=${R.fc}MPa, λ=${R.lam}, ${R.cracked?'균열':'무균열'}`);
+    line(`연단: Ca1=${fmt(R.Ca1,1)}mm, hef'=${fmt(R.hefp,1)}mm${R.hefpMod?'(수정)':''}, ca1'=${fmt(R.ca1v,1)}mm${R.ca1vMod?'(수정)':''}`);
+    line(`하중: P=${nv('iP')}kN, H=${nv('iH')}kN, M=${nv('iM')}kN·m`);
+    y+=2;line('2. 하중 분배',11,6);
+    line(`ΣNua=${fmt(R.sumT)}kN (${R.nT}EA), Nua,max=${fmt(R.maxT)}kN, e'N=${fmt(R.eN,2)}mm, Vua,g=${fmt(R.Vua_g)}kN`);
+    y+=2;line('3. 인장 검토 [지배: '+(R.tGov?R.tGov.label:'-')+', 비율 '+fmt(R.NRatio,3)+']',11,6);
+    R.tItems.forEach(it=>line(`- ${it.label}: φNn=${fmt(it.cap)}kN vs Nua=${fmt(it.dem)}kN → ${fmt(it.ratio,3)} [${it.ratio<=1?'O.K':'N.G'}]`));
+    y+=2;line('4. 전단 검토 [지배: '+(R.vGov?R.vGov.label:'-')+', 비율 '+fmt(R.VRatio,3)+']',11,6);
+    R.vItems.forEach(it=>line(`- ${it.label}: φVn=${fmt(it.cap)}kN vs Vua=${fmt(it.dem)}kN → ${fmt(it.ratio,3)} [${it.ratio<=1?'O.K':'N.G'}]`));
+    y+=2;line('5. 복합 §17.8',11,6);
+    if(R.doCombined)line(`IR=${fmt(R.IR,3)} ≤ 1.2 [${R.cOk?'O.K':'N.G'}]`);else line('복합 생략(§17.8.1)');
+    y+=3;doc.setFontSize(12);doc.text('종합 판정: '+(R.allOk?'O.K':'N.G'),14,Math.min(y,288));
+    doc.save('AnchorBolt_Oct35_'+(g('mItem').value||'calc')+'.pdf');
+  }catch(e){alert('PDF 오류: '+e.message);}
+  g('pdfBtn').textContent='📄 PDF';
+}
+function expXLS(){
+  const R=window.LR_;if(!R){alert('먼저 계산을 실행해 주세요.');return;}
+  const rows=[['앵커볼트 계산서 — Octagonal v3.5'],['Job',g('mJob').value,'Project',g('mP').value],
+    [],['N',R.N,'BCD',R.BCD,'D',R.D,'Ha',R.Ha,'da',R.da,'hef',R.hef],["f'c",R.fc,'λ',R.lam,'Ca1',R.Ca1,"hef'",R.hefp],
+    [],['ΣNua',R.sumT,'Nua,max',R.maxT,"e'N",R.eN,'Vua,g',R.Vua_g],
+    [],...R.tItems.map(it=>[it.label,'φNn',it.cap,'Nua',it.dem,'ratio',it.ratio,it.ratio<=1?'O.K':'N.G']),
+    [],...R.vItems.map(it=>[it.label,'φVn',it.cap,'Vua',it.dem,'ratio',it.ratio,it.ratio<=1?'O.K':'N.G']),
+    [],['종합',R.allOk?'O.K':'N.G']];
+  const ws=XLSX.utils.aoa_to_sheet(rows);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Calc');XLSX.writeFile(wb,'AnchorBolt_Oct35_'+(g('mItem').value||'calc')+'.xlsx');
+}
+
+// ═══ SCHEDULER & MAIN ═══
+let calcTimer=null;
+function schedCalc(){clearTimeout(calcTimer);calcTimer=setTimeout(doCalc,120);}
+function doCalc(){
+  let R=null;
+  try{R=cmpOct();}catch(e){console.error(e);g('rc').innerHTML='<div class="nabox">계산 오류: '+e.message+'</div>';return;}
+  renderResults(R);
+  updateSuggestBadge(R);
+
+  const anchPts=getAnchorPts();
+  const N=nvi('iNbolt'),D=nv('iD'),da=nv('iDa'),hef=nv('iHef'),Ha=nv('iHa'),BCD=nv('iBCD');
+  // 보강철근 좌표 (BCD 기준 내접 원)
+  let rebar=[];
+  if(g('iHasRebar').value==='yes'&&g('iNnrMode').value==='yes'){
+    const Ntot=nvi('iNtot'),C2=nv('iC2'),dv=nvi('iRb');
+    const r_rb=D/2-C2;
+    for(let i=0;i<Ntot;i++){const a=2*Math.PI*i/Ntot;rebar.push({x:r_rb*Math.cos(a),y:r_rb*Math.sin(a)});}
+  }
+  // 앵커별 인장력 배열 (인덱스 순서)
+  const anchorLoads=R.loads.pts.map(p=>Math.max(0,p.Nua));
+  const maxT=R.maxT||1;
+  // 중립축 좌표
+  const c_na=R.loads.c_na;
+  const theta0=nv('iTheta0');
+
+  ISO.setData({D,Ha,BCD,N,da,hef,
+    bolts:anchPts,rebar,dv:nvi('iRb'),
+    anchorLoads,maxT,c_na:R.loads.c_na,theta0,
+    arrows:{N:R.sumT,H:nv('iH'),theta0},
+  });
+  PLAN.setData({D,BCD,N,da,bolts:anchPts,rebar,dv:nvi('iRb'),c_na:R.loads.c_na});
+  g('dS').textContent=fmt(Math.PI*BCD/N,1)+' mm (호)';
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  g('mD').value=new Date().toISOString().slice(0,10);
+  ISO.init();PLAN.init();
+  onAT();onRebarToggle();onFriction();onSLToggle();
+  doCalc();
+  initPdfJs();
+});
+</script>
+</body>
+</html>
